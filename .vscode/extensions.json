@@ -1,0 +1,10 @@
+{
+	"recommendations": [
+		"astro-build.astro-vscode",
+		"EditorConfig.EditorConfig",
+		"deque-systems.vscode-axe-linter",
+		"bierner.color-info",
+		"dbaeumer.vscode-eslint",
+	],
+	"unwantedRecommendations": []
+}

@@ -1,0 +1,38 @@
+---
+// Définition des paramètres pouvant être passés au gabarit:
+interface Props {
+  // Le titre est toujours obligatoire:
+  titre: string;
+
+  // La description est optionnelle:
+  description?: string;
+}
+
+// Le titre est obligatoire donc c'est une constante; la description est optionnelle donc c'est une variable:
+const { titre } = Astro.props;
+let { description } = Astro.props;
+
+// Si la description n'est pas définie, on lui donne une valeur par défaut:
+description ??= import.meta.env.DESCRIPTION_PAR_DEFAUT;
+
+// URL canonique pour le référencement:
+const URLcanonique = new URL(Astro.url.pathname, Astro.site);
+
+// On souhaite que le gabarit soit pré-compilé:
+export const prerender = true;
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={URLcanonique} />
+    <title>{titre} &mdash; {import.meta.env.NOM_SITE}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

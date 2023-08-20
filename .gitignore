@@ -1,0 +1,21 @@
+# fichiers de déploiement
+dist/
+
+# types générés
+.astro/
+
+# dépendances
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# variables d'environnement
+.env
+.env.production
+
+# fichiers spécifiques à macOS
+.DS_Store
