@@ -5,6 +5,8 @@
 		"deque-systems.vscode-axe-linter",
 		"bierner.color-info",
 		"dbaeumer.vscode-eslint",
+		"syler.sass-indented",
+		"stylelint.vscode-stylelint",
 	],
 	"unwantedRecommendations": []
 }

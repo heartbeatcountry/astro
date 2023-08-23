@@ -7,15 +7,20 @@
 		"start": "astro dev",
 		"build": "astro build",
 		"preview": "astro preview",
-		"astro": "astro"
+		"astro": "astro",
+		"stylelint": "stylelint \"src/**/*.{astro,scss,sass}\""
 	},
 	"dependencies": {
 		"astro": "^2.10.13",
-		"mongodb": "^5.8.0"
+		"mongodb": "^5.8.0",
+		"sass": "^1.66.1"
 	},
 	"devDependencies": {
 		"eslint": "^8.47.0",
 		"eslint-plugin-astro": "^0.29.0",
-		"eslint-plugin-jsx-a11y": "^6.7.1"
+		"eslint-plugin-jsx-a11y": "^6.7.1",
+		"postcss-html": "^1.5.0",
+		"stylelint": "^15.10.3",
+		"stylelint-config-recommended-scss": "^12.0.0"
 	}
 }

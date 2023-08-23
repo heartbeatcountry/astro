@@ -5,7 +5,8 @@
 		"ecmaVersion": "latest"
 	},
 	"env": {
-		"browser": true
+		"browser": true,
+		"module": true
 	},
 	"rules": {
 		"strict": [
