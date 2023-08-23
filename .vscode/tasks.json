@@ -1,0 +1,24 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Lancer le serveur Astro",
+			"type": "shell",
+			"command": "npm run dev",
+			"group": {
+				"kind": "none",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Compiler",
+			"type": "shell",
+			"command": "npm run build",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+	]
+}
