@@ -1,0 +1,39 @@
+{
+	"root": true,
+	"extends": "eslint:recommended",
+	"parserOptions": {
+		"ecmaVersion": "latest"
+	},
+	"env": {
+		"browser": true
+	},
+	"rules": {
+		"strict": [
+			"error",
+			"global"
+		],
+		"no-undef": "warn",
+		"no-use-before-define": "warn",
+		"camelcase": "warn",
+		"comma-style": [
+			"warn",
+			"last"
+		],
+		"no-lonely-if": "warn",
+		"semi": "off",
+		"no-var": "warn",
+		"no-unused-vars": "warn",
+		"require-jsdoc": [
+			"warn",
+			{
+				"require": {
+					"FunctionDeclaration": true,
+					"MethodDefinition": true,
+					"ClassDeclaration": false,
+					"ArrowFunctionExpression": false,
+					"FunctionExpression": false
+				}
+			}
+		]
+	}
+}
