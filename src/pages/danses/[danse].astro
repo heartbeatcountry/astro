@@ -1,9 +1,18 @@
 ---
 import Page from "../../layouts/GabaritPrincipal.astro";
+import Bd from "../../lib/bd.mjs";
 
+// Obtention du permalien depuis l'URL:
 const { danse } = Astro.params;
+
+// Obtention des détails selon le permalien
+const details = await Bd.obtenirDetailsDanse(danse);
+
+// Conversion en JSON:
+const detailsJson = JSON.stringify(details);
 ---
 
 <Page titre={danse}>
   <p>Détails d'une danse</p>
+  {detailsJson}
 </Page>
