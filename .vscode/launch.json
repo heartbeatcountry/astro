@@ -2,13 +2,13 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"command": "./node_modules/.bin/astro dev",
+			"command": "npm run dev",
 			"name": "Serveur local",
 			"request": "launch",
 			"type": "node-terminal"
 		},
 		{
-			"command": "./node_modules/.bin/astro build",
+			"command": "npm run build",
 			"name": "Compiler le projet",
 			"request": "launch",
 			"type": "node-terminal"

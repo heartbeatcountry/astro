@@ -4,4 +4,7 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
 	// TODO: changer pour https://heartbeatcountry.com/ après la remise finale:
 	"site": "https://heartbeat.pages.dev",
+
+	// on souhaite utiliser le mode SSR:
+	"output": "server",
 });
