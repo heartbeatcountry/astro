@@ -177,4 +177,13 @@ export default class Session {
 
 		return Session.#depuisJson(decrypterObjet(cookie));
 	}
+
+	/**
+	 * Détruire le cookie de session de l'utilisateur.
+	 *
+	 * @param {AstroGlobal} Astro Référence à l'instance de Astro
+	 */
+	static detruire(Astro) {
+		Astro.cookies.delete(NOM_COOKIE);
+	}
 }

@@ -1,0 +1,16 @@
+---
+import Session from "../../lib/session.mjs";
+import Page from "../../layouts/GabaritPrincipal.astro";
+
+const session = Session.obtenirDepuisCookie(Astro);
+---
+
+<Page titre="Session">
+	<p>
+		Contenu de la session:
+		<pre>{JSON.stringify(session)}</pre>
+	</p>
+
+	<a href="/exemple-session/nouv">[Nouvelle session]</a>
+	<a href="/exemple-session/deconnexion">[Déconnexion]</a>
+</Page>

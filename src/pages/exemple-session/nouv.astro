@@ -1,0 +1,12 @@
+---
+import Session from "../../lib/session.mjs";
+
+const identifiantUnique = "patate";
+const nomConnexion = "marcel";
+const estAdmin = false;
+
+const session = new Session(identifiantUnique, nomConnexion, estAdmin);
+session.ecrireCookie(Astro);
+
+return Astro.redirect("/exemple-session");
+---
