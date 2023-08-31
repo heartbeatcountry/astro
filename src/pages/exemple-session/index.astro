@@ -1,8 +1,10 @@
 ---
-import Session from "../../lib/session.mjs";
 import Page from "../../layouts/GabaritPrincipal.astro";
 
-const session = Session.obtenirDepuisCookie(Astro);
+const session = Astro.locals["session"];
+
+// OPTIONNEL: obtenir les détails de l'usagé associé à la session:
+await session?.populate("usager");
 ---
 
 <Page titre="Session">

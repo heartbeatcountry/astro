@@ -1,12 +1,10 @@
 ---
 import Session from "../../lib/session.mjs";
 
-const identifiantUnique = "patate";
-const nomConnexion = "marcel";
-const estAdmin = false;
-
-const session = new Session(identifiantUnique, nomConnexion, estAdmin);
-session.ecrireCookie(Astro);
+Astro.locals["session"] = await Session.nouvSession(
+	Astro.cookies,
+	"64efcd939a22a43b7655725e"
+);
 
 return Astro.redirect("/exemple-session");
 ---

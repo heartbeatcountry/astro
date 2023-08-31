@@ -1,9 +1,10 @@
 // Importation du paquet NPM pour MongoDB:
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
+import ModeleSession from "./models/session.mjs";
+import ModeleUsager from "./models/usager.mjs";
 
-// Importation des types JSDoc pour MongoDB:
-/** @typedef {import("mongodb").Db} Db */
-/** @typedef {import("mongodb").Collection} Collection */
+const ObjectId = mongoose.mongo.ObjectId;
+
 
 // Obtention du MONGO_URL depuis le fichier .env:
 const urlConnexion = import.meta.env.MONGO_URL?.trim();
@@ -25,19 +26,13 @@ export default class Bd {
 
 	/**
 	 * Référence de connexion à MongoDB
-	 * @type {MongoClient}
+	 * @type {mongoose.Connection}
 	 */
-	static #client = new MongoClient(urlConnexion);
-
-	/**
-	 * Référence à la base de donnée
-	 * @type {Db}
-	 */
-	static #base = null;
+	static #client = null;
 
 	/**
 	 * Référence aux collections de la base de données.
-	 * @type {Map<String,Collection>}
+	 * @type {Map<String,mongoose.Model>}
 	 */
 	static #collections = new Map();
 
@@ -52,32 +47,39 @@ export default class Bd {
 	 */
 	static async #etablirConnexionAvecBase() {
 		// Si déjà connecté, nul besoin de reconnecter:
-		if (Bd.#base !== null) {
+		if (Bd.#client !== null) {
 			return;
 		}
 
 		// Connexion au serveur MongoDB:
-		await Bd.#client.connect();
+		Bd.#client = await mongoose.createConnection(urlConnexion);
 
 		// Connexion à la base de données:
-		Bd.#base = Bd.#client.db(nomBase);
+		Bd.#client.useDb(nomBase);
+	}
+
+	/**
+	 * Initialise les modèles et collections de la base MongoDB
+	 */
+	static async #initialiserModeles() {
+		await this.#etablirConnexionAvecBase();
+
+		Bd.#collections
+			.set("sessions", Bd.#client.model("Session", ModeleSession))
+			.set("usagers", Bd.#client.model("Usager", ModeleUsager));
 	}
 
 	/**
 	 * Obtient une référence à la collection donnée en paramètre.
 	 * @param {String} nom nom de la collection
-	 * @returns {Promise<Collection>} Une référence à la collection MongoDB
+	 * @returns {Promise<mongoose.Model>} Une référence à la collection MongoDB
 	 */
 	static async #obtenirCollection(nom) {
-		await Bd.#etablirConnexionAvecBase();
-		let collection = Bd.#collections.get(nom);
-
-		if (collection === undefined) {
-			collection = Bd.#base.collection(nom);
-			Bd.#collections.set(nom, collection);
+		if (Bd.#collections.size < 1) {
+			await Bd.#initialiserModeles();
 		}
 
-		return collection;
+		return Bd.#collections.get(nom);
 	}
 
 
@@ -87,6 +89,51 @@ export default class Bd {
 	 **************************************************************************/
 
 	/**
+	 * Obtient une session ayant la clé donnée.
+	 *
+	 * @param {String} cleSession clé publique de la session
+	 * @returns {typeof ModeleSession}
+	 */
+	static async obtenirSession(cleSession) {
+		const sessions = await Bd.#obtenirCollection("sessions");
+		return await sessions.findOne({ cle: cleSession, dateExpiration: { $gt: new Date() } });
+	}
+
+	/**
+	 * Supprime la session de l'usager donné.
+	 *
+	 * @param {String} idUsager identifiant unique de l'usager
+	 */
+	static async supprimerSession(idUsager) {
+		const sessions = await Bd.#obtenirCollection("sessions");
+		const usager = new ObjectId(idUsager);
+		await sessions.deleteOne({ usager: usager });
+	}
+
+	/**
+	 * Ajoute une nouvelle session dans la collection des sessions.
+	 *
+	 * @param {String} cleSession clé publique de la session
+	 * @param {String} idUsager identifiant unique de l'usager
+	 * @param {Date} expiration date d'expiration de la session
+	 * @returns {typeof ModeleSession}
+	 */
+	static async nouvSession(cleSession, idUsager, expiration) {
+		const sessions = await Bd.#obtenirCollection("sessions");
+		await Bd.supprimerSession(idUsager);
+		const usager = new ObjectId(idUsager);
+		const session = new sessions({
+			cle: cleSession,
+			usager: usager,
+			dateExpiration: expiration
+		});
+		await session.save();
+
+		return session;
+	}
+
+	/**
+	 * Obtient tous les champs d'un document de la collection `danses`
 	 *
 	 * @param {String} permalien Le permalien de la danse
 	 * @returns Les détails de la danse

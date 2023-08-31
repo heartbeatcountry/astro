@@ -1,7 +1,12 @@
 ---
 import Session from "../../lib/session.mjs";
 
-Session.detruire(Astro);
+const session = Astro.locals["session"];
+if (session) {
+	await session?.deleteOne();
+}
+
+Session.detruire(Astro.cookies);
 
 return Astro.redirect("/exemple-session");
 ---
