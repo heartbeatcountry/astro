@@ -14,6 +14,7 @@ export default defineConfig({
 	}),
 
 	server: {
+		host: process.env.NODE_ENV === 'production' ? true : false,
 		port: +process.env.PORT || 3000,
 	},
 });
