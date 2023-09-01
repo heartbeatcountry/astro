@@ -5,12 +5,14 @@
 	"scripts": {
 		"dev": "astro dev",
 		"start": "astro dev",
+		"prod": "node ./dist/server/entry.mjs",
 		"build": "astro build",
 		"preview": "astro preview",
 		"astro": "astro",
 		"stylelint": "stylelint \"src/**/*.{astro,scss,sass}\""
 	},
 	"dependencies": {
+		"@astrojs/node": "^5.3.6",
 		"astro": "^2.10.13",
 		"mongoose": "^7.5.0",
 		"sass": "^1.66.1"
