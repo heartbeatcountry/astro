@@ -1,12 +1,19 @@
 {
 	"root": true,
-	"extends": "eslint:recommended",
+	"extends": [
+		"eslint:recommended",
+		"plugin:astro/recommended",
+		"plugin:astro/jsx-a11y-strict"
+	],
 	"parserOptions": {
-		"ecmaVersion": "latest"
+		"ecmaVersion": "latest",
+		"sourceType": "module"
 	},
 	"env": {
 		"browser": true,
-		"module": true
+		"es6": true,
+		"mongo": true,
+		"node": true
 	},
 	"rules": {
 		"strict": [
@@ -36,5 +43,20 @@
 				}
 			}
 		]
-	}
+	},
+	"overrides": [
+		{
+			"files": [
+				"*.astro"
+			],
+			"parser": "astro-eslint-parser",
+			"parserOptions": {
+				"parser": "@typescript-eslint/parser",
+				"extraFileExtensions": [
+					".astro"
+				]
+			},
+			"rules": {}
+		}
+	]
 }

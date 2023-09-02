@@ -1,5 +1,8 @@
 {
-	"extends": "stylelint-config-recommended-scss",
+	"extends": [
+		"stylelint-config-recommended-scss",
+		"stylelint-config-html"
+	],
 	"rules": {
 		"color-named": "never",
 		"font-family-name-quotes": "always-where-required",
@@ -21,6 +24,5 @@
 	"ignoreFiles": [
 		"node_modules/*"
 	],
-	"defaultSeverity": "error",
-	"customSyntax": "postcss-html"
+	"defaultSeverity": "error"
 }

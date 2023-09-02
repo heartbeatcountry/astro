@@ -8,6 +8,7 @@
 	"editor.bracketPairColorization.enabled": true,
 	"editor.guides.bracketPairs": "active",
 	"stylelint.validate": [
+		"html",
 		"scss",
 		"css",
 		"astro",
