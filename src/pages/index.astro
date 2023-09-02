@@ -39,7 +39,7 @@ import Page from "../layouts/GabaritPrincipal.astro";
 	</div>
 </Page>
 
-<style>
+<style lang="scss">
 	:global(body) {
 		background: url("/images/construction/bg-vent.png") center center repeat;
 	}
@@ -79,6 +79,7 @@ import Page from "../layouts/GabaritPrincipal.astro";
 					rgb(175, 2, 175)
 				);
 				background-clip: text;
+				-webkit-background-clip: text;
 				-webkit-text-fill-color: transparent;
 				animation: deplacement 120s linear infinite;
 				font-size: 1.4em;
