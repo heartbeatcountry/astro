@@ -13,4 +13,11 @@
 		"css",
 		"astro",
 	],
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"astro",
+		"typescript",
+		"typescriptreact"
+	]
 }
