@@ -3,5 +3,106 @@ import Page from "../layouts/GabaritPrincipal.astro";
 ---
 
 <Page titre="Accueil">
-  <p>Bienvenue</p>
+	<div class="container">
+		<main>
+			<header>
+				<img
+					src="/images/construction/bienvenue.gif"
+					width="439"
+					height="73"
+					alt="Bienvenue"
+				/>
+				<h1>Bienvenue</h1>
+			</header>
+
+			<p>Ce site est en construction!</p>
+
+			<img
+				src="/images/construction/cowboy-ordi.gif"
+				alt="un cowboy assis devant un ordinateur"
+				class="cowboy"
+			/>
+		</main>
+		<footer>
+			<p>Ce site n'est <strong>pas</strong> optimisé pour:</p>
+			<img
+				src="/images/construction/ie.png"
+				width="100"
+				alt="Internet Explorer"
+			/>
+			<img
+				src="/images/construction/netscape.png"
+				width="100"
+				alt="Netscape"
+			/>
+		</footer>
+	</div>
 </Page>
+
+<style>
+	:global(body) {
+		background: url("/images/construction/bg-vent.png") center center repeat;
+	}
+
+	.container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		main {
+			margin: 1em;
+			padding: 1em;
+			background:
+				url("/images/construction/clindoeil.gif") bottom right no-repeat,
+				rgba(221, 221, 221, 0.7);
+			background-size: 90px, auto;
+			border-radius: 20px;
+			min-width: 960px;
+
+			& > header > h1 {
+				display: none;
+			}
+
+			& > p {
+				display: block;
+				margin: 1em;
+				margin-top: 2em;
+
+				font-family: Comic Sans MS;
+				background-image: linear-gradient(
+					to right,
+					rgb(199, 0, 0),
+					rgb(185, 121, 0),
+					green,
+					rgb(0, 0, 167),
+					indigo,
+					rgb(175, 2, 175)
+				);
+				background-clip: text;
+				-webkit-text-fill-color: transparent;
+				animation: deplacement 120s linear infinite;
+				font-size: 1.4em;
+				text-shadow: 0 0 1px #fffff20;
+			}
+
+			& > .cowboy {
+				mix-blend-mode: multiply;
+			}
+		}
+		footer {
+			margin-top: 2em;
+			color: white;
+			text-align: center;
+
+			img + img {
+				margin-left: 1em;
+			}
+		}
+	}
+
+	@keyframes deplacement {
+		to {
+			background-position: 2500vh;
+		}
+	}
+</style>
