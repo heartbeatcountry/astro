@@ -1,6 +1,8 @@
+// eslint-disable-next-line no-unused-vars
 import { AstroCookies } from "astro";
 import { chaineAleatoire } from "./cryptographie.mjs";
 import Bd from "./bd.mjs";
+// eslint-disable-next-line no-unused-vars
 import ModeleSession from "./models/session.mjs";
 
 /**
