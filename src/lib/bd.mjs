@@ -3,6 +3,12 @@ import mongoose from "mongoose";
 import ModeleSession from "./models/session.mjs";
 import ModeleUsager from "./models/usager.mjs";
 
+// Importation des interfaces:
+/** @typedef {import("./interfaces.mjs").IDateEvenement} IDateEvenement */
+/** @typedef {import("./interfaces.mjs").IPhoto} IPhoto */
+/** @typedef {import("./interfaces.mjs").ILien} ILien */
+
+// Raccourci pour ObjectId:
 const ObjectId = mongoose.mongo.ObjectId;
 
 
