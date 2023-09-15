@@ -33,5 +33,9 @@ export const contraintes = {
 			longueurMax: 255, // sera haché côté serveur avant stockage
 			hacherCoteClient: true,
 		},
+
+		telephone: {
+			regex: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
+		}
 	},
 };

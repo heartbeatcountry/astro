@@ -37,6 +37,26 @@ export const Usager = new Schema({
 		minLength: contraintes.usager.mdp.longueurMin,
 		maxLength: contraintes.usager.mdp.longueurMax,
 	},
+	telephone: {
+		type: String,
+		trim: true,
+		required: true,
+		validate: [contraintes.usager.telephone.regex.test, "Le champ `téléphone` est invalide.  Veuillez entrer selon le format 555-555-5555"]
+	},
+	estAdmin: {
+		type: Boolean,
+		default: false,
+	},
+	estValide: {
+		type: Boolean,
+		default:false,
+	},
+	dansesSouhaitees:{
+		type: [ObjectId],
+		//ref: 'Usager',
+		required: true,
+		unique: true,
+	}
 });
 
 export default Usager;
