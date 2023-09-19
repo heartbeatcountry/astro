@@ -49,14 +49,13 @@ export const Usager = new Schema({
 	},
 	estValide: {
 		type: Boolean,
-		default:false,
+		default: false,
 	},
-	dansesSouhaitees:{
-		type: [ObjectId],
-		//ref: 'Usager',
-		required: true,
+	dansesSouhaitees: [{
+		type: ObjectId,
+		ref: 'Danse',
 		unique: true,
-	}
+	}]
 });
 
 export default Usager;

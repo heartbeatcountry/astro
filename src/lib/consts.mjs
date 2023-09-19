@@ -38,4 +38,65 @@ export const contraintes = {
 			regex: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
 		}
 	},
+	/**
+	 * Contraintes pour une danse
+	 */
+	danse: {
+		/**
+		 * titre de la danse
+		 */
+		titre: {
+			longueurMin: 1,
+			longueurMax: 100,
+		},
+		/**
+		 * description
+		 */
+		description: {
+			longueurMin: 1,
+			longueurMax: 500,
+		},
+		/**
+		 * nombre de comptes
+		 */
+		comptes: {
+			min: 1,
+			max: 400,
+		},
+		/**
+		 * nombre de murs
+		 */
+		murs: {
+			min: 1,
+			max: 8,
+		},
+		/**
+		 * détails de l'auteur
+		 */
+		auteur: {
+			longueurMin: 1,
+			longueurMax: 100,
+		},
+		/**
+		 * détails de l'auteur
+		 */
+		niveau: {
+			longueurMin: 1,
+			longueurMax: 100,
+		},
+		/**
+		 * détails du tag
+		 */
+		tag: {
+			longueurMin: 1,
+			longueurMax: 100,
+		},
+		/**
+		 * détails de la musique
+		 */
+		musique: {
+			longueurMin: 1,
+			longueurMax: 100,
+		},
+	},
 };
