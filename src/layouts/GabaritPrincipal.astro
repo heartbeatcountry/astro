@@ -4,11 +4,11 @@ import "../styles/style.scss";
 
 // Définition des paramètres pouvant être passés au gabarit:
 interface Props {
-  // Le titre est toujours obligatoire:
-  titre: string;
+	// Le titre est toujours obligatoire:
+	titre: string;
 
-  // La description est optionnelle:
-  description?: string;
+	// La description est optionnelle:
+	description?: string;
 }
 
 // Le titre est obligatoire donc c'est une constante; la description est optionnelle donc c'est une variable:
@@ -25,17 +25,216 @@ const URLcanonique = new URL(Astro.url.pathname, Astro.site);
 export const prerender = true;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={URLcanonique} />
-    <title>{titre} &mdash; {import.meta.env.NOM_SITE}</title>
-  </head>
-  <body>
-    <slot />
-  </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="canonical" href={URLcanonique} />
+		<title>{titre} &mdash; {import.meta.env.NOM_SITE}</title>
+	</head>
+	<body>
+		<a href="#contenuPrincipal" class="textePourLecteur"
+			>Aller au contenu principal</a
+		>
+		<header>
+			<nav
+				aria-labelledby="MenuPrincipal"
+				class="navbar navbar-expand-sm bg-light-trans sticky-top"
+			>
+				<h1 id="MenuPrincipal" class="textePourLecteur">
+					Menu principal
+				</h1>
+				<div class="container-fluid">
+					<div id="navbarSupportedContent">
+						<ul class="navbar-nav">
+							<li class="nav-item col-md-3">
+								<a href="index.html"
+									><img
+										class="w-75"
+										src="images/logoblanctransparent.png"
+										alt="logo heartbeat country"
+									/></a
+								>
+								<span class="textePourLecteur"
+									>L’école de danse Heartbeat Country</span
+								>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="index.html">Accueil</a
+								>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="services.html"
+									>Cours et Services</a
+								>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="danses.html">Danses</a
+								>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="evenements.html"
+									>Événements</a
+								>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="a_propos.html"
+									>À propos</a
+								>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="connexion.html"
+									>Connexion</a
+								>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+			<nav
+				aria-labelledby="MenuPrincipal"
+				class="navbar navbar-dark bg-light-trans affichage-sticker sticky-top"
+			>
+				<h1 id="MenuPrincipal2" class="textePourLecteur">
+					Menu principal
+				</h1>
+				<div class="container-fluid container">
+					<button
+						class="navbar-toggler"
+						type="button"
+						data-bs-toggle="offcanvas"
+						data-bs-target="#offcanvasDarkNavbar"
+						aria-controls="offcanvasDarkNavbar"
+						aria-label="Toggle navigation"
+					>
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div
+						class="offcanvas offcanvas-end bleu"
+						tabindex="-1"
+						id="offcanvasDarkNavbar"
+					>
+						<div class="offcanvas-header">
+							<h5
+								class="offcanvas-title"
+								id="offcanvasDarkNavbarLabel"
+							>
+								Menu
+							</h5>
+							<button
+								type="button"
+								class="btn-close btn-close-white"
+								data-bs-dismiss="offcanvas"
+								aria-label="Close"></button>
+						</div>
+						<div class="offcanvas-body">
+							<ul class="navbar-nav">
+								<li class="nav-item">
+									<a class="nav-link" href="index.html"
+										>Accueil</a
+									>
+								</li>
+
+								<li class="nav-item">
+									<a class="nav-link" href="services.html"
+										>Cours et Services</a
+									>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="danses.html"
+										>Danses</a
+									>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="evenements.html"
+										>Événements</a
+									>
+								</li>
+
+								<li class="nav-item">
+									<a class="nav-link" href="a_propos.html"
+										>À propos</a
+									>
+								</li>
+
+								<li class="nav-item">
+									<a class="nav-link" href="connexion.html"
+										>Connexion</a
+									>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</nav>
+
+			<h1>{titre}</h1>
+
+		</header>
+
+		<slot />
+
+		<footer>
+			<p>
+				<script type="text/javascript">
+					let div = document.getElementById("adresse");
+					let part1 = "heartbeatcountry";
+					let part2 = Math.pow(2, 6);
+					let part3 = String.fromCharCode(part2);
+					let part4 = "outlook.com";
+					let part5 = part1 + String.fromCharCode(part2) + part4;
+					document.write(
+						"<a href=" +
+							"mai" +
+							"lto" +
+							":" +
+							part5 +
+							">" +
+							part1 +
+							part3 +
+							part4 +
+							"</a>",
+					);
+				</script>
+			</p>
+			<p>
+				Site web crée par Pascal Breton etCynthia Fortier automne 2023
+			</p>
+			<p>Tous droits réservés.</p>
+
+			<a
+				href="https://www.facebook.com/profile.php?id=100063673747492"
+				target="_blank"
+				><img
+					class="w-"
+					src="images/iconeFacebook2.png"
+					alt="Logo Facebook"
+				/></a
+			>
+			<a
+				href="https://www.instagram.com/heartbeatcountry/"
+				target="_blank"
+				><img
+					src="images/iconeInstagram2.png"
+					alt="Logo Instagram"
+				/></a
+			>
+
+			<a
+				href="https://www.linkedin.com/in/cynthia-fortier-414a4a259/"
+				target="_blank"
+				><img src="images/iconeLinkedin.png" alt="Logo Linkedin" /></a
+			>
+			<a href="https://www.tiktok.com/@heartbeatcountry" target="_blank"
+				><img src="images/icone_tiktok.png" alt="Logo Tiktok" /></a
+			>
+		</footer>
+	</body>
 </html>
