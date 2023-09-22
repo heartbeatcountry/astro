@@ -19,5 +19,8 @@
 		"astro",
 		"typescript",
 		"typescriptreact"
-	]
+	],
+	"[astro]": {
+		"editor.formatOnSave": false,
+	}
 }
