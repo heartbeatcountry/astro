@@ -1,9 +1,9 @@
 ---
 import Session from "../../lib/session.mjs";
 
-Astro.locals["session"] = await Session.nouvSession(
+await Session.nouvSession(
 	Astro.cookies,
-	"64efcd939a22a43b7655725e"
+	"64f2128f1ecdc2e592625896"
 );
 
 return Astro.redirect("/exemple-session");

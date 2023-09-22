@@ -1,17 +1,26 @@
 ---
 import Page from "../../layouts/GabaritPrincipal.astro";
 
-const session = Astro.locals["session"];
-
-// OPTIONNEL: obtenir les détails de l'usagé associé à la session:
-await session?.populate("usager");
+const usager = Astro.locals["usager"];
 ---
 
 <Page titre="Session">
-	<p>
-		Contenu de la session:
-		<pre>{JSON.stringify(session)}</pre>
-	</p>
+	{
+		usager &&
+		<p>
+			Usager connecté:
+			<pre>
+				Prénom: {usager.prenom}
+				Nom: {usager.nom}
+			</pre>
+		</p>
+	}
+	{
+		!usager &&
+		<p>
+			(non connecté)
+		</p>
+	}
 
 	<a href="/exemple-session/nouv">[Nouvelle session]</a>
 	<a href="/exemple-session/deconnexion">[Déconnexion]</a>

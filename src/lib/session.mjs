@@ -77,11 +77,17 @@ export default class Session {
 	}
 
 	/**
-	 * Détruire le cookie de session de l'utilisateur.
+	 * Détruire la session de l'utilisateur.
 	 *
 	 * @param {AstroCookies} cookies Référence à l'instance de Astro.cookies
 	 */
 	static async detruire(cookies) {
+		const session = await Session.obtenirDepuisCookie(cookies);
+
+		if (session != null) {
+			session.deleteOne();
+		}
+
 		cookies.delete(NOM_COOKIE);
 	}
 }
