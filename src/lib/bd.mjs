@@ -29,8 +29,11 @@ await mongoose.connect(urlConnexion);
 await mongoose.connection.useDb(nomBase);
 
 // Création des modèles à partir des schémas:
-const Session = model("Session", SchemaSession);
+/** @type {Model<SchemaSession>} */
+export const Session = model("Session", SchemaSession);
+/** @type {Model<SchemaUsager>} */
 const Usager = model("Usager", SchemaSession);
+/** @type {Model<SchemaAppreciation>} */
 const Appreciation = model("Appreciation", SchemaAppreciation);
 
 
@@ -42,7 +45,7 @@ export default class Bd {
 	 * Obtient une session ayant la clé donnée.
 	 *
 	 * @param {String} cleSession clé publique de la session
-	 * @returns {typeof SchemaSession}
+	 * @returns {Promise<Session>} instance de la Session
 	 */
 	static async obtenirSession(cleSession) {
 		return await Session.findOne({ cle: cleSession, dateExpiration: { $gt: new Date() } });
@@ -52,6 +55,7 @@ export default class Bd {
 	 * Supprime la session de l'usager donné.
 	 *
 	 * @param {String} idUsager identifiant unique de l'usager
+	 * @returns {Promise<void>} rien
 	 */
 	static async supprimerSession(idUsager) {
 		const usager = new ObjectId(idUsager);
@@ -64,7 +68,7 @@ export default class Bd {
 	 * @param {String} cleSession clé publique de la session
 	 * @param {String} idUsager identifiant unique de l'usager
 	 * @param {Date} expiration date d'expiration de la session
-	 * @returns {typeof SchemaSession}
+	 * @returns {Promise<Session>} instance de la nouvelle Session
 	 */
 	static async nouvSession(cleSession, idUsager, expiration) {
 		await Bd.supprimerSession(idUsager);

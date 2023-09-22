@@ -3,7 +3,7 @@ import { AstroCookies } from "astro";
 import { chaineAleatoire } from "./cryptographie.mjs";
 import Bd from "./bd.mjs";
 // eslint-disable-next-line no-unused-vars
-import ModeleSession from "./models/session.mjs";
+import { Session as ModeleSession } from "./bd.mjs";
 
 /**
  * Nombre d'heures avant qu'une session expire et que l'utilisateur doivent se
@@ -34,7 +34,7 @@ export default class Session {
 	 *
 	 * @param {AstroCookies} cookies Référence à l'instance de Astro.cookies
 	 * @param {String} idUsager Identifiant de l'usager
-	 * @returns {typeof ModeleSession} une référence à la nouvelle session
+	 * @returns {Promise<ModeleSession>} une référence à la nouvelle session
 	 */
 	static async nouvSession(cookies, idUsager) {
 		// Création de la clé de session:
@@ -62,8 +62,8 @@ export default class Session {
 	 * Restaure une session à partir d'un cookie encrypté.
 	 *
 	 * @param {AstroCookies} cookies Référence à l'instance de Astro.cookies
-	 * @returns {typeof ModeleSession} Une nouvelle instance de la classe ou null si aucune
-	 * session existe pour l'usager
+	 * @returns {Promise<ModeleSession>} Une nouvelle instance de la classe ou
+	 * null si aucune session existe pour l'usager
 	 */
 	static async obtenirDepuisCookie(cookies) {
 		const cleSession = cookies.get(NOM_COOKIE)?.value;
