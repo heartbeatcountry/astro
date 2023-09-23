@@ -21,167 +21,168 @@ description ??= import.meta.env.DESCRIPTION_PAR_DEFAUT;
 // URL canonique pour le référencement:
 const URLcanonique = new URL(Astro.url.pathname, Astro.site);
 
-// On souhaite que le gabarit soit pré-compilé:
-export const prerender = true;
+const usager = Astro.locals["usager"];
 ---
 
 <!doctype html>
 <html lang="fr">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="canonical" href={URLcanonique} />
-		<title>{titre} &mdash; {import.meta.env.NOM_SITE}</title>
-	</head>
-	<body>
-		<a href="#contenuPrincipal" class="textePourLecteur"
-			>Aller au contenu principal</a
-		>
-		<header>
-			<nav
-				aria-labelledby="MenuPrincipal"
-				class="navbar navbar-expand-sm bg-light-trans sticky-top"
-			>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="description" content={description} />
+	<meta name="viewport" content="width=device-width" />
+	<link rel="icon" href="/minilogo3.png" />
+	<link rel="canonical" href={URLcanonique} />
+	<title>{titre} &mdash; {import.meta.env.NOM_SITE}</title>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+		crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<a href="#contenuPrincipal" class="textePourLecteur">Aller au contenu principal</a>
+	<header class="d-flex justify-content-center">
+		<div>
+			<nav aria-labelledby="MenuPrincipal" class="navbar navbar-expand-sm sticky-topnavbar
+				border-bottom border-body affichage_nav" data-bs-theme="dark">
+
 				<h1 id="MenuPrincipal" class="textePourLecteur">
 					Menu principal
 				</h1>
 				<div class="container-fluid">
 					<div id="navbarSupportedContent">
 						<ul class="navbar-nav">
-							<li class="nav-item col-md-3">
-								<a href="index.html"
-									><img
-										class="w-75"
-										src="images/logoblanctransparent.png"
-										alt="logo heartbeat country"
-									/></a
-								>
-								<span class="textePourLecteur"
-									>L’école de danse Heartbeat Country</span
-								>
+							<li class=" col-md-3">
+								<a href="index.html"><img class="w-75" src="images/logoblanctransparent.png"
+										alt="logo heartbeat country" /></a>
+								<span class="textePourLecteur">L’école de danse Heartbeat Country</span>
 							</li>
 
-							<li class="nav-item">
-								<a class="nav-link" href="index.html">Accueil</a
-								>
+							<li>
+								<a href="index.html">Accueil</a>
 							</li>
 
-							<li class="nav-item">
-								<a class="nav-link" href="services.html"
-									>Cours et Services</a
-								>
+							<li>
+								<a href="services.html">Cours et Services</a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="danses.html">Danses</a
-								>
+							<li>
+								<a href="danses.html">Danses</a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="evenements.html"
-									>Événements</a
-								>
+							<li>
+								<a href="evenements.html">Événements</a>
 							</li>
 
-							<li class="nav-item">
-								<a class="nav-link" href="a_propos.html"
-									>À propos</a
-								>
+							<li>
+								<a href="a_propos.html">À propos</a>
 							</li>
-
-							<li class="nav-item">
-								<a class="nav-link" href="connexion.html"
-									>Connexion</a
-								>
+							{
+							usager && (
+							<li>
+								<span>Bienvenue, {usager?.prenom}</span>
+								<a href="deconnexion.html">
+									Déconnexion
+								</a>
 							</li>
+							)
+							}
+							{
+							!usager && (
+							<li>
+								<a href="connexion.html">
+									Connexion
+								</a>
+							</li>
+							)
+							}
 						</ul>
 					</div>
 				</div>
 			</nav>
-			<nav
-				aria-labelledby="MenuPrincipal"
-				class="navbar navbar-dark bg-light-trans affichage-sticker sticky-top"
-			>
-				<h1 id="MenuPrincipal2" class="textePourLecteur">
-					Menu principal
-				</h1>
-				<div class="container-fluid container">
-					<button
-						class="navbar-toggler"
-						type="button"
-						data-bs-toggle="offcanvas"
-						data-bs-target="#offcanvasDarkNavbar"
-						aria-controls="offcanvasDarkNavbar"
-						aria-label="Toggle navigation"
-					>
+			<nav aria-labelledby="MenuPrincipal" class="navbar navbar-dark affichage_nav_sticker sticky-top" data-bs-theme="dark">
+				<h1 id="MenuPrincipal2" class="textePourLecteur">Menu principal</h1>
+				<div>
+					<a href="index.html"><img class="w-50" src="images/logoblanctransparent.png"
+						alt="logo heartbeat country" /></a>
+				<span class="textePourLecteur">L’école de danse Heartbeat Country</span>
+					<button class="navbar-toggler " type="button" data-bs-toggle="offcanvas"
+						data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar"
+						aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
-					<div
-						class="offcanvas offcanvas-end bleu"
-						tabindex="-1"
-						id="offcanvasDarkNavbar"
-					>
+
+
+					<div class="offcanvas offcanvas-end bleu" tabindex="-1" id="offcanvasDarkNavbar">
 						<div class="offcanvas-header">
-							<h5
-								class="offcanvas-title"
-								id="offcanvasDarkNavbarLabel"
-							>
-								Menu
-							</h5>
-							<button
-								type="button"
-								class="btn-close btn-close-white"
-								data-bs-dismiss="offcanvas"
+							<h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Menu</h5>
+							<button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
 								aria-label="Close"></button>
 						</div>
 						<div class="offcanvas-body">
-							<ul class="navbar-nav">
-								<li class="nav-item">
-									<a class="nav-link" href="index.html"
-										>Accueil</a
-									>
-								</li>
+							<ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+							<li>
+								<a href="index.html">Accueil</a>
+							</li>
 
-								<li class="nav-item">
-									<a class="nav-link" href="services.html"
-										>Cours et Services</a
-									>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="danses.html"
-										>Danses</a
-									>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="evenements.html"
-										>Événements</a
-									>
-								</li>
+							<li>
+								<a href="services.html">Cours et Services</a>
+							</li>
+							<li>
+								<a href="danses.html">Danses</a>
+							</li>
+							<li>
+								<a href="evenements.html">Événements</a>
+							</li>
 
-								<li class="nav-item">
-									<a class="nav-link" href="a_propos.html"
-										>À propos</a
-									>
-								</li>
+							<li>
+								<a href="a_propos.html">À propos</a>
+							</li>
 
-								<li class="nav-item">
-									<a class="nav-link" href="connexion.html"
-										>Connexion</a
-									>
+							{
+								usager && (
+								<li>
+									<span>Bienvenue, {usager?.prenom}</span>
+									<a href="deconnexion.html">
+										Déconnexion
+									</a>
 								</li>
-							</ul>
-						</div>
+								)
+								}
+								{
+								!usager && (
+								<li>
+									<a href="connexion.html">
+										Connexion
+									</a>
+								</li>
+								)
+								}
+						</ul>
 					</div>
 				</div>
+			</div>
 			</nav>
 
+				{
+				usager && (
+					<h2>Bienvenue, {usager?.prenom}</h2>
+				)
+				}
+
 			<h1>{titre}</h1>
+		</div>
+	</header>
 
-		</header>
+	<slot />
 
-		<slot />
+	<footer>
+		<div>
 
-		<footer>
+			<p>
+				Site web crée par Pascal Breton et Cynthia Fortier automne 2023
+			</p>
+			<p>Tous droits réservés.</p>
+		</div>
+		<div>
 			<p>
 				<script type="text/javascript">
 					let div = document.getElementById("adresse");
@@ -204,37 +205,20 @@ export const prerender = true;
 					);
 				</script>
 			</p>
-			<p>
-				Site web crée par Pascal Breton etCynthia Fortier automne 2023
-			</p>
-			<p>Tous droits réservés.</p>
 
-			<a
-				href="https://www.facebook.com/profile.php?id=100063673747492"
-				target="_blank"
-				><img
-					class="w-"
-					src="images/iconeFacebook2.png"
-					alt="Logo Facebook"
-				/></a
-			>
-			<a
-				href="https://www.instagram.com/heartbeatcountry/"
-				target="_blank"
-				><img
-					src="images/iconeInstagram2.png"
-					alt="Logo Instagram"
-				/></a
-			>
+			<a href="https://www.facebook.com/profile.php?id=100063673747492" target="_blank"><img class="w-"
+					src="images/icones/iconeFacebook2.png" alt="Logo Facebook" /></a>
+			<a href="https://www.instagram.com/heartbeatcountry/" target="_blank"><img
+					src="images/icones/iconeInstagram2.png" alt="Logo Instagram" /></a>
 
-			<a
-				href="https://www.linkedin.com/in/cynthia-fortier-414a4a259/"
-				target="_blank"
-				><img src="images/iconeLinkedin.png" alt="Logo Linkedin" /></a
-			>
-			<a href="https://www.tiktok.com/@heartbeatcountry" target="_blank"
-				><img src="images/icone_tiktok.png" alt="Logo Tiktok" /></a
-			>
-		</footer>
-	</body>
+			<a href="https://www.linkedin.com/in/cynthia-fortier-414a4a259/" target="_blank"><img
+					src="images/icones/iconeLinkedin.png" alt="Logo Linkedin" /></a>
+			<a href="https://www.tiktok.com/@heartbeatcountry" target="_blank"><img src="images/icones/icone_tiktok.png"
+					alt="Logo Tiktok" /></a>
+		</div>
+		</div>
+	</footer>
+</body>
+
 </html>
+
