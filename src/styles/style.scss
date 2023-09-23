@@ -1,3 +1,173 @@
+/* stylelint-disable function-url-quotes */
+/* stylelint-disable declaration-block-no-duplicate-properties */
+/* stylelint-disable no-descending-specificity */
+/* stylelint-disable font-family-name-quotes */
+/* stylelint-disable scss/at-extend-no-missing-placeholder */
 @charset "UTF-8";
 
-@use "./bootstrap.min.css"
+@use "./bootstrap.min.css";
+
+
+/*************************
+        Général
+**************************/
+
+.textePourLecteur {
+	border: 0;
+	clip: rect 1px 1px 1px 1px;
+	clip-path: inset (50%);
+	height: 1px;
+	margin: 1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+h1, h2, h3, h4, h5, p, a {
+
+	font-family:Georgia, 'Times New Roman', Times, serif;
+	text-align: center;
+}
+
+h1{
+	margin-top: 20px;
+}
+
+header{
+	background-image: url(../../images/background_header.png);
+	background-size: 100%;
+	min-height:450px;
+	box-shadow: 300px 3000px 0 0 rgba(245, 249, 245, 0.704) inset;
+
+
+}
+
+nav, footer{
+	background-color: rgba(0, 0, 0, 0.795);
+	text-align: center;
+	font-size: 1.5rem;
+}
+
+
+nav {
+	display: block;
+	a{
+		@extend .nav-link, .mx-3;
+		padding:10px;
+	}
+}
+.affichage_nav {
+	display: block;
+}
+
+.affichage_nav_sticker {
+	display: none;
+}
+nav a:hover{
+	background-color: #80a2acf6;
+	border-radius: 4px;
+}
+
+nav li{
+	@extend .nav-item;
+}
+
+footer img{
+	max-width: 8vw;
+	padding: 20px;
+}
+
+footer{
+
+	justify-content: space-between;
+	align-items: center;
+	display: flex;
+	justify-content: center;
+
+	p{
+		@extend .px-5;
+		color: #ffffff;
+	}
+}
+
+@media screen and (max-width:1340px) {
+	nav a, footer{
+		font-size: 1.25rem;
+		padding: 5px;
+
+	}
+
+}
+
+@media screen and (max-width:1110px) {
+	header{
+
+		min-height:380px;
+
+	}
+
+	nav a, footer{
+
+		font-size: 1rem;
+		padding: 2px;
+
+	}
+
+	footer img{
+		max-width: 8vw;
+		padding: 10px;
+	}
+
+
+}
+
+@media screen and (max-width:910px) {
+
+	header{
+
+		min-height:220px;
+
+	}
+
+	nav a, footer{
+
+		font-size: 1rem;
+		padding: 2px;
+		display: block;
+
+	}
+	.affichage_nav{
+		display: none;
+
+	}
+
+	.affichage_nav_sticker {
+		display: block;
+		background-color: rgba(0, 0, 0, 0.442);
+
+	}
+
+	footer img{
+		max-width: 10vw;
+		padding: 5px;
+	}
+
+}
+
+
+@media screen and (max-width:670px) {
+	header{
+
+		min-height:180px;
+
+	}
+
+	footer img{
+		max-width: 12vw;
+		padding: 5px;
+	}
+
+}
+
