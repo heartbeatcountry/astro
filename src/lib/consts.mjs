@@ -1,3 +1,4 @@
+/* eslint-disable no-control-regex */
 /**
  * Expression rationnelle pour valider les adresses courriel (RFC 5322)
  */
@@ -38,4 +39,46 @@ export const contraintes = {
 			regex: /^\(?([0-9]{3})\)?[- ]?([0-9]{3})[-]?([0-9]{4})$/,
 		}
 	},
+
+	/**
+	 * Contraintes pour une danse
+	 */
+
+	danse: {
+		/**
+		 * Nom de la danse
+		 */
+		titre: {
+			longueurMin: 1,
+			longueurMax: 50,
+		},
+		/**
+		 * Prénom et nom du ou des chorégraphes
+		 */
+		choregraphe:{
+			longueurMin: 8,
+			longueurMax: 255,
+		},
+		/**
+		 * Musique
+		 */
+			musique: {
+				longueurMin: 1,
+				longueurMax: 255,
+			},
+		/**
+		 * Détails des "Tags" et "Restarts"
+		 */
+		detailsTag:{
+			longueurMin: 8,
+			longueurMax: 555,
+		}
+
+	},
+
+
+
+
+
+
 };

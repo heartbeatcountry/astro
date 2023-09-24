@@ -1,12 +1,185 @@
 ---
 import Page from "../layouts/GabaritPrincipal.astro";
+
+const danse = Astro.locals["danse"];
+const cours = Astro.locals["cours"];
+
+const dateActuelle = new Date();
+const jourActuel = dateActuelle.getDay();
+const joursAvantDimanche = 7 - jourActuel;
+const dimancheDeLaSemaine = new Date(dateActuelle);
+dimancheDeLaSemaine.setDate(dateActuelle.getDate() + joursAvantDimanche );
+
+const dateMoisDimanche = obtenirJourDateMois(dimancheDeLaSemaine)
+
+const coursTest = {
+	niveau:"intermédiaire",
+	date: new Date('2023-09-30'),
+	lieu: "Salle des Lions"
+
+};
+
+const danseDeTest = {
+	titre: "Everyone needs a hero",
+	choregraphe: "Roy Verdonk, Grace David, Jef Camps",
+	musique:"Holding Out for a Hero - Adam Lambert",
+	niveau: "intermédiaire",
+	detailsTag: "Après 2e mur, Ajouter 8 comptes (step 1/2 tour X 2, out, out, in, in), après 3e mur et 4e mur ajouter 4 comptes (step 1/2 tour X 2)",
+	lienFeuille:"https://www.copperknob.co.uk/.../everyone-needs-a-hero",
+	lienVideoDanse: "https://www.youtube.com/watch?v=338U80kqryY&t=71s",
+	lienVideoMusique: "https://www.youtube.com/watch?v=dB7NsWHCQv4",
+	lienVideoAcademie: "https://www.academiedansetavie.com/products/academie-danse-ta-vie/categories/2150082906/posts/2169250245  ",
+	nbComptes: 64,
+	nbMurs: 2,
+	estCoupDeCoeur: true,
+	cours: [coursTest],
+};
+
+
+/**
+ * Permet d'obternir le jour, la date et le mois pour une "Date"
+ */
+function obtenirJourDateMois(date){
+
+	const nomsJours = [
+		"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
+		];
+	const nomsMois = [
+		"Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+		"Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+		];
+	const jourDeLaSemaine = nomsJours[date.getDay()];
+
+	const jour = date.getDate();
+
+	// Obtenez le mois
+	const mois = nomsMois[date.getMonth()];
+
+	// Formatez le résultat
+	const resultat = `${jourDeLaSemaine}, ${jour} ${mois}`;
+
+	return resultat;
+
+}
+
+
 ---
 
 <Page titre="Accueil">
-	<div class="container">
+<h1> Danses de la semaine du {dateMoisDimanche} </h1>
+
+
+<div class="row row-cols-1 row-cols-lg-3 g-4">
+	<div class="col">
+	  	<div class="card">
+			<div class="card-header">{obtenirJourDateMois(danseDeTest.cours[0].date)}<br>
+			{danseDeTest.cours[0].lieu}</div>
+			<iframe src={danseDeTest.lienVideoMusique} title="YouTube video player"
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media;
+			gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+			<div class="card-body">
+		  	<h5 class="card-title">{danseDeTest.titre}</h5>
+		  	<p class="card-text">Niveau: {danseDeTest.niveau} </p>
+			<p class="card-text">{danseDeTest.nbComptes} comptes {danseDeTest.nbMurs} Murs</p>
+		</div>
 	</div>
+
+
+</div>
+
+
+
 </Page>
 
 <style lang="scss">
+//@use "../styles/bootstrap.min.css";
 
+.card{
+	margin: 30px;
+}
+
+.card-header{
+	font-size: 2rem;
+	background-color: #80a2acf6;
+
+}
+
+@media screen and (max-width:1340px) {
+	nav a, footer{
+		font-size: 1.25rem;
+		padding: 5px;
+
+	}
+
+}
+
+@media screen and (max-width:1110px) {
+	header{
+
+		min-height:380px;
+
+	}
+
+	nav a, footer{
+
+		font-size: 1rem;
+		padding: 2px;
+
+	}
+
+	footer img{
+		max-width: 8vw;
+		padding: 10px;
+	}
+
+
+}
+
+@media screen and (max-width:910px) {
+
+	header{
+
+		min-height:220px;
+
+	}
+
+	nav a, footer{
+
+		font-size: 1rem;
+		padding: 2px;
+		display: block;
+
+	}
+	.affichage_nav{
+		display: none;
+
+	}
+
+	.affichage_nav_sticker {
+		display: block;
+		background-color: rgba(0, 0, 0, 0.442);
+
+	}
+
+	footer img{
+		max-width: 10vw;
+		padding: 5px;
+	}
+
+}
+
+
+@media screen and (max-width:670px) {
+	header{
+
+		min-height:180px;
+
+	}
+
+	footer img{
+		max-width: 12vw;
+		padding: 5px;
+	}
+
+}
 </style>

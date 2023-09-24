@@ -47,7 +47,7 @@ export const Usager = new Schema({
 	},
 	dansesSouhaitees: {
 		type: [ObjectId],
-		//ref: 'Usager',
+		ref: 'Danse',
 		required: true,
 	}
 });
