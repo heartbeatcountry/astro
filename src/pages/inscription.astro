@@ -1,0 +1,170 @@
+---
+import Page from "../layouts/GabaritPrincipal.astro";
+import { contraintes } from "../lib/consts.mjs";
+
+const cnt = contraintes.usager;
+
+let erreurs = {};
+
+if (Astro.request.method === "POST") {
+	// On récupère toutes les données du formulaire:
+	const form = await Astro.request.formData();
+	const prenom = form.get("prenom")?.toString().trim() ?? "";
+	const nom = form.get("nom")?.toString().trim() ?? "";
+	const courriel = form.get("courriel")?.toString().trim().toLowerCase() ?? "";
+	const telephone = form.get("telephone")?.toString().trim() ?? "";
+	const mdp = form.get("mdp")?.toString().trim() ?? "";
+
+	// On vérifie selon les contraintes de consts.mjs:
+	if (prenom.length < cnt.nom.longueurMin || prenom.length > cnt.nom.longueurMax) {
+		erreurs["prenom"] = `Doit contenir entre ${cnt.nom.longueurMin} et ${cnt.nom.longueurMax} caractères.`;
+	}
+	if (nom.length < cnt.nom.longueurMin || nom.length > cnt.nom.longueurMax) {
+		erreurs["nom"] = `Doit contenir entre ${cnt.nom.longueurMin} et ${cnt.nom.longueurMax} caractères.`;
+	}
+	if (!cnt.courriel.regex.test(courriel)) {
+		erreurs["courriel"] = "Doit être une adresse courriel valide.";
+	}
+	if (!cnt.telephone.regex.test(telephone)) {
+		erreurs["telephone"] = "Doit respecter le format 555-555-5555.";
+	}
+	if (mdp.length < cnt.mdp.longueurMin || mdp.length > cnt.mdp.longueurMax) {
+		erreurs["mdp"] = `Doit contenir entre ${cnt.mdp.longueurMin} et ${cnt.mdp.longueurMax} caractères.`;
+	}
+
+	if (Reflect.ownKeys(erreurs).length < 1) {
+		console.log("tout est beau!");
+	} else {
+		console.log("contient des erreurs", erreurs);
+	}
+}
+---
+
+<Page titre="Inscription">
+	<div class="row">
+		<div class="col-12 col-lg-8">
+			<form class="row row-cols-1 g-5" method="POST" action="#" id="form-inscription" novalidate>
+				<div>
+					<label for="prenom" class="form-label">Prénom</label>
+					{
+						!erreurs["prenom"] &&
+							<input type="text" class="form-control" name="prenom" id="prenom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} required>
+					}
+					{
+						erreurs["prenom"] &&
+						(
+							<input type="text" class="form-control is-invalid" name="prenom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} id="prenom" required aria-describedby="prenom-invalide">
+							<div class="invalid-feedback" id="prenom-invalide">
+								{erreurs["prenom"]}
+							</div>
+						)
+					}
+				</div>
+				<div>
+					<label for="nom" class="form-label">Nom</label>
+					{
+						!erreurs["nom"] &&
+							<input type="text" class="form-control" name="nom" id="nom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} required>
+					}
+					{
+						erreurs["nom"] &&
+						(
+							<input type="text" class="form-control is-invalid" name="nom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} id="nom" required aria-describedby="nom-invalide">
+							<div class="invalid-feedback" id="nom-invalide">
+								{erreurs["nom"]}
+							</div>
+						)
+					}
+				</div>
+				<div>
+					<label for="courriel" class="form-label">Adresse courriel</label>
+					{
+						!erreurs["courriel"] &&
+							<input type="email" class="form-control" id="courriel" name="courriel" required aria-describedby="aide-courriel">
+					}
+					{
+						erreurs["courriel"] &&
+						(
+							<input type="email" class="form-control is-invalid" id="courriel" name="courriel" required aria-describedby="aide-courriel courriel-invalide">
+							<div class="invalid-feedback" id="courriel-invalide">
+								{erreurs["courriel"]}
+							</div>
+						)
+					}
+					<div id="aide-courriel" class="form-text">
+						Nous ne partagerons jamais vos informations personnelles.
+					</div>
+				</div>
+				<div>
+					<label for="telephone" class="form-label">Numéro de téléphone</label>
+					{
+						!erreurs["telephone"] &&
+						(
+							<input type="tel" class="form-control" id="telephone" pattern="\\d{3}-\\d{3}-\\d{4}" name="telephone" required aria-describedby="aide-telephone">
+							<div class="form-text" id="aide-telephone">
+								Utilisez le format 555-555-5555.
+							</div>
+						)
+					}
+					{
+						erreurs["telephone"] &&
+						(
+							<input type="tel" class="form-control is-invalid" id="telephone" pattern="\\d{3}-\\d{3}-\\d{4}" name="telephone" required aria-describedby="telephone-invalide">
+							<div class="invalid-feedback" id="courriel-invalide">
+								{erreurs["telephone"]}
+							</div>
+						)
+					}
+				</div>
+				<div>
+					<input type="hidden" id="mdp-sha" name="mdp">
+					<label for="mdp" class="form-label">Mot de passe</label>
+					{
+						!erreurs["mdp"] &&
+						(
+							<input type="password" class="form-control" required minlength={cnt.mdp.longueurMin} maxlength={cnt.mdp.longueurMax} id="mdp" aria-describedby="aide-mdp">
+							<div id="aide-mdp" class="form-text">
+								Min. {cnt.mdp.longueurMin} caractères.
+								Votre mot de passe est chiffré côté client et n'est jamais transmis au serveur.
+							</div>
+						)
+					}
+					{
+						erreurs["mdp"] &&
+						(
+							<input type="password" class="form-control is-invalid" required minlength={cnt.mdp.longueurMin} maxlength={cnt.mdp.longueurMax} id="mdp" aria-describedby="mdp-invalide">
+							<div id="mdp-invalide" class="invalid-feedback">
+								{erreurs["mdp"]}
+							</div>
+						)
+					}
+				</div>
+				<button type="submit" class="btn btn-primary">Créer mon compte</button>
+			</form>
+		</div>
+	</div>
+</Page>
+
+<script>
+import { sha256 } from "../lib/hachage.mjs";
+
+/**
+ * Champ du mot de passe
+ * @type {HTMLInputElement}
+ */
+const mdp = document.getElementById("mdp");
+/**
+ * Champ caché du mot de passe chiffré
+ * @type {HTMLInputElement}
+ */
+const mdpc = document.getElementById("mdp-sha");
+
+/**
+ * Permet de chiffrer côté client le mot de passe avant de l'envoyer au serveur
+ */
+mdp.addEventListener("keydown", async () => {
+	const val = mdp.value.trim();
+	const mdpValide = val.length >= 8 && val.length <= 255;
+	mdpc.value = mdpValide ? await sha256(mdp.value) : "";
+});
+</script>
