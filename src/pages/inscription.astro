@@ -1,10 +1,13 @@
 ---
 import Page from "../layouts/GabaritPrincipal.astro";
+import Bd from "../lib/bd.mjs";
+import { ErrUtilisateurExiste } from "../lib/bd-exceptions.mjs";
 import { contraintes } from "../lib/consts.mjs";
 
 const cnt = contraintes.usager;
 
 let erreurs = {};
+let succes = false;
 
 if (Astro.request.method === "POST") {
 	// On récupère toutes les données du formulaire:
@@ -32,10 +35,18 @@ if (Astro.request.method === "POST") {
 		erreurs["mdp"] = `Doit contenir entre ${cnt.mdp.longueurMin} et ${cnt.mdp.longueurMax} caractères.`;
 	}
 
+	// Si aucun problème détecté, on crée l'usager:
 	if (Reflect.ownKeys(erreurs).length < 1) {
-		console.log("tout est beau!");
-	} else {
-		console.log("contient des erreurs", erreurs);
+		try {
+			await Bd.creerNouvUsager(courriel, prenom, nom, telephone, mdp);
+			succes = true;
+		} catch (err) {
+			if (err instanceof ErrUtilisateurExiste) {
+				erreurs["courriel"] = "Un autre usager utilise déjà cette même adresse courriel."
+			} else {
+				erreurs["general"] = "Un problème est survenu lors de la création de votre compte. Veuillez réssayer sous peu."
+			}
+		}
 	}
 }
 ---
@@ -43,6 +54,19 @@ if (Astro.request.method === "POST") {
 <Page titre="Inscription">
 	<div class="row">
 		<div class="col-12 col-lg-8">
+			{
+				erreurs["general"] &&
+				<div class="alert alert-danger" role="alert">
+					{erreurs["general"]}
+				</div>
+			}
+			{
+				succes &&
+				<div class="alert alert-success" role="alert">
+					Votre demande de création de compte a été traitée avec succès.
+					Votre compte sera activé sous peu.
+				</div>
+			}
 			<form class="row row-cols-1 g-5" method="POST" action="#" id="form-inscription" novalidate>
 				<div>
 					<label for="prenom" class="form-label">Prénom</label>
@@ -146,7 +170,7 @@ if (Astro.request.method === "POST") {
 </Page>
 
 <script>
-import { sha256 } from "../lib/hachage.mjs";
+import { sha256 } from "../lib/clientside/hachage.mjs";
 
 /**
  * Champ du mot de passe
