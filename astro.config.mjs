@@ -17,4 +17,8 @@ export default defineConfig({
 		host: process.env.NODE_ENV === 'production' ? true : false,
 		port: +process.env.PORT || 3000,
 	},
+
+	vite: {
+		optimizeDeps: { exclude: ["@node-rs/argon2"] },
+	}
 });
