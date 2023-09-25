@@ -6,6 +6,10 @@ import SchemaSession from "./models/session.mjs";
 import SchemaUsager from "./models/usager.mjs";
 import SchemaAppreciation from "./models/appreciation.mjs";
 
+// Importation des autres dépendances:
+import { hacherMdp } from "./cryptographie.mjs";
+import { ErrUtilisateurExiste, MongoServerError } from "./bd-exceptions.mjs";
+
 // Importation des interfaces:
 /** @typedef {import("./interfaces.mjs").IDateEvenement} IDateEvenement */
 /** @typedef {import("./interfaces.mjs").IPhoto} IPhoto */
@@ -32,7 +36,7 @@ await mongoose.connection.useDb(nomBase);
 /** @type {Model<SchemaSession>} */
 export const Session = model("Session", SchemaSession);
 /** @type {Model<SchemaUsager>} */
-const Usager = model("Usager", SchemaSession);
+const Usager = model("Usager", SchemaUsager);
 /** @type {Model<SchemaAppreciation>} */
 const Appreciation = model("Appreciation", SchemaAppreciation);
 
@@ -81,5 +85,40 @@ export default class Bd {
 		await session.save();
 
 		return session;
+	}
+
+	/**
+	 * Permet de créer un nouvel usager standard (pas superutilisateur)
+	 *
+	 * @param {String} courriel adresse courriel
+	 * @param {String} prenom prénom
+	 * @param {String} nom nom
+	 * @param {String} telephone numéro de téléphone
+	 * @param {String} mdp mot de passe en clair
+	 * @throws {ErrUtilisateurExiste} si un usager avec le même courriel existe
+	 * @throws {MongoServerError} pour tout autre erreur
+	 * @returns {Promise<Usager>} référence au nouvel Usager
+	 */
+	static async creerNouvUsager(courriel, prenom, nom, telephone, mdp) {
+		// Création de l'usager:
+		const usager = new Usager({
+			prenom,
+			nom,
+			courriel,
+			telephone,
+			mdp: await hacherMdp(mdp),
+		});
+
+		// Tentative d'enregistrement:
+		try {
+			await usager.save();
+		} catch (err) {
+			if (err.code && err.code == 11000)
+				throw new ErrUtilisateurExiste(err.message ?? "");
+			else
+				throw err;
+		}
+
+		return usager;
 	}
 }
