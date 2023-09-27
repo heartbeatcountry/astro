@@ -107,6 +107,7 @@ export default class Bd {
 			courriel,
 			telephone,
 			mdp: await hacherMdp(mdp),
+			estActive: true,
 		});
 
 		// Tentative d'enregistrement:
