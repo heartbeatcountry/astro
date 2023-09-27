@@ -36,33 +36,32 @@ const usager = Astro.locals["usager"];
 	<title>{titre} &mdash; {import.meta.env.NOM_SITE}</title>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-		crossorigin="anonymous"></script>
+		crossorigin="anonymous" defer></script>
 </head>
 
 <body>
-	<a href="#contenuPrincipal" class="visually-hidden-focusable">Aller au contenu principal</a>
-	<header class="d-flex justify-content-center text-center ">
-		<div>
+	<a href="#contenuPrincipal" class="visually-hidden-focusable">
+		Aller au contenu principal
+	</a>
+	<header>
+		<nav class="navbar navbar-expand-xxl bg-body-tertiary bg-opacity-75  sticky-topnavbar"
+			data-bs-theme="dark" aria-labelledby="MenuPrincipal">
+			<div class="container-xxl">
+				<a class="navbar-brand" href="index.html">
+					<img class="logo"  src="images/logoblanctransparent.png"
+						alt="logo heartbeat country" />
+					<span class="visually-hidden">L’école de danse Heartbeat Country</span>
+				</a>
 
-			<nav class="navbar navbar-expand-lg bg-body-tertiary bg-opacity-75  sticky-topnavbar bgTranslucide" data-bs-theme="dark" aria-labelledby="MenuPrincipal">
+				<button class="navbar-toggler m-4" type="button" data-bs-toggle="collapse"
+					data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
 
-
-				<div class="container-fluid row">
-				<div class="col-lg-3">
-
-						<a href="index.html"><img class="w-50" src="images/logoblanctransparent.png"
-						alt="logo heartbeat country" /></a>
-						<span class="visually-hidden-focusable">L’école de danse Heartbeat Country</span>
-						<div>
-							<button class="navbar-toggler m-4" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-							<span class="navbar-toggler-icon"></span>
-							</button>
-						</div>
-
-				</div>
 
 				<div class="collapse navbar-collapse " id="navbarSupportedContent">
-					<ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+					<ul class="navbar-nav mb-2 mb-lg-0 ">
 
 						<li class="nav-item">
 							<a href="index.html">Accueil</a>
@@ -77,95 +76,156 @@ const usager = Astro.locals["usager"];
 							<a href="evenements.html">Événements</a>
 						</li>
 						<li class="nav-item">
-						<a href="a_propos.html">À propos</a>
+							<a href="a_propos.html">À propos</a>
+						</li>
+						{
+							usager &&
+							<li>
+								<a href="deconnexion.html">
+									Déconnexion
+								</a>
 							</li>
-							{
-								usager && (
-								<li>
-									<span>Bienvenue, {usager?.prenom}</span>
-									<a href="deconnexion.html">
-										Déconnexion
-									</a>
-								</li>
-								)
-							}
-							{
-								!usager && (
-								<li>
-									<a href="connexion.html">
-										Connexion
-									</a>
-								</li>
-								)
-							}
+						}
+						{
+							!usager &&
+							<li>
+								<a href="connexion.html">
+									Connexion
+								</a>
+							</li>
+						}
 
 					</ul>
 				</div>
+			</div>
+		</nav>
+
+		<div class="container-xxl">
+			<div class="hero hstack mt-5 pt-5 justify-content-center">
+				<div class="mx-auto px-3 py-0">
+					<h1 class="fw-bold">{titre}</h1>
 				</div>
-			</nav>
-
-				{
-				usager && (
-					<h2 class="text-center">Bienvenue, {usager?.prenom}</h2>
-				)
-				}
-
-			<h1 class="text-center">{titre}</h1>
+			</div>
 		</div>
+
 	</header>
-
-	<slot />
-
-	<footer class="bg-body-tertiary bg-opacity-75 row text-center" data-bs-theme="dark">
-		<div class="col-lg-3">
-			<p>
-				Site web crée par Pascal Breton et Cynthia Fortier automne 2023
-			</p>
-
+	<main>
+		<div class="container-xxl py-4">
+			<slot />
 		</div>
-		<div class="col-lg-6">
-			<a href="index.html"><img class="w-50" src="images/logoblanctransparent.png"
-				alt="logo heartbeat country" /></a>
-			<p>
-				<script type="text/javascript">
-					let part1 = "heartbeatcountry";
-					let part2 = Math.pow(2, 6);
-					let part3 = String.fromCharCode(part2);
-					let part4 = "outlook.com";
-					let part5 = part1 + String.fromCharCode(part2) + part4;
-					document.write(
-						"<a href=" +
-							"mai" +
-							"lto" +
-							":" +
-							part5 +
-							">" +
-							part1 +
-							part3 +
-							part4 +
-							"</a>",
-					);
-				</script>
-			</p>
-			<p>Tous droits réservés.</p>
+	</main>
 
-		</div>
+	<footer class="bg-body-tertiary bg-opacity-75" data-bs-theme="dark">
+		<div class="container-xxl"><div class="row row-cols-1 row-cols-xxl-3 text-center p-4 align-items-center">
+			<div class="">
+				<p class="p-0">
+					Site web crée par Pascal Breton et Cynthia Fortier automne 2023
+				</p>
 
-		<div class="col-lg-3">
+			</div>
+			<div class="col-xxl-6">
+				<a href="index.html"><img  class="logo" src="images/logoblanctransparent.png"
+						alt="logo heartbeat country" /></a>
+				<p>
+					<a href="mailto:" class="courriel-footer">&nbsp;</a>
+				</p>
+				<p>Tous droits réservés.</p>
 
-			<a href="https://www.facebook.com/profile.php?id=100063673747492" target="_blank"><img class="w-25"
-					src="images/icones/iconeFacebook2.png" alt="Logo Facebook" /></a>
-			<a href="https://www.instagram.com/heartbeatcountry/" target="_blank"><img class="w-25"
-					src="images/icones/iconeInstagram2.png" alt="Logo Instagram" /></a>
+			</div>
 
-			<a href="https://www.linkedin.com/in/cynthia-fortier-414a4a259/" target="_blank"><img class="w-25"
-					src="images/icones/iconeLinkedin.png" alt="Logo Linkedin" /></a>
-			<a href="https://www.tiktok.com/@heartbeatcountry" target="_blank"><img class="w-25" src="images/icones/icone_tiktok.png"
-					alt="Logo Tiktok" /></a>
-		</div>
+			<div class="">
 
+				<a href="https://www.facebook.com/profile.php?id=100063673747492" target="_blank"><img class="mini"
+						src="images/icones/iconeFacebook2.png" alt="Logo Facebook" /></a>
+				<a href="https://www.instagram.com/heartbeatcountry/" target="_blank"><img  class="mini"
+						src="images/icones/iconeInstagram2.png" alt="Logo Instagram" /></a>
+
+				<a href="https://www.linkedin.com/in/cynthia-fortier-414a4a259/" target="_blank"><img  class="mini"
+						src="images/icones/iconeLinkedin.png" alt="Logo Linkedin" /></a>
+				<a href="https://www.tiktok.com/@heartbeatcountry" target="_blank"><img  class="mini"
+						src="images/icones/icone_tiktok.png" alt="Logo Tiktok" /></a>
+			</div>
+		</div></div>
 	</footer>
 </body>
 
 </html>
 
+<script>
+	const courrielFooter = document.getElementsByClassName("courriel-footer")[0];
+	const courriel = atob("aGVhcnRiZWF0Y291bnRyeUBvdXRsb29rLmNvbQ==");
+	courrielFooter.innerText = courriel;
+	courrielFooter.href += courriel;
+</script>
+
+
+<style lang="scss">
+@use "../styles/bootstrap.min.css";
+
+/* stylelint-disable scss/at-extend-no-missing-placeholder */
+
+/*************************
+        Général
+**************************/
+
+h1{
+	@extend .mt-3;
+}
+
+header{
+
+	background: linear-gradient(to bottom, #ffffff85, #ffffff85), url("../../images/background_header.png") center  top / cover no-repeat;
+}
+
+nav, footer{
+
+	@extend .fs-4;
+}
+
+li a{
+	@extend .nav-link, .mx-1, .px-3, .rounded-2;
+
+}
+
+li a:hover, li a:focus{
+	background-color: #80a2acf6;
+
+}
+
+nav li{
+	@extend .nav-item;
+}
+
+footer img{
+	@extend .p-2;
+}
+
+footer{
+
+
+	p{
+		@extend .px-5;
+		color: #ffffff;
+	}
+}
+
+.mini{
+	width: 100px;
+}
+
+.logo
+{
+	width: 250px;
+}
+
+.hero {
+	padding-bottom: 6em;
+
+	div {
+		@extend .rounded-4;
+		text-shadow: #fff 0 0 3px;
+		text-transform: uppercase;
+	}
+}
+
+</style>

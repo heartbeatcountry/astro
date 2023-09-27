@@ -12,6 +12,8 @@
 		"value-keyword-case": "lower",
 		"no-descending-specificity": true,
 		"no-duplicate-selectors": true,
+		"at-extend-no-missing-placeholder": null,
+		"scss/at-extend-no-missing-placeholder": null,
 		"selector-pseudo-class-no-unknown": [
 			true,
 			{
