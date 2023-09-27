@@ -1,8 +1,8 @@
 ---
-import Page from "../layouts/GabaritPrincipal.astro";
-import Bd from "../lib/bd.mjs";
-import { ErrUtilisateurExiste } from "../lib/bd-exceptions.mjs";
-import { contraintes } from "../lib/consts.mjs";
+import Page from "../../layouts/GabaritPrincipal.astro";
+import Bd from "../../lib/bd.mjs";
+import { ErrUtilisateurExiste } from "../../lib/bd-exceptions.mjs";
+import { contraintes } from "../../lib/consts.mjs";
 
 const cnt = contraintes.usager;
 
@@ -125,20 +125,20 @@ if (Astro.request.method === "POST") {
 						!erreurs["telephone"] &&
 						(
 							<input type="tel" class="form-control" id="telephone" pattern="\\d{3}-\\d{3}-\\d{4}" name="telephone" required aria-describedby="aide-telephone">
-							<div class="form-text" id="aide-telephone">
-								Utilisez le format 555-555-5555.
-							</div>
 						)
 					}
 					{
 						erreurs["telephone"] &&
 						(
-							<input type="tel" class="form-control is-invalid" id="telephone" pattern="\\d{3}-\\d{3}-\\d{4}" name="telephone" required aria-describedby="telephone-invalide">
+							<input type="tel" class="form-control is-invalid" id="telephone" pattern="\\d{3}-\\d{3}-\\d{4}" name="telephone" required aria-describedby="aide-telephone telephone-invalide">
 							<div class="invalid-feedback" id="courriel-invalide">
 								{erreurs["telephone"]}
 							</div>
 						)
 					}
+					<div class="form-text" id="aide-telephone">
+						Utilisez le format 555-555-5555.
+					</div>
 				</div>
 				<div>
 					<input type="hidden" id="mdp-sha" name="mdp">
@@ -147,30 +147,45 @@ if (Astro.request.method === "POST") {
 						!erreurs["mdp"] &&
 						(
 							<input type="password" class="form-control" required minlength={cnt.mdp.longueurMin} maxlength={cnt.mdp.longueurMax} id="mdp" aria-describedby="aide-mdp">
-							<div id="aide-mdp" class="form-text">
-								Min. {cnt.mdp.longueurMin} caractères.
-								Votre mot de passe est chiffré côté client et n'est jamais transmis au serveur.
-							</div>
 						)
 					}
 					{
 						erreurs["mdp"] &&
 						(
-							<input type="password" class="form-control is-invalid" required minlength={cnt.mdp.longueurMin} maxlength={cnt.mdp.longueurMax} id="mdp" aria-describedby="mdp-invalide">
+							<input type="password" class="form-control is-invalid" required minlength={cnt.mdp.longueurMin} maxlength={cnt.mdp.longueurMax} id="mdp" aria-describedby="aide-mdp mdp-invalide">
 							<div id="mdp-invalide" class="invalid-feedback">
 								{erreurs["mdp"]}
 							</div>
 						)
 					}
+					<div id="aide-mdp" class="form-text">
+						Min. {cnt.mdp.longueurMin} caractères.
+						Votre mot de passe est chiffré côté client et n'est jamais transmis au serveur.
+					</div>
 				</div>
-				<button type="submit" class="btn btn-primary">Créer mon compte</button>
+				<div>
+					<label for="mdp2" class="form-label">Répétez votre mot de passe</label>
+					<input type="password" class="form-control" required minlength={cnt.mdp.longueurMin} maxlength={cnt.mdp.longueurMax} id="mdp2" aria-describedby="aide-mdp2">
+					<div id="mdp2-valide" class="valid-feedback">
+						Les mots de passes sont identiques.
+					</div>
+					<div id="mdp2-invalide" class="invalid-feedback">
+						Les mots de passes ne sont pas identiques.
+					</div>
+					<div id="aide-mdp2" class="form-text">
+						Tapez à nouveau le même mot de passe.
+					</div>
+				</div>
+				<div class="row row-cols-1 mt-5">
+					<button type="submit" class="btn btn-primary" disabled id="btn-soumission">Créer mon compte</button>
+				</div>
 			</form>
 		</div>
 	</div>
 </Page>
 
 <script>
-import { sha256 } from "../lib/clientside/hachage.mjs";
+import { sha256 } from "../../lib/clientside/hachage.mjs";
 
 /**
  * Champ du mot de passe
@@ -182,13 +197,51 @@ const mdp = document.getElementById("mdp");
  * @type {HTMLInputElement}
  */
 const mdpc = document.getElementById("mdp-sha");
+/**
+ * Champ de répétition du mot de passe
+ * @type {HTMLInputElement}
+ */
+const mdp2 = document.getElementById("mdp2");
+/**
+ * Bouton de soumission du formulaire
+ * @type {HTMLButtonElement}
+ */
+const btn = document.getElementById("btn-soumission");
 
 /**
  * Permet de chiffrer côté client le mot de passe avant de l'envoyer au serveur
  */
-mdp.addEventListener("keydown", async () => {
+mdp.addEventListener("keyup", async () => {
 	const val = mdp.value.trim();
 	const mdpValide = val.length >= 8 && val.length <= 255;
 	mdpc.value = mdpValide ? await sha256(mdp.value) : "";
 });
+
+/**
+ * Permet de s'assurer que les deux mots de passes soient identiques
+ */
+mdp2.addEventListener("keyup", () => {
+	const nonVide = mdp2.value.length > 0;
+	const identique = mdp.value.trim() == mdp2.value.trim();
+
+	if (nonVide && identique) {
+		mdp2.classList.add("is-valid");
+		mdp2.classList.remove("is-invalid");
+		btn.removeAttribute("disabled");
+	} else if (nonVide) {
+		mdp2.classList.remove("is-valid");
+		mdp2.classList.add("is-invalid");
+		btn.setAttribute("disabled", "");
+	} else {
+		mdp2.classList.remove("is-valid");
+		mdp2.classList.remove("is-invalid");
+		btn.setAttribute("disabled", "");
+	}
+})
 </script>
+
+<style lang="scss">
+:is(.is-valid, .is-invalid) ~ .form-text {
+	display: none;
+}
+</style>
