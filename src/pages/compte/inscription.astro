@@ -3,11 +3,11 @@ import Page from "../../layouts/GabaritPrincipal.astro";
 import Bd from "../../lib/bd.mjs";
 import { ErrUtilisateurExiste } from "../../lib/bd-exceptions.mjs";
 import { contraintes } from "../../lib/consts.mjs";
+import Session from "../../lib/session.mjs";
 
 const cnt = contraintes.usager;
 
 let erreurs = {};
-let succes = false;
 
 if (Astro.request.method === "POST") {
 	// On récupère toutes les données du formulaire:
@@ -38,8 +38,9 @@ if (Astro.request.method === "POST") {
 	// Si aucun problème détecté, on crée l'usager:
 	if (Reflect.ownKeys(erreurs).length < 1) {
 		try {
-			await Bd.creerNouvUsager(courriel, prenom, nom, telephone, mdp);
-			succes = true;
+			const usager = await Bd.creerNouvUsager(courriel, prenom, nom, telephone, mdp);
+			await Session.nouvSession(Astro.cookies, usager.id);
+			return Astro.redirect("/compte/?succesInscription", 303);
 		} catch (err) {
 			if (err instanceof ErrUtilisateurExiste) {
 				erreurs["courriel"] = "Un autre usager utilise déjà cette même adresse courriel."
@@ -58,12 +59,6 @@ if (Astro.request.method === "POST") {
 				erreurs["general"] &&
 				<div class="alert alert-danger" role="alert">
 					{erreurs["general"]}
-				</div>
-			}
-			{
-				succes &&
-				<div class="alert alert-success" role="alert">
-					Votre compte a été créé avec succès.
 				</div>
 			}
 			<form class="row row-cols-1 g-5" method="POST" action="#" id="form-inscription" novalidate>
