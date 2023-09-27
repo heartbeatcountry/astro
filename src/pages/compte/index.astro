@@ -1,0 +1,24 @@
+---
+import Page from "../../layouts/GabaritPrincipal.astro";
+
+const succesInscription = Astro.url.searchParams.has("succesInscription");
+const usager = Astro.locals["usager"];
+
+if (!usager) {
+	return Astro.redirect("/compte/connexion");
+}
+---
+
+<Page titre="Mon compte">
+	{
+		succesInscription &&
+		<div class="alert alert-success mb-4" role="alert">
+			Votre compte a été créé avec succès.
+		</div>
+	}
+
+	<h3>Bienvenue, {usager?.nom}</h3>
+	<div class="mt-4">
+		<a class="btn btn-primary" href="/compte/deconnexion">Se déconnecter</a>
+	</div>
+</Page>
