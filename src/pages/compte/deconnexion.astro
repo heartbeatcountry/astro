@@ -1,0 +1,6 @@
+---
+import Session from "../../lib/session.mjs";
+
+await Session.detruire(Astro.cookies);
+return Astro.redirect("/compte/connexion?succesDeconnexion");
+---
