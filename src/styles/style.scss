@@ -7,57 +7,6 @@
 
 @use "./bootstrap.min.css";
 
-
-/*************************
-        Général
-**************************/
-
-h1{
-	@extend .mt-3
+body{
+	--bs-body-font-family: "Georgia";
 }
-
-header{
-	//background-image: url(../../images/background_header.png),rgba(245, 249, 245, 0.075);
-	//background-color: rgba(245, 249, 245, 0.075), ("url(../../images/background_header.png)") ;
-	background-image: url(../../images/background_header.png);
-	background-size: 100%;
-	min-height:450px;
-	box-shadow: 300px 3000px 0 0 rgba(245, 249, 245, 0.704) inset;
-
-
-}
-
-nav, footer{
-
-	@extend .fs-4;
-}
-
-li a{
-	@extend .nav-link, .mx-1, .px-3;
-
-}
-
-li a:hover{
-	background-color: #80a2acf6;
-	border-radius: 4px;
-}
-
-nav li{
-	@extend .nav-item;
-}
-
-footer img{
-	@extend .p-2;
-}
-
-footer{
-
-	align-items: center;
-
-
-	p{
-		@extend .px-5;
-		color: #ffffff;
-	}
-}
-
