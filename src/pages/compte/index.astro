@@ -2,6 +2,7 @@
 import Page from "../../layouts/GabaritPrincipal.astro";
 
 const succesInscription = Astro.url.searchParams.has("succesInscription");
+const succesConnexion = Astro.url.searchParams.has("succesConnexion");
 const usager = Astro.locals["usager"];
 
 if (!usager) {
@@ -14,6 +15,12 @@ if (!usager) {
 		succesInscription &&
 		<div class="alert alert-success mb-4" role="alert">
 			Votre compte a été créé avec succès.
+		</div>
+	}
+	{
+		succesConnexion &&
+		<div class="alert alert-success mb-4" role="alert">
+			Connexion effectuée avec succès.
 		</div>
 	}
 

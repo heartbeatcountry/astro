@@ -1,0 +1,137 @@
+---
+import Page from "../../layouts/GabaritPrincipal.astro";
+import Bd from "../../lib/bd.mjs";
+import { contraintes } from "../../lib/consts.mjs";
+import Session from "../../lib/session.mjs";
+import { validerMdp } from "../../lib/cryptographie.mjs";
+
+const usager = Astro.locals["usager"];
+const succesDeconnexion = Astro.url.searchParams.has("succesDeconnexion");
+
+if (usager) {
+	return Astro.redirect("/compte?succesConnexion");
+}
+
+
+const cnt = contraintes.usager;
+
+let erreurs = {},
+	courriel = "";
+
+if (Astro.request.method === "POST") {
+	// On récupère toutes les données du formulaire:
+	const form = await Astro.request.formData();
+	courriel = form.get("courriel")?.toString().trim().toLowerCase() ?? "";
+	const mdp = form.get("mdp")?.toString().trim() ?? "";
+
+	// On vérifie selon les contraintes de consts.mjs:
+	if (!cnt.courriel.regex.test(courriel)) {
+		erreurs["courriel"] = "Doit être une adresse courriel valide.";
+	}
+	if (mdp.length < cnt.mdp.longueurMin || mdp.length > cnt.mdp.longueurMax) {
+		erreurs["mdp"] = `Doit contenir entre ${cnt.mdp.longueurMin} et ${cnt.mdp.longueurMax} caractères.`;
+	}
+
+	// Si aucun problème détecté, on tente de connecter l'usager:
+	if (Reflect.ownKeys(erreurs).length < 1) {
+		const usagerBd = await Bd.obtenirUsagerParCourriel(courriel);
+
+		if (usagerBd && await validerMdp(mdp, usagerBd.mdp)) {
+			await Session.nouvSession(Astro.cookies, usagerBd.id);
+			return Astro.redirect("/compte?succesConnexion", 303);
+		} else {
+			erreurs["general"] = "Le nom d'usager ou le mot de passe est invalide. Veuillez noter que le mot de passe est sensible à la casse."
+		}
+	}
+}
+---
+
+<Page titre="Connexion">
+	{
+		succesDeconnexion &&
+		<div class="alert alert-success mb-4" role="alert">
+			Déconnexion effectuée avec succès.
+		</div>
+	}
+	{
+		erreurs["general"] &&
+		<div class="alert alert-danger" role="alert">
+			{erreurs["general"]}
+		</div>
+	}
+	<div class="row g-5">
+		<div class="col-12 col-lg-7">
+			<form class="row row-cols-1 g-5" method="POST" action="" id="form-connexion" novalidate>
+				<div>
+					<label for="courriel" class="form-label">Adresse courriel</label>
+					<input type="email" value={courriel} class:list={{"form-control": 1, "is-invalid": erreurs["courriel"]}} id="courriel" name="courriel" required aria-describedby="courriel-invalide">
+					<div class="invalid-feedback" id="courriel-invalide">
+						{erreurs["courriel"]}
+					</div>
+				</div>
+				<div>
+					<input type="hidden" id="mdp-sha" name="mdp">
+					<label for="mdp" class="form-label">Mot de passe</label>
+					<input type="password" class:list={{"form-control": 1, "is-invalid": erreurs["mdp"]}} required minlength={cnt.mdp.longueurMin} maxlength={cnt.mdp.longueurMax} id="mdp" aria-describedby="mdp-invalide">
+					<div id="mdp-invalide" class="invalid-feedback">
+						{erreurs["mdp"]}
+					</div>
+				</div>
+				<div>
+					<button type="submit" class="btn btn-primary w-100" id="btn-soumission">Valider</button>
+				</div>
+			</form>
+		</div>
+		<div class="col-12 col-lg-5">
+			<div class="card text-bg-light">
+				<div class="card-body">
+					<h3 class="card-title">Vous n'avez pas encore de compte?</h3>
+					<p class="card-text">
+						Inscrivez-vous gratuitement en moins de 5 minutes.
+					</p>
+					<a href="/compte/inscription" class="btn btn-outline-primary w-100">Créer un compte</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</Page>
+
+<script>
+import { sha256 } from "../../lib/clientside/hachage.mjs";
+
+/**
+ * Champ du mot de passe
+ * @type {HTMLInputElement}
+ */
+const mdp = document.getElementById("mdp");
+/**
+ * Champ caché du mot de passe chiffré
+ * @type {HTMLInputElement}
+ */
+const mdpc = document.getElementById("mdp-sha");
+/**
+ * Champ de répétition du mot de passe
+ * @type {HTMLInputElement}
+ */
+const mdp2 = document.getElementById("mdp2");
+/**
+ * Bouton de soumission du formulaire
+ * @type {HTMLButtonElement}
+ */
+const btn = document.getElementById("btn-soumission");
+
+/**
+ * Permet de chiffrer côté client le mot de passe avant de l'envoyer au serveur
+ */
+mdp.addEventListener("keyup", async () => {
+	const val = mdp.value.trim();
+	const mdpValide = val.length >= 8 && val.length <= 255;
+	mdpc.value = mdpValide ? await sha256(mdp.value) : "";
+});
+</script>
+
+<style lang="scss">
+:is(.is-valid, .is-invalid) ~ .form-text {
+	display: none;
+}
+</style>
