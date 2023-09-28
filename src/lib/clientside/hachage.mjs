@@ -11,17 +11,9 @@ export const hacher = async (clair, algo) =>
 	)).map(b => b.toString(16).padStart(2, "0")).join("");
 
 /**
-* Permet de hacher du texte en SHA-1
-*
-* @param {String} clair - Le texte à hacher
-* @returns {Promise<String>} le texte, haché en SHA-1
-*/
-export const sha1 = async clair => await hacher(clair, "SHA-1");
-
-/**
-* Permet de hacher du texte en SHA-256
+* Permet de hacher du texte en SHA-512
 *
 * @param {String} clair - Le texte à hacher
 * @returns {Promise<String>} le texte, haché en SHA-256
 */
-export const sha256 = async clair => await hacher(clair, "SHA-256");
+export const sha512 = async clair => await hacher(clair, "SHA-512");
