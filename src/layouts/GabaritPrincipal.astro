@@ -6,6 +6,7 @@ import "../styles/style.scss";
 interface Props {
 	// Le titre est toujours obligatoire:
 	titre: string;
+	h1:string;
 
 	// La description est optionnelle:
 	description?: string;
@@ -13,10 +14,12 @@ interface Props {
 
 // Le titre est obligatoire donc c'est une constante; la description est optionnelle donc c'est une variable:
 const { titre } = Astro.props;
-let { description } = Astro.props;
+let { description, h1 } = Astro.props;
 
 // Si la description n'est pas définie, on lui donne une valeur par défaut:
 description ??= import.meta.env.DESCRIPTION_PAR_DEFAUT;
+h1 ??= titre;
+
 
 // URL canonique pour le référencement:
 const URLcanonique = new URL(Astro.url.pathname, Astro.site);
@@ -103,7 +106,7 @@ const usager = Astro.locals["usager"];
 		<div class="container-xxl">
 			<div class="hero hstack mt-5 pt-5 justify-content-center">
 				<div class="mx-auto px-3 py-0">
-					<h1 class="fw-bold">{titre}</h1>
+					<h1 class="fw-bold">{h1}</h1>
 				</div>
 			</div>
 		</div>
