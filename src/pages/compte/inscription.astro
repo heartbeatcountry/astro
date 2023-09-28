@@ -65,75 +65,37 @@ if (Astro.request.method === "POST") {
 					{erreurs["general"]}
 				</div>
 			}
-			<form class="row row-cols-1 g-5" method="POST" action="#" id="form-inscription" novalidate>
+			<form class="row row-cols-1 g-5" method="POST" action="" id="form-inscription" novalidate>
 				<div>
 					<label for="prenom" class="form-label">Prénom</label>
-					{
-						!erreurs["prenom"] &&
-							<input type="text" value={prenom} class="form-control" name="prenom" id="prenom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} required>
-					}
-					{
-						erreurs["prenom"] &&
-						(
-							<input type="text" value={prenom} class="form-control is-invalid" name="prenom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} id="prenom" required aria-describedby="prenom-invalide">
-							<div class="invalid-feedback" id="prenom-invalide">
-								{erreurs["prenom"]}
-							</div>
-						)
-					}
+					<input type="text" value={prenom} class:list={{"form-control": 1, "is-invalid": erreurs["prenom"]}} name="prenom" id="prenom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} required aria-describedby="prenom-invalide">
+					<div class="invalid-feedback" id="prenom-invalide">
+						{erreurs["prenom"]}
+					</div>
 				</div>
 				<div>
 					<label for="nom" class="form-label">Nom</label>
-					{
-						!erreurs["nom"] &&
-							<input type="text" value={nom} class="form-control" name="nom" id="nom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} required>
-					}
-					{
-						erreurs["nom"] &&
-						(
-							<input type="text" value={nom} class="form-control is-invalid" name="nom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} id="nom" required aria-describedby="nom-invalide">
-							<div class="invalid-feedback" id="nom-invalide">
-								{erreurs["nom"]}
-							</div>
-						)
-					}
+					<input type="text" value={nom} class:list={{"form-control": 1, "is-invalid": erreurs["nom"]}} name="nom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} id="nom" required aria-describedby="nom-invalide">
+					<div class="invalid-feedback" id="nom-invalide">
+						{erreurs["nom"]}
+					</div>
 				</div>
 				<div>
 					<label for="courriel" class="form-label">Adresse courriel</label>
-					{
-						!erreurs["courriel"] &&
-							<input type="email" value={courriel} class="form-control" id="courriel" name="courriel" required aria-describedby="aide-courriel">
-					}
-					{
-						erreurs["courriel"] &&
-						(
-							<input type="email" value={courriel} class="form-control is-invalid" id="courriel" name="courriel" required aria-describedby="aide-courriel courriel-invalide">
-							<div class="invalid-feedback" id="courriel-invalide">
-								{erreurs["courriel"]}
-							</div>
-						)
-					}
+					<input type="email" value={courriel} class:list={{"form-control": 1, "is-invalid": erreurs["courriel"]}} id="courriel" name="courriel" required aria-describedby="aide-courriel courriel-invalide">
+					<div class="invalid-feedback" id="courriel-invalide">
+						{erreurs["courriel"]}
+					</div>
 					<div id="aide-courriel" class="form-text">
 						Nous ne partagerons jamais vos informations personnelles.
 					</div>
 				</div>
 				<div>
 					<label for="telephone" class="form-label">Numéro de téléphone</label>
-					{
-						!erreurs["telephone"] &&
-						(
-							<input type="tel" value={telephone} class="form-control" id="telephone" pattern="\\d{3}-\\d{3}-\\d{4}" name="telephone" required aria-describedby="aide-telephone">
-						)
-					}
-					{
-						erreurs["telephone"] &&
-						(
-							<input type="tel" value={telephone} class="form-control is-invalid" id="telephone" pattern="\\d{3}-\\d{3}-\\d{4}" name="telephone" required aria-describedby="aide-telephone telephone-invalide">
-							<div class="invalid-feedback" id="courriel-invalide">
-								{erreurs["telephone"]}
-							</div>
-						)
-					}
+					<input type="tel" value={telephone} class:list={{"form-control": 1, "is-invalid": erreurs["telephone"]}} id="telephone" pattern="\\d{3}-\\d{3}-\\d{4}" name="telephone" required aria-describedby="aide-telephone telephone-invalide">
+					<div class="invalid-feedback" id="courriel-invalide">
+						{erreurs["telephone"]}
+					</div>
 					<div class="form-text" id="aide-telephone">
 						Utilisez le format 555-555-5555.
 					</div>
@@ -141,21 +103,10 @@ if (Astro.request.method === "POST") {
 				<div>
 					<input type="hidden" id="mdp-sha" name="mdp">
 					<label for="mdp" class="form-label">Mot de passe</label>
-					{
-						!erreurs["mdp"] &&
-						(
-							<input type="password" class="form-control" required minlength={cnt.mdp.longueurMin} maxlength={cnt.mdp.longueurMax} id="mdp" aria-describedby="aide-mdp">
-						)
-					}
-					{
-						erreurs["mdp"] &&
-						(
-							<input type="password" class="form-control is-invalid" required minlength={cnt.mdp.longueurMin} maxlength={cnt.mdp.longueurMax} id="mdp" aria-describedby="aide-mdp mdp-invalide">
-							<div id="mdp-invalide" class="invalid-feedback">
-								{erreurs["mdp"]}
-							</div>
-						)
-					}
+					<input type="password" class:list={{"form-control": 1, "is-invalid": erreurs["mdp"]}} required minlength={cnt.mdp.longueurMin} maxlength={cnt.mdp.longueurMax} id="mdp" aria-describedby="aide-mdp mdp-invalide">
+					<div id="mdp-invalide" class="invalid-feedback">
+						{erreurs["mdp"]}
+					</div>
 					<div id="aide-mdp" class="form-text">
 						Min. {cnt.mdp.longueurMin} caractères.
 						Votre mot de passe est chiffré côté client et n'est jamais transmis au serveur.
