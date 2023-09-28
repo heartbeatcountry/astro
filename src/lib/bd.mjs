@@ -122,4 +122,14 @@ export default class Bd {
 
 		return usager;
 	}
+
+	/**
+	 * Obtient un usager à partir de son adresse courriel
+	 *
+	 * @param {String} courriel adresse courriel de l'usager
+	 * @returns {Promise<Usager>} instance de l'Usager
+	 */
+	static async obtenirUsagerParCourriel(courriel) {
+		return await Usager.findOne({ courriel, estValide: true });
+	}
 }
