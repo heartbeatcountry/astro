@@ -7,15 +7,19 @@ import Session from "../../lib/session.mjs";
 
 const cnt = contraintes.usager;
 
-let erreurs = {};
+let erreurs = {},
+	prenom = "",
+	nom = "",
+	courriel = "",
+	telephone = "";
 
 if (Astro.request.method === "POST") {
 	// On récupère toutes les données du formulaire:
 	const form = await Astro.request.formData();
-	const prenom = form.get("prenom")?.toString().trim() ?? "";
-	const nom = form.get("nom")?.toString().trim() ?? "";
-	const courriel = form.get("courriel")?.toString().trim().toLowerCase() ?? "";
-	const telephone = form.get("telephone")?.toString().trim() ?? "";
+	prenom = form.get("prenom")?.toString().trim() ?? "";
+	nom = form.get("nom")?.toString().trim() ?? "";
+	courriel = form.get("courriel")?.toString().trim().toLowerCase() ?? "";
+	telephone = form.get("telephone")?.toString().trim() ?? "";
 	const mdp = form.get("mdp")?.toString().trim() ?? "";
 
 	// On vérifie selon les contraintes de consts.mjs:
@@ -66,12 +70,12 @@ if (Astro.request.method === "POST") {
 					<label for="prenom" class="form-label">Prénom</label>
 					{
 						!erreurs["prenom"] &&
-							<input type="text" class="form-control" name="prenom" id="prenom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} required>
+							<input type="text" value={prenom} class="form-control" name="prenom" id="prenom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} required>
 					}
 					{
 						erreurs["prenom"] &&
 						(
-							<input type="text" class="form-control is-invalid" name="prenom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} id="prenom" required aria-describedby="prenom-invalide">
+							<input type="text" value={prenom} class="form-control is-invalid" name="prenom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} id="prenom" required aria-describedby="prenom-invalide">
 							<div class="invalid-feedback" id="prenom-invalide">
 								{erreurs["prenom"]}
 							</div>
@@ -82,12 +86,12 @@ if (Astro.request.method === "POST") {
 					<label for="nom" class="form-label">Nom</label>
 					{
 						!erreurs["nom"] &&
-							<input type="text" class="form-control" name="nom" id="nom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} required>
+							<input type="text" value={nom} class="form-control" name="nom" id="nom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} required>
 					}
 					{
 						erreurs["nom"] &&
 						(
-							<input type="text" class="form-control is-invalid" name="nom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} id="nom" required aria-describedby="nom-invalide">
+							<input type="text" value={nom} class="form-control is-invalid" name="nom" minlength={cnt.nom.longueurMin} maxlength={cnt.nom.longueurMax} id="nom" required aria-describedby="nom-invalide">
 							<div class="invalid-feedback" id="nom-invalide">
 								{erreurs["nom"]}
 							</div>
@@ -98,12 +102,12 @@ if (Astro.request.method === "POST") {
 					<label for="courriel" class="form-label">Adresse courriel</label>
 					{
 						!erreurs["courriel"] &&
-							<input type="email" class="form-control" id="courriel" name="courriel" required aria-describedby="aide-courriel">
+							<input type="email" value={courriel} class="form-control" id="courriel" name="courriel" required aria-describedby="aide-courriel">
 					}
 					{
 						erreurs["courriel"] &&
 						(
-							<input type="email" class="form-control is-invalid" id="courriel" name="courriel" required aria-describedby="aide-courriel courriel-invalide">
+							<input type="email" value={courriel} class="form-control is-invalid" id="courriel" name="courriel" required aria-describedby="aide-courriel courriel-invalide">
 							<div class="invalid-feedback" id="courriel-invalide">
 								{erreurs["courriel"]}
 							</div>
@@ -118,13 +122,13 @@ if (Astro.request.method === "POST") {
 					{
 						!erreurs["telephone"] &&
 						(
-							<input type="tel" class="form-control" id="telephone" pattern="\\d{3}-\\d{3}-\\d{4}" name="telephone" required aria-describedby="aide-telephone">
+							<input type="tel" value={telephone} class="form-control" id="telephone" pattern="\\d{3}-\\d{3}-\\d{4}" name="telephone" required aria-describedby="aide-telephone">
 						)
 					}
 					{
 						erreurs["telephone"] &&
 						(
-							<input type="tel" class="form-control is-invalid" id="telephone" pattern="\\d{3}-\\d{3}-\\d{4}" name="telephone" required aria-describedby="aide-telephone telephone-invalide">
+							<input type="tel" value={telephone} class="form-control is-invalid" id="telephone" pattern="\\d{3}-\\d{3}-\\d{4}" name="telephone" required aria-describedby="aide-telephone telephone-invalide">
 							<div class="invalid-feedback" id="courriel-invalide">
 								{erreurs["telephone"]}
 							</div>
@@ -170,8 +174,8 @@ if (Astro.request.method === "POST") {
 						Tapez à nouveau le même mot de passe.
 					</div>
 				</div>
-				<div class="row row-cols-1 mt-5">
-					<button type="submit" class="btn btn-primary" disabled id="btn-soumission">Créer mon compte</button>
+				<div>
+					<button type="submit" class="btn btn-primary w-100" disabled id="btn-soumission">Créer mon compte</button>
 				</div>
 			</form>
 		</div>
