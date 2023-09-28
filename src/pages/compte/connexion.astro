@@ -97,7 +97,7 @@ if (Astro.request.method === "POST") {
 </Page>
 
 <script>
-import { sha256 } from "../../lib/clientside/hachage.mjs";
+import { sha512 } from "../../lib/clientside/hachage.mjs";
 
 /**
  * Champ du mot de passe
@@ -126,7 +126,7 @@ const btn = document.getElementById("btn-soumission");
 mdp.addEventListener("keyup", async () => {
 	const val = mdp.value.trim();
 	const mdpValide = val.length >= 8 && val.length <= 255;
-	mdpc.value = mdpValide ? await sha256(mdp.value) : "";
+	mdpc.value = mdpValide ? await sha512(mdp.value) : "";
 });
 </script>
 
