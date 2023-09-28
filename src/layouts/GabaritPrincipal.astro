@@ -64,24 +64,24 @@ const usager = Astro.locals["usager"];
 					<ul class="navbar-nav mb-2 mb-lg-0 ">
 
 						<li class="nav-item">
-							<a href="index.html">Accueil</a>
+							<a href="/">Accueil</a>
 						</li>
 						<li class="nav-item">
-							<a href="services.html">Cours et Services</a>
+							<a href="/services">Cours et Services</a>
 						</li>
 						<li class="nav-item dropdown">
-							<a href="danses.html">Danses</a>
+							<a href="/danses">Danses</a>
 						</li>
 						<li class="nav-item">
-							<a href="evenements.html">Événements</a>
+							<a href="/evenements">Événements</a>
 						</li>
 						<li class="nav-item">
-							<a href="a_propos.html">À propos</a>
+							<a href="/a-propos">À propos</a>
 						</li>
 						{
 							usager &&
 							<li>
-								<a href="deconnexion.html">
+								<a href="/compte/deconnexion">
 									Déconnexion
 								</a>
 							</li>
@@ -89,7 +89,7 @@ const usager = Astro.locals["usager"];
 						{
 							!usager &&
 							<li>
-								<a href="connexion.html">
+								<a href="/compte/connexion">
 									Connexion
 								</a>
 							</li>
@@ -135,14 +135,14 @@ const usager = Astro.locals["usager"];
 
 			<div class="">
 
-				<a href="https://www.facebook.com/profile.php?id=100063673747492" target="_blank"><img class="mini"
+				<a href="https://www.facebook.com/profile.php?id=100063673747492" rel="noopener"><img class="mini"
 						src="images/icones/iconeFacebook2.png" alt="Logo Facebook" /></a>
-				<a href="https://www.instagram.com/heartbeatcountry/" target="_blank"><img  class="mini"
+				<a href="https://www.instagram.com/heartbeatcountry/" rel="noopener"><img  class="mini"
 						src="images/icones/iconeInstagram2.png" alt="Logo Instagram" /></a>
 
-				<a href="https://www.linkedin.com/in/cynthia-fortier-414a4a259/" target="_blank"><img  class="mini"
+				<a href="https://www.linkedin.com/in/cynthia-fortier-414a4a259/" rel="noopener"><img  class="mini"
 						src="images/icones/iconeLinkedin.png" alt="Logo Linkedin" /></a>
-				<a href="https://www.tiktok.com/@heartbeatcountry" target="_blank"><img  class="mini"
+				<a href="https://www.tiktok.com/@heartbeatcountry" rel="noopener"><img  class="mini"
 						src="images/icones/icone_tiktok.png" alt="Logo Tiktok" /></a>
 			</div>
 		</div></div>
