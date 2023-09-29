@@ -1,85 +1,73 @@
 ---
+import { date } from "astro/zod";
 import Page from "../layouts/GabaritPrincipal.astro";
+import { formaterDate, obtenirDimanchePrecedent } from "../lib/date.mjs";
+import Bd from "../lib/bd.mjs";
 
 const danse = Astro.locals["danse"];
 const cours = Astro.locals["cours"];
 
-const dateActuelle = new Date();
-const jourActuel = dateActuelle.getDay();
-const joursAvantDimanche = 7 - jourActuel;
-const dimancheDeLaSemaine = new Date(dateActuelle);
-dimancheDeLaSemaine.setDate(dateActuelle.getDate() + joursAvantDimanche );
+const dimancheDeLaSemaine = obtenirDimanchePrecedent(new Date());
+const dateMoisDimanche = formaterDate(dimancheDeLaSemaine)
 
-const dateMoisDimanche = obtenirJourDateMois(dimancheDeLaSemaine)
+/*
+const coursTest = await Bd.creerCours(
+	"Intermédiaire",
+	new Date('2023-09-30T19:15:00-04:00'),
+	"Salle des Lions"
+);
 
-const coursTest = {
-	niveau:"intermédiaire",
-	date: new Date('2023-09-30'),
-	lieu: "Salle des Lions"
-
-};
-
-const danseDeTest = {
-	titre: "Everyone needs a hero",
-	choregraphe: "Roy Verdonk, Grace David, Jef Camps",
-	musique:"Holding Out for a Hero - Adam Lambert",
-	niveau: "intermédiaire",
-	detailsTag: "Après 2e mur, Ajouter 8 comptes (step 1/2 tour X 2, out, out, in, in), après 3e mur et 4e mur ajouter 4 comptes (step 1/2 tour X 2)",
-	lienFeuille:"https://www.copperknob.co.uk/.../everyone-needs-a-hero",
-	lienVideoDanse: "338U80kqryY",
-	lienVideoMusique: "dB7NsWHCQv4",
-	lienVideoAcademie: "https://www.academiedansetavie.com/products/academie-danse-ta-vie/categories/2150082906/posts/2169250245  ",
-	nbComptes: 64,
-	nbMurs: 2,
-	estCoupDeCoeur: true,
-	cours: [coursTest],
-};
-
-const lstDanses = [
-	danseDeTest, danseDeTest, danseDeTest
-];
-
-
-/**
- * Permet d'obternir le jour, la date et le mois pour une "Date"
- */
-function obtenirJourDateMois(date){
-
-	const nomsJours = [
-		"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
-		];
-	const nomsMois = [
-		"Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-		"Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-		];
-	const jourDeLaSemaine = nomsJours[date.getDay()];
-
-	const jour = date.getDate();
-
-	// Obtenez le mois
-	const mois = nomsMois[date.getMonth()];
-
-	// Formatez le résultat
-	const resultat = `${jourDeLaSemaine}, ${jour} ${mois}`;
-
-	return resultat;
-
+for (let i = 0; i < 8; ++i) {
+	const {titre, choregraphe, musique, niveau, detailsTag, lienFeuille, lienVideoAcademie, lienVideoDanse, lienVideoMusique, nbComptes, nbMurs, estCoupDeCoeur, cours} = {
+		titre: "Everyone needs a hero",
+		choregraphe: "Roy Verdonk, Grace David, Jef Camps",
+		musique:"Holding Out for a Hero - Adam Lambert",
+		niveau: "Intermédiaire",
+		detailsTag: "Après 2e mur, Ajouter 8 comptes (step 1/2 tour X 2, out, out, in, in), après 3e mur et 4e mur ajouter 4 comptes (step 1/2 tour X 2)",
+		lienFeuille:"https://www.copperknob.co.uk/stepsheets/167154/everyone-needs-a-hero",
+		lienVideoDanse: "338U80kqryY",
+		lienVideoMusique: "dB7NsWHCQv4",
+		lienVideoAcademie: "https://www.academiedansetavie.com/products/academie-danse-ta-vie/categories/2150082906/posts/2169250245  ",
+		nbComptes: 64,
+		nbMurs: 2,
+		estCoupDeCoeur: true,
+		cours: [coursTest],
+	};
+	await Bd.creerDanse(titre + i,
+		choregraphe,
+		musique,
+		niveau,
+		detailsTag,
+		lienFeuille,
+		lienVideoDanse,
+		lienVideoMusique,
+		lienVideoAcademie,
+		nbComptes,
+		nbMurs,
+		estCoupDeCoeur,
+		coursTest._id);
 }
+*/
 
-
+const lstDanses = await Bd.obtenirDansesDepuisDimanche(dimancheDeLaSemaine);
 ---
 
 <Page titre="Accueil">
+
 	<h1> Danses de la semaine du {dateMoisDimanche} </h1>
 
 
 	<div class="row row-cols-1 row-cols-lg-3 g-4">
 		{
+			!lstDanses &&
+			<p>Aucune danse prévue cette semaine</p>
+		}
+		{
 			lstDanses.map(danse =>
 				<div class="col">
 					<div class="card">
 						<div class="card-header row row-cols-1 g-5">
-							<span>{obtenirJourDateMois(danse.cours[0].date)}</span>
+							<span>{formaterDate(danse.cours[0].date, true)}</span>
 							<span>{danse.cours[0].lieu}</span>
 						</div>
 						<a href={ `https://youtube.com/watch?v=${danse.lienVideoMusique}` }>
@@ -88,7 +76,7 @@ function obtenirJourDateMois(date){
 						<div class="card-body">
 							<h5 class="card-title">{danse.titre}</h5>
 							<p class="card-text">Niveau: {danse.niveau} </p>
-							<p class="card-text">{danse.nbComptes} comptes {danseDeTest.nbMurs} Murs</p>
+							<p class="card-text">{danse.nbComptes} comptes {danse.nbMurs} Murs</p>
 						</div>
 					</div>
 				</div>
