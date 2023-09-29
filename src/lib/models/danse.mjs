@@ -3,7 +3,6 @@ import { contraintes } from "../consts.mjs";
 
 
 export const Danse = new Schema({
-
 	titre: {
 		type: String,
 		trim: true,
@@ -14,7 +13,8 @@ export const Danse = new Schema({
 	choregraphe: {
 		type: String,
 		trim: true,
-		required: "Le prénom et nom du chorégraphe est requis.  Sinon indiquer inconnu.",
+		required:
+			"Le prénom et nom du chorégraphe est requis.  Sinon indiquer inconnu.",
 		minLength: contraintes.danse.choregraphe.longueurMin,
 		maxLength: contraintes.danse.choregraphe.longueurMax,
 	},
@@ -25,9 +25,9 @@ export const Danse = new Schema({
 		minLength: contraintes.danse.musique.longueurMin,
 		maxLength: contraintes.danse.musique.longueurMax,
 	},
-	niveau:{
-		type:String,
-		enum: ['Initiation', 'Débutant','Novice','Intermédiaire','Avancé'],
+	niveau: {
+		type: String,
+		enum: ["Initiation", "Débutant", "Novice", "Intermédiaire", "Avancé"],
 		required: true,
 	},
 	detailsTag: {
@@ -66,12 +66,11 @@ export const Danse = new Schema({
 		type: Boolean,
 		default: false,
 	},
-	cours:{
+	cours: {
 		type: [ObjectId],
-		ref: 'Cours',
+		ref: "Cours",
 		required: true,
-		unique: true,
-	}
+	},
 });
 
 export default Danse;
