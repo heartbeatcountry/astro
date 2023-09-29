@@ -47,9 +47,9 @@ const usager = Astro.locals["usager"];
 		Aller au contenu principal
 	</a>
 	<header>
-		<nav class="navbar navbar-expand-xxl bg-body-tertiary bg-opacity-75  sticky-topnavbar"
+		<nav class="navbar navbar-expand-xl bg-body-tertiary bg-opacity-75  sticky-topnavbar"
 			data-bs-theme="dark" aria-labelledby="MenuPrincipal">
-			<div class="container-xxl">
+			<div class="container-xl">
 				<a class="navbar-brand" href="/">
 					<img class="logo"  src="/images/logoblanctransparent.png"
 						alt="logo heartbeat country" />
@@ -102,7 +102,7 @@ const usager = Astro.locals["usager"];
 			</div>
 		</nav>
 
-		<div class="container-xxl">
+		<div class="container-xl">
 			<div class="hero hstack mt-5 pt-5 justify-content-center">
 				<div class="mx-auto px-3 py-0">
 					<h1 class="fw-bold">{h1}</h1>
@@ -112,42 +112,47 @@ const usager = Astro.locals["usager"];
 
 	</header>
 	<main>
-		<div class="container-xxl py-4">
+		<div class="container-xl py-4">
 			<slot />
 		</div>
 	</main>
 
 	<footer class="bg-body-tertiary bg-opacity-75" data-bs-theme="dark">
-		<div class="container-xxl"><div class="row row-cols-1 row-cols-xxl-3 text-center p-4 align-items-center">
-			<div class="">
-				<p class="p-0">
-					Site web crée par Pascal Breton et Cynthia Fortier automne 2023
-				</p>
+		<div class="container-xl">
+			<div class="row row-cols-1 row-cols-xl-3 text-center py-4 align-items-center">
+				<div>
+					<p class="p-0">
+						Site web crée par Pascal Breton et Cynthia Fortier.
+					</p>
+					<p class="p-0">
+						automne 2023
+					</p>
+				</div>
+				<div class="col-xl-6">
+					<img  class="logo" src="/images/logoblanctransparent.png"
+							alt="logo heartbeat country" />
+					<p>
+						<a href="mailto:" class="courriel-footer">&nbsp;</a>
+					</p>
+					<p>Tous droits réservés.</p>
 
+				</div>
+				<div class="hstack gap-2 justify-content-center">
+					<a href="https://www.facebook.com/profile.php?id=100063673747492" rel="noopener">
+						<img class="mini" src="/images/icones/iconeFacebook2.png" alt="Logo Facebook" />
+					</a>
+					<a href="https://www.instagram.com/heartbeatcountry/" rel="noopener">
+						<img  class="mini" src="/images/icones/iconeInstagram2.png" alt="Logo Instagram" />
+					</a>
+					<a href="https://www.linkedin.com/in/cynthia-fortier-414a4a259/" rel="noopener">
+						<img  class="mini" src="/images/icones/iconeLinkedin.png" alt="Logo Linkedin" />
+					</a>
+					<a href="https://www.tiktok.com/@heartbeatcountry" rel="noopener">
+						<img  class="mini" src="/images/icones/icone_tiktok.png" alt="Logo Tiktok" />
+					</a>
+				</div>
 			</div>
-			<div class="col-xxl-6">
-				<img  class="logo" src="/images/logoblanctransparent.png"
-						alt="logo heartbeat country" />
-				<p>
-					<a href="mailto:" class="courriel-footer">&nbsp;</a>
-				</p>
-				<p>Tous droits réservés.</p>
-
-			</div>
-
-			<div class="">
-
-				<a href="https://www.facebook.com/profile.php?id=100063673747492" rel="noopener"><img class="mini"
-						src="/images/icones/iconeFacebook2.png" alt="Logo Facebook" /></a>
-				<a href="https://www.instagram.com/heartbeatcountry/" rel="noopener"><img  class="mini"
-						src="/images/icones/iconeInstagram2.png" alt="Logo Instagram" /></a>
-
-				<a href="https://www.linkedin.com/in/cynthia-fortier-414a4a259/" rel="noopener"><img  class="mini"
-						src="/images/icones/iconeLinkedin.png" alt="Logo Linkedin" /></a>
-				<a href="https://www.tiktok.com/@heartbeatcountry" rel="noopener"><img  class="mini"
-						src="/images/icones/icone_tiktok.png" alt="Logo Tiktok" /></a>
-			</div>
-		</div></div>
+		</div>
 	</footer>
 </body>
 
@@ -207,12 +212,7 @@ header{
 
 footer{
 	p{
-		@extend .px-5;
 		color: #ffffff;
-	}
-
-	img{
-		@extend .p-2;
 	}
 
 	.logo
