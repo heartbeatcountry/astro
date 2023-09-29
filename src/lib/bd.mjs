@@ -5,6 +5,8 @@ import mongoose, { Model, model } from "mongoose";
 import SchemaSession from "./models/session.mjs";
 import SchemaUsager from "./models/usager.mjs";
 import SchemaAppreciation from "./models/appreciation.mjs";
+import SchemaDanse from "./models/danse.mjs";
+import SchemaCours from "./models/cours.mjs";
 
 // Importation des autres dépendances:
 import { hacherMdp } from "./cryptographie.mjs";
@@ -18,14 +20,20 @@ import { ErrUtilisateurExiste, MongoServerError } from "./bd-exceptions.mjs";
 // Raccourci pour ObjectId:
 const ObjectId = mongoose.mongo.ObjectId;
 
-
 // Obtention du MONGO_URL depuis le fichier .env:
 const urlConnexion = import.meta.env.MONGO_URL?.trim();
 const nomBase = import.meta.env.MONGO_BASE?.trim();
 
 // Validation du MONGO_URL:
-if (urlConnexion == null || urlConnexion.length < 1 || nomBase == null || nomBase.length < 1) {
-	throw new Error("Veuillez configurer un fichier .env contenant une clé MONGO_URL.");
+if (
+	urlConnexion == null ||
+	urlConnexion.length < 1 ||
+	nomBase == null ||
+	nomBase.length < 1
+) {
+	throw new Error(
+		"Veuillez configurer un fichier .env contenant une clé MONGO_URL."
+	);
 }
 
 // Connexion à mongo avec la connexion Mongoose par défaut:
@@ -39,7 +47,10 @@ export const Session = model("Session", SchemaSession);
 const Usager = model("Usager", SchemaUsager);
 /** @type {Model<SchemaAppreciation>} */
 const Appreciation = model("Appreciation", SchemaAppreciation);
-
+/** @type {Model<SchemaDanse>} */
+const Danse = model("Danse", SchemaDanse);
+/** @type {Model<SchemaCours>} */
+const Cours = model("Cours", SchemaCours);
 
 /**
  * Classe de communication avec la base MongoDB
@@ -52,7 +63,10 @@ export default class Bd {
 	 * @returns {Promise<Session>} instance de la Session
 	 */
 	static async obtenirSession(cleSession) {
-		return await Session.findOne({ cle: cleSession, dateExpiration: { $gt: new Date() } });
+		return await Session.findOne({
+			cle: cleSession,
+			dateExpiration: { $gt: new Date() },
+		});
 	}
 
 	/**
@@ -80,7 +94,7 @@ export default class Bd {
 		const session = new Session({
 			cle: cleSession,
 			usager: usager,
-			dateExpiration: expiration
+			dateExpiration: expiration,
 		});
 		await session.save();
 
@@ -116,8 +130,7 @@ export default class Bd {
 		} catch (err) {
 			if (err.code && err.code == 11000)
 				throw new ErrUtilisateurExiste(err.message ?? "");
-			else
-				throw err;
+			else throw err;
 		}
 
 		return usager;
@@ -131,5 +144,68 @@ export default class Bd {
 	 */
 	static async obtenirUsagerParCourriel(courriel) {
 		return await Usager.findOne({ courriel, estValide: true });
+	}
+
+	/** Création d'une danse
+	 * @returns {Promise<void>}
+	 */
+	static async creerDanse(
+		titre,
+		choregraphe,
+		musique,
+		niveau,
+		detailsTag,
+		lienFeuille,
+		lienVideoDanse,
+		lienVideoMusique,
+		lienVideoAcademie,
+		nbComptes,
+		nbMurs,
+		estCoupDeCoeur,
+		cours
+	) {
+		const danse = new Danse({
+			titre,
+			choregraphe,
+			musique,
+			niveau,
+			detailsTag,
+			lienFeuille,
+			lienVideoDanse,
+			lienVideoMusique,
+			lienVideoAcademie,
+			nbComptes,
+			nbMurs,
+			estCoupDeCoeur,
+			cours,
+		});
+		await danse.save();
+	}
+
+	/** Création d'un cours
+	 * @returns {Promise<Cours>}
+	 */
+	static async creerCours(niveau, date, lieu) {
+		const cours = new Cours({
+			niveau,
+			date,
+			lieu,
+		});
+		return await cours.save();
+	}
+
+	/**
+	 * Trouver TOUTES les danses dans les cours à partir du dimanche donné
+	 *
+	 * @param {Date} dimanche le dimanche à partir duquel chercher
+	 * @returns {Promise<Danse>} liste des danses
+	 */
+	static async obtenirDansesDepuisDimanche(dimanche) {
+		return await Danse.find().populate({
+			path: "cours",
+			match: {
+				date: { $gte: dimanche },
+			},
+		});
 	}
 }
