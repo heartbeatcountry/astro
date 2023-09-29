@@ -66,18 +66,18 @@ const usager = Astro.locals["usager"];
 				<div class="collapse navbar-collapse mb-2 mb-lg-0" id="navbarSupportedContent">
 					<ul class="navbar-nav me-auto">
 						<li class="nav-item">
-							<a href="/">Accueil</a>
+							<a href="/" class="nav-link">Accueil</a>
 						</li>
 						<li class="nav-item">
-							<a href="/danses">Danses</a>
+							<a href="/danses" class="nav-link">Danses</a>
 						</li>
 						<li class="nav-item">
-							<a href="/evenements">Événements</a>
+							<a href="/evenements" class="nav-link">Événements</a>
 						</li>
 						<li class="nav-item dropdown">
-							<span class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<a class="nav-link dropdown-toggle" href="/a-propos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 								Informations
-							</span>
+							</a>
 							<ul class="dropdown-menu">
 								<li><a class="dropdown-item" href="/a-propos">À propos</a></li>
 								<li><a class="dropdown-item" href="/services">Cours et services</a></li>
@@ -88,11 +88,11 @@ const usager = Astro.locals["usager"];
 						<li class="nav-item">
 							{
 								usager ?
-								<a href="/compte">
+								<a href="/compte" class="nav-link">
 									Mon compte
 								</a>
 								:
-								<a href="/compte/connexion">
+								<a href="/compte/connexion" class="nav-link">
 									Connexion
 								</a>
 							}
@@ -175,60 +175,55 @@ h1{
 }
 
 header{
+	@extend .fs-4;
 
 	background: linear-gradient(to bottom, #ffffff85, #ffffff85), url("../../images/background_header.png") center  top / cover no-repeat;
-}
 
-nav, footer{
+	nav li > :first-child {
+		@extend .rounded-2;
 
-	@extend .fs-4;
-}
+		&:hover, &:focus, &:active, &.active, &.show {
+			background-color: #80a2ac;
+			color: #2B3641;
+		}
+	}
 
-li a{
-	@extend .nav-link, .mx-1, .px-3, .rounded-2;
+	.logo
+	{
+		width: 250Q;
+		height: 111Q;
+	}
 
-}
+	.hero {
+		padding-bottom: 6em;
 
-li a:hover, li a:focus{
-	background-color: #80a2acf6;
-
-}
-
-nav li{
-	@extend .nav-item;
-}
-
-footer img{
-	@extend .p-2;
+		div {
+			@extend .rounded-4;
+			text-shadow: #fff 0 0 3Q;
+			text-transform: uppercase;
+		}
+	}
 }
 
 footer{
-
-
 	p{
 		@extend .px-5;
 		color: #ffffff;
+	}
+
+	img{
+		@extend .p-2;
+	}
+
+	.logo
+	{
+		width: 200Q;
+		height: 89Q;
 	}
 }
 
 .mini{
 	width: 100Q;
-}
-
-.logo
-{
-	width: 250Q;
-	height: 111Q;
-}
-
-.hero {
-	padding-bottom: 6em;
-
-	div {
-		@extend .rounded-4;
-		text-shadow: #fff 0 0 3Q;
-		text-transform: uppercase;
-	}
 }
 
 </style>
