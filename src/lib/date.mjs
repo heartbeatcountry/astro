@@ -33,3 +33,16 @@ export const obtenirDimanchePrecedent = (date) => {
 	const jourDeSemaine = aujourdhui.getDay();
 	return new Date(aujourdhui.setDate(jourDuMois - jourDeSemaine));
 };
+
+/**
+ * Obtenir la date du samedi suivant
+ *
+ * @param {Date} date date d'origine
+ * @returns date du samedi suivant
+ */
+export const obtenirSamediSuivant = (date) => {
+	const aujourdhui = new Date(date);
+	const joursRestants = 5 - aujourdhui.getDay();
+	aujourdhui.setDate(aujourdhui.getDate() + joursRestants + 1);
+	return aujourdhui;
+  };
