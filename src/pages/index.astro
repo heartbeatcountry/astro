@@ -1,14 +1,16 @@
 ---
 import { date } from "astro/zod";
 import Page from "../layouts/GabaritPrincipal.astro";
-import { formaterDate, obtenirDimanchePrecedent } from "../lib/date.mjs";
+import { formaterDate, obtenirDimanchePrecedent,obtenirSamediSuivant  } from "../lib/date.mjs";
 import Bd from "../lib/bd.mjs";
 
 const danse = Astro.locals["danse"];
 const cours = Astro.locals["cours"];
 
 const dimancheDeLaSemaine = obtenirDimanchePrecedent(new Date());
-const dateMoisDimanche = formaterDate(dimancheDeLaSemaine)
+const samediDeLaSemaine = obtenirSamediSuivant(new Date());
+const samedi = formaterDate(samediDeLaSemaine)
+const dimanche = formaterDate(dimancheDeLaSemaine);
 
 /*
 const coursTest = await Bd.creerCours(
@@ -49,43 +51,55 @@ for (let i = 0; i < 8; ++i) {
 }
 */
 
-const lstDanses = await Bd.obtenirDansesDepuisDimanche(dimancheDeLaSemaine);
+
+const lstDanses = await Bd.obtenirDansesDepuisDimanche(dimancheDeLaSemaine,samediDeLaSemaine);
+
+const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine,samediDeLaSemaine )
 ---
 
 <Page titre="Accueil">
 
-	<h1> Danses de la semaine du {dateMoisDimanche} </h1>
+	<h2 class="text-center"> Danses de la semaine du {dimanche} au {samedi} </h2>
 
 
-	<div class="row row-cols-1 row-cols-lg-3 g-4">
+
+	<div class="row row-cols-1 row-cols-md-3 g-4">
 		{
-			!lstDanses &&
+			!lstCours &&
 			<p>Aucune danse prévue cette semaine</p>
 		}
 		{
+
 			lstDanses.map(danse =>
 				<div class="col">
-					<div class="card">
-						<div class="card-header row row-cols-1 g-5">
-							<span>{formaterDate(danse.cours[0].date, true)}</span>
-							<span>{danse.cours[0].lieu}</span>
+					<div class="card text-center">
+						<div class="card-header">
+
+							<h3>{formaterDate(danse.cours[0].date, true)}</h3>
+							<h4>{danse.cours[0].lieu}</h4>
+
+
 						</div>
 						<a href={ `https://youtube.com/watch?v=${danse.lienVideoMusique}` }>
-							<img src={ `https://img.youtube.com/vi/${danse.lienVideoMusique}/0.jpg` } alt="vidéo youtube" />
+							<img  class="card-img-top" src={ `https://img.youtube.com/vi/${danse.lienVideoMusique}/0.jpg` } alt="vidéo youtube" />
 						</a>
 						<div class="card-body">
-							<h5 class="card-title">{danse.titre}</h5>
-							<p class="card-text">Niveau: {danse.niveau} </p>
-							<p class="card-text">{danse.nbComptes} comptes {danse.nbMurs} Murs</p>
+							<h4>{danse.titre}</h4>
+							<h5>Niveau: {danse.niveau} </h5>
+							<p>{danse.nbComptes} comptes {danse.nbMurs} Murs</p>
 						</div>
 					</div>
 				</div>
 			)
 		}
 	</div>
+
+
 </Page>
 
+
 <style lang="scss">
+
 .card{
 	margin: 30px;
 }
