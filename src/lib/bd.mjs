@@ -194,17 +194,36 @@ export default class Bd {
 		return await cours.save();
 	}
 
+
+	/**
+	 * Trouver les cours à partir du dimanche donné
+	 *
+	 * @param {Date} dimanche le dimanche à partir duquel chercher
+	 * @returns {Promise<Cours>} liste des cours
+	 */
+	static async obtenirCoursDeLaSemaine(dimanche, samedi) {
+		return await Cours.find({
+				date: {
+					$gte: dimanche,
+					$lte: samedi
+					},
+			});
+	}
+
 	/**
 	 * Trouver TOUTES les danses dans les cours à partir du dimanche donné
 	 *
 	 * @param {Date} dimanche le dimanche à partir duquel chercher
 	 * @returns {Promise<Danse>} liste des danses
 	 */
-	static async obtenirDansesDepuisDimanche(dimanche) {
+	static async obtenirDansesDepuisDimanche(dimanche, samedi) {
 		return await Danse.find().populate({
 			path: "cours",
 			match: {
-				date: { $gte: dimanche },
+				date: {
+					$gte: dimanche,
+					$lte: samedi
+					},
 			},
 		});
 	}
