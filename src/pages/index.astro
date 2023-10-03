@@ -3,28 +3,25 @@ import { date } from "astro/zod";
 import Page from "../layouts/GabaritPrincipal.astro";
 import { formaterDate, obtenirDimanchePrecedent,obtenirSamediSuivant  } from "../lib/date.mjs";
 import Bd from "../lib/bd.mjs";
+import { NIVEAU } from "../lib/enums.mjs";
 
-const danse = Astro.locals["danse"];
-const cours = Astro.locals["cours"];
 
 const dimancheDeLaSemaine = obtenirDimanchePrecedent(new Date());
 const samediDeLaSemaine = obtenirSamediSuivant(new Date());
 const samedi = formaterDate(samediDeLaSemaine)
 const dimanche = formaterDate(dimancheDeLaSemaine);
 
+
+
 /*
-const coursTest = await Bd.creerCours(
-	"Intermédiaire",
-	new Date('2023-09-30T19:15:00-04:00'),
-	"Salle des Lions"
-);
+const listesDanses = [];
 
 for (let i = 0; i < 8; ++i) {
-	const {titre, choregraphe, musique, niveau, detailsTag, lienFeuille, lienVideoAcademie, lienVideoDanse, lienVideoMusique, nbComptes, nbMurs, estCoupDeCoeur, cours} = {
+	const {titre, choregraphe, musique, niveau, detailsTag, lienFeuille, lienVideoAcademie, lienVideoDanse, lienVideoMusique, nbComptes, nbMurs, estCoupDeCoeur} = {
 		titre: "Everyone needs a hero",
 		choregraphe: "Roy Verdonk, Grace David, Jef Camps",
 		musique:"Holding Out for a Hero - Adam Lambert",
-		niveau: "Intermédiaire",
+		niveau: NIVEAU.INTERMEDIAIRE,
 		detailsTag: "Après 2e mur, Ajouter 8 comptes (step 1/2 tour X 2, out, out, in, in), après 3e mur et 4e mur ajouter 4 comptes (step 1/2 tour X 2)",
 		lienFeuille:"https://www.copperknob.co.uk/stepsheets/167154/everyone-needs-a-hero",
 		lienVideoDanse: "338U80kqryY",
@@ -33,8 +30,8 @@ for (let i = 0; i < 8; ++i) {
 		nbComptes: 64,
 		nbMurs: 2,
 		estCoupDeCoeur: true,
-		cours: [coursTest],
 	};
+	listesDanses.push(
 	await Bd.creerDanse(titre + i,
 		choregraphe,
 		musique,
@@ -46,37 +43,41 @@ for (let i = 0; i < 8; ++i) {
 		lienVideoAcademie,
 		nbComptes,
 		nbMurs,
-		estCoupDeCoeur,
-		coursTest._id);
+		estCoupDeCoeur));
 }
+
+const coursTest = await Bd.creerCours(
+	NIVEAU.INTERMEDIAIRE,
+	new Date('2023-09-30T19:15:00-04:00'),
+	"Salle des Lions",
+	listesDanses,
+);
+
+return
 */
 
-
-const lstDanses = await Bd.obtenirDansesDepuisDimanche(dimancheDeLaSemaine,samediDeLaSemaine);
-
-const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine,samediDeLaSemaine )
+const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 ---
 
 <Page titre="Accueil">
 
 	<h2 class="text-center"> Danses de la semaine du {dimanche} au {samedi} </h2>
 
-
-
 	<div class="row row-cols-1 row-cols-md-3 g-4">
 		{
-			!lstCours &&
-			<p>Aucune danse prévue cette semaine</p>
+			!lstCours.length &&
+			<h3>Aucun cours prévu cette semaine</h3>
 		}
 		{
 
-			lstDanses.map(danse =>
+			lstCours.map(cours => cours.danses.map(
+				danse =>
 				<div class="col">
 					<div class="card text-center">
 						<div class="card-header">
 
-							<h3>{formaterDate(danse.cours[0].date, true)}</h3>
-							<h4>{danse.cours[0].lieu}</h4>
+							<h3>{formaterDate(cours.date, true)}</h3>
+							<h4>{cours.lieu}</h4>
 
 
 						</div>
@@ -84,12 +85,13 @@ const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine,samediDeLa
 							<img  class="card-img-top" src={ `https://img.youtube.com/vi/${danse.lienVideoMusique}/0.jpg` } alt="vidéo youtube" />
 						</a>
 						<div class="card-body">
-							<h4>{danse.titre}</h4>
-							<h5>Niveau: {danse.niveau} </h5>
+							<h3>{danse.titre}</h3>
+							<h4>Niveau: {danse.niveau} </h4>
 							<p>{danse.nbComptes} comptes {danse.nbMurs} Murs</p>
 						</div>
 					</div>
 				</div>
+			)
 			)
 		}
 	</div>
