@@ -148,7 +148,7 @@ export default class Bd {
 	}
 
 	/** Création d'une danse
-	 * @returns {Promise<void>}
+	 * @returns {Promise<Danse>}
 	 */
 	static async creerDanse(
 		titre,
@@ -162,8 +162,7 @@ export default class Bd {
 		lienVideoAcademie,
 		nbComptes,
 		nbMurs,
-		estCoupDeCoeur,
-		cours
+		estCoupDeCoeur
 	) {
 		const danse = new Danse({
 			titre,
@@ -178,23 +177,22 @@ export default class Bd {
 			nbComptes,
 			nbMurs,
 			estCoupDeCoeur,
-			cours,
 		});
-		await danse.save();
+		return await danse.save();
 	}
 
 	/** Création d'un cours
-	 * @returns {Promise<Cours>}
+	 * @returns {Promise<void>}
 	 */
-	static async creerCours(niveau, date, lieu) {
+	static async creerCours(niveau, date, lieu, danses) {
 		const cours = new Cours({
 			niveau,
 			date,
 			lieu,
+			danses,
 		});
-		return await cours.save();
+		await cours.save();
 	}
-
 
 	/**
 	 * Trouver les cours de la semaine à partir du dimanche donné
@@ -208,24 +206,6 @@ export default class Bd {
 				$gte: dimanche,
 				$lt: obtenirDimancheSuivant(dimanche),
 			},
-		});
-	}
-
-	/**
-	 * Trouver TOUTES les danses de la semaine à partir du dimanche donné
-	 *
-	 * @param {Date} dimanche le dimanche à partir duquel chercher
-	 * @returns {Promise<Danse[]>} liste des danses
-	 */
-	static async obtenirDansesDepuisDimanche(dimanche) {
-		return await Danse.find().populate({
-			path: "cours",
-			match: {
-				date: {
-					$gte: dimanche,
-					$lt: obtenirDimancheSuivant(dimanche),
-				},
-			},
-		});
+		}).populate("danses");
 	}
 }
