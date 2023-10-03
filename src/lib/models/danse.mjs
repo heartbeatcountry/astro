@@ -1,5 +1,6 @@
 import { Schema, model, ObjectId } from "mongoose";
 import { contraintes } from "../consts.mjs";
+import { NIVEAU } from "../enums.mjs";
 
 
 export const Danse = new Schema({
@@ -26,8 +27,8 @@ export const Danse = new Schema({
 		maxLength: contraintes.danse.musique.longueurMax,
 	},
 	niveau: {
-		type: String,
-		enum: ["Initiation", "Débutant", "Novice", "Intermédiaire", "Avancé"],
+		type: Number,
+		enum: Object.values(NIVEAU),
 		required: true,
 	},
 	detailsTag: {
@@ -66,11 +67,7 @@ export const Danse = new Schema({
 		type: Boolean,
 		default: false,
 	},
-	cours: {
-		type: [ObjectId],
-		ref: "Cours",
-		required: true,
-	},
+
 });
 
 export default Danse;
