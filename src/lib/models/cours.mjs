@@ -1,27 +1,34 @@
 import { Schema, model, ObjectId } from "mongoose";
 import { contraintes } from "../consts.mjs";
+import { NIVEAU } from "../enums.mjs";
+
 
 
 export const Cours = new Schema({
-
-	niveau:{
-		type:String,
-		enum: ['Initiation', 'Débutant','Novice','Intermédiaire','Avancé'],
+	niveau: {
+		type: Number,
+		enum: Object.values(NIVEAU),
 		required: true,
 	},
 
-	date:{
-		type:Date,
+	date: {
+		type: Date,
 		required: true,
 	},
 
-	lieu:{
-		type:String,
+	lieu: {
+		type: String,
 		//type: [ObjectId],
-		//ref: 'lieu',
+		//ref: 'Lieu',
 		required: true,
-		unique: true,
-	}
+	},
+
+	danses: [
+		{
+			type: ObjectId,
+			ref: "Danse",
+		},
+	],
 });
 
 export default Cours;
