@@ -11,6 +11,7 @@ import SchemaCours from "./models/cours.mjs";
 // Importation des autres dépendances:
 import { hacherMdp } from "./cryptographie.mjs";
 import { ErrUtilisateurExiste, MongoServerError } from "./bd-exceptions.mjs";
+import { obtenirDimancheSuivant } from "./date.mjs";
 
 // Importation des interfaces:
 /** @typedef {import("./interfaces.mjs").IDateEvenement} IDateEvenement */
@@ -196,34 +197,34 @@ export default class Bd {
 
 
 	/**
-	 * Trouver les cours à partir du dimanche donné
+	 * Trouver les cours de la semaine à partir du dimanche donné
 	 *
 	 * @param {Date} dimanche le dimanche à partir duquel chercher
-	 * @returns {Promise<Cours>} liste des cours
+	 * @returns {Promise<Cours[]>} liste des cours
 	 */
-	static async obtenirCoursDeLaSemaine(dimanche, samedi) {
+	static async obtenirCoursDeLaSemaine(dimanche) {
 		return await Cours.find({
-				date: {
-					$gte: dimanche,
-					$lte: samedi
-					},
-			});
+			date: {
+				$gte: dimanche,
+				$lt: obtenirDimancheSuivant(dimanche),
+			},
+		});
 	}
 
 	/**
-	 * Trouver TOUTES les danses dans les cours à partir du dimanche donné
+	 * Trouver TOUTES les danses de la semaine à partir du dimanche donné
 	 *
 	 * @param {Date} dimanche le dimanche à partir duquel chercher
-	 * @returns {Promise<Danse>} liste des danses
+	 * @returns {Promise<Danse[]>} liste des danses
 	 */
-	static async obtenirDansesDepuisDimanche(dimanche, samedi) {
+	static async obtenirDansesDepuisDimanche(dimanche) {
 		return await Danse.find().populate({
 			path: "cours",
 			match: {
 				date: {
 					$gte: dimanche,
-					$lte: samedi
-					},
+					$lt: obtenirDimancheSuivant(dimanche),
+				},
 			},
 		});
 	}
