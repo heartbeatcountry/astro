@@ -1,5 +1,5 @@
 /**
- * Formater la date
+ * Formater la date afin d'afficher le jour, la date et le mois
  *
  * @param {Date} date la date à formater
  * @param {Boolean} afficherHeure vrai s'il faut aussi afficher l'heure
@@ -10,6 +10,29 @@ export const formaterDate = (date, afficherHeure = false) => {
 		weekday: "long",
 		month: "long",
 		day: "numeric",
+	};
+
+	if (afficherHeure) {
+		Object.assign(options, {
+			hour: "2-digit",
+			minute: "2-digit",
+		});
+	}
+
+	return date.toLocaleDateString("fr-CA", options);
+};
+
+
+/**
+ * Formater la date
+ *
+ * @param {Date} date la date à formater
+ * @param {Boolean} afficherHeure vrai s'il faut aussi afficher l'heure
+ * @returns une représentation textuelle de la date
+ */
+export const formaterDateJour = (date, afficherHeure = false) => {
+	let options = {
+		weekday: "long",
 	};
 
 	if (afficherHeure) {
