@@ -201,11 +201,15 @@ export default class Bd {
 	 * @returns {Promise<Cours[]>} liste des cours
 	 */
 	static async obtenirCoursDeLaSemaine(dimanche) {
-		return await Cours.find({
+		const coursDeLaSemaine = await Cours.find({
 			date: {
 				$gte: dimanche,
 				$lt: obtenirDimancheSuivant(dimanche),
 			},
 		}).populate("danses");
+
+		coursDeLaSemaine.sort((a, b) => a.date - b.date);
+		
+		return coursDeLaSemaine;
 	}
 }
