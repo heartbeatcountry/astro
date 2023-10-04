@@ -3,7 +3,7 @@ import { date } from "astro/zod";
 import Page from "../layouts/GabaritPrincipal.astro";
 import { formaterDate, obtenirDimanchePrecedent,obtenirSamediSuivant, formaterDateJour  } from "../lib/date.mjs";
 import Bd from "../lib/bd.mjs";
-import { NIVEAU } from "../lib/enums.mjs";
+import { NIVEAU_STR } from "../lib/enums.mjs";
 
 
 const dimancheDeLaSemaine = obtenirDimanchePrecedent(new Date());
@@ -62,36 +62,59 @@ const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 <Page titre="Accueil">
 
 	<h2 class="text-center"> Danses de la semaine du {dimanche} au {samedi} </h2>
+
 	{
 		!lstCours.length &&
 		<h3 class="text-center m-5">Aucun cours prévu cette semaine</h3>
 	}
-	<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+	<div class="my-2 row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 g-lg-5">
 
 		{
 
-			lstCours.map(cours => cours.danses.map(
+
+			lstCours.map(cours =>
+			cours.danses.length ?
+			cours.danses.map(
 				danse =>
 				<div class="col">
 					<div class="card text-center ">
 						<div class="card-header">
-
 							<h3>{formaterDateJour(cours.date, true)}</h3>
 							<h4>{cours.lieu}</h4>
-
-
 						</div>
+
+						{
+							!danse.lienVideoMusique &&
+							<img  class="card-img-top"  src="../../public/images/background_header.png" alt="aucun lien vidéo" />
+						}
+						{
+							danse.lienVideoMusique &&
 						<a href={ `https://youtube.com/watch?v=${danse.lienVideoMusique}`}  class="stretched-link" >
 							<img  class="card-img-top" src={ `https://img.youtube.com/vi/${danse.lienVideoMusique}/0.jpg` } alt="vidéo youtube" />
 						</a>
+						}
+
 						<div class="card-body">
 							<h3>{danse.titre}</h3>
-							<h4>Niveau: {danse.niveau} </h4>
+							<h4>Niveau: {NIVEAU_STR[danse.niveau]} </h4>
 							<p>{danse.nbComptes} comptes {danse.nbMurs} Murs</p>
 						</div>
 					</div>
 				</div>
 			)
+			:
+			<div class="col">
+					<div class="card text-center ">
+						<div class="card-header">
+							<h3>{formaterDateJour(cours.date, true)}</h3>
+							<h4>{cours.lieu}</h4>
+						</div>
+
+						<div class="card-body">
+							<h3>Cours de révision</h3>
+						</div>
+					</div>
+				</div>
 			)
 		}
 	</div>
@@ -102,12 +125,7 @@ const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 
 <style lang="scss">
 
-.card{
-	margin: 30px;
-}
-
 .card-header{
-	font-size: 2rem;
 	background-color: #80a2acf6;
 
 }
