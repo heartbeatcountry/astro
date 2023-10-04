@@ -10,16 +10,23 @@
  * @memberof enums
  */
 export const NIVEAU = Object.freeze({
-	/** Débutant 1 */
+	/** Ultra-Débutant */
 	INITIATION: 0,
-	/** Débutant 2 */
+	/** Débutant */
 	DEBUTANT: 1,
-	/** Débutant-intermédiaire */
+	/** Novice */
 	NOVICE: 2,
 	/** Intermédiaire */
 	INTERMEDIAIRE: 3,
-	/** Expérimenté */
+	/** Avancé */
 	AVANCE: 4,
+});
+export const NIVEAU_STR = Object.freeze({
+    [NIVEAU.INITIATION]: "Ultra-Débutant",
+    [NIVEAU.DEBUTANT]: "Débutant",
+    [NIVEAU.NOVICE]: "Novice",
+    [NIVEAU.INTERMEDIAIRE]: "Intermédiaire",
+    [NIVEAU.AVANCE]: "Avancé",
 });
 
 /**
