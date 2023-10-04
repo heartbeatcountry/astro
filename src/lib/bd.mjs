@@ -206,10 +206,13 @@ export default class Bd {
 				$gte: dimanche,
 				$lt: obtenirDimancheSuivant(dimanche),
 			},
-		}).populate("danses");
+		})
+			.populate("danses")
+			.sort({
+				date: 1,
+			});
 
-		coursDeLaSemaine.sort((a, b) => a.date - b.date);
-		
+
 		return coursDeLaSemaine;
 	}
 }
