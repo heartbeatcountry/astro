@@ -55,13 +55,13 @@ export const Danse = new Schema({
 	},
 	nbComptes: {
 		type: Number,
-		min: 8,
-		max: 255,
+		min: contraintes.danse.nbComptes.min,
+		max: contraintes.danse.nbComptes.max,
 	},
 	nbMurs: {
 		type: Number,
-		min: 0,
-		max: 4,
+		min: contraintes.danse.nbMurs.min,
+		max: contraintes.danse.nbMurs.max,
 	},
 	estCoupDeCoeur: {
 		type: Boolean,
