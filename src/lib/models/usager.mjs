@@ -50,6 +50,14 @@ export const Usager = new Schema({
 		ref: 'Danse',
 		required: true,
 	}
+}, {
+	virtuals: {
+		nomAffichage: {
+			get() {
+				return this.prenom + " " + this.nom;
+			},
+		},
+	},
 });
 
 export default Usager;
