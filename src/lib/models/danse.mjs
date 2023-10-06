@@ -1,6 +1,7 @@
 import { Schema, model, ObjectId } from "mongoose";
 import { contraintes } from "../consts.mjs";
 import { NIVEAU } from "../enums.mjs";
+import { genererIdentifiantUnique } from "../cryptographie.mjs";
 
 
 export const Danse = new Schema({
@@ -14,8 +15,7 @@ export const Danse = new Schema({
 	choregraphe: {
 		type: String,
 		trim: true,
-		required:
-			"Le prénom et nom du chorégraphe est requis.  Sinon indiquer inconnu.",
+		required: [true, "Le prénom et nom du chorégraphe est requis.  Sinon indiquer inconnu."],
 		minLength: contraintes.danse.choregraphe.longueurMin,
 		maxLength: contraintes.danse.choregraphe.longueurMax,
 	},
@@ -67,7 +67,20 @@ export const Danse = new Schema({
 		type: Boolean,
 		default: false,
 	},
-
+	identifiantUnique: {
+		type: String,
+		default() {
+			return genererIdentifiantUnique();
+		},
+		set() {
+			return genererIdentifiantUnique();
+		},
+		required: true,
+		unique: true,
+		immutable: [true, "impossible de modifier l'identifiant unique de la danse"],
+		minLength: contraintes.danse.titre.longueurMin,
+		maxLength: contraintes.danse.titre.longueurMax,
+	},
 });
 
 export default Danse;

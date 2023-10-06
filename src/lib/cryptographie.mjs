@@ -4,6 +4,9 @@ import { randomBytes } from "node:crypto";
 // importation du paquet NPM pour argon2-rs:
 import { hash, verify } from "@node-rs/argon2";
 
+// importation du paquet NPM pour les identifiants uniques:
+import { customAlphabet } from "nanoid";
+
 /**
  * Génère une chaîne aléatoire selon une entropie donnée.
  *
@@ -42,3 +45,16 @@ export const hacherMdp = async mdp =>
  */
 export const validerMdp = async (mdp, mdpConnu) =>
 	await verify(mdpConnu, mdp, optionsArgon2);
+
+/**
+ * Alphabet qui est utilisé pour générer les identifiants uniques
+ */
+const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz-.+!=~:@,&';
+
+/**
+ * Génère un identifiant unique
+ *
+ * @param {Number?} size - longueur de l'identifiant unique
+ * @returns {String} un nouvel identifiant unique
+ */
+export const genererIdentifiantUnique = customAlphabet(alphabet, 12);
