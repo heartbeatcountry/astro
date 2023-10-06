@@ -81,6 +81,19 @@ export const Danse = new Schema({
 		minLength: contraintes.danse.titre.longueurMin,
 		maxLength: contraintes.danse.titre.longueurMax,
 	},
+}, {
+	methods: {
+		/**
+		 * Requête qui permet d'obtenir la moyenne des appréciations
+		 */
+		obtenirNoteMoyenne() {
+			return model("Appreciation")
+				.aggregate()
+				.match({ danse: this._id })
+				.group({ _id: null, moyenne: { $avg: "$note" } })
+				.project({ _id: 0, moyenne: { $round: ["$moyenne", 1] } });
+		}
+	},
 });
 
 export default Danse;
