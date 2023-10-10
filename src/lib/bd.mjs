@@ -215,4 +215,14 @@ export default class Bd {
 
 		return coursDeLaSemaine;
 	}
+
+	/**
+	 * Obtenir les détails d'une danse à partir de son identifiant
+	 * @param {String} id_danse id de la danse
+	 * @returns {Promise<Danse>} instance de la Danse
+	 */
+	static async obtenirDetailsDanse(id_danse){
+		return await Danse.findOne(id_danse)
+	}
+
 }
