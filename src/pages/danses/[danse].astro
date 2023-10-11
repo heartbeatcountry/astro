@@ -1,18 +1,161 @@
 ---
 import Page from "../../layouts/GabaritPrincipal.astro";
 import Bd from "../../lib/bd.mjs";
+import { NIVEAU, NIVEAU_STR } from "../../lib/enums.mjs";
+import { obtenirNoteMoyenne  } from "../../lib/models/danse.mjs";
 
 // Obtention du permalien depuis l'URL:
-const { danse } = Astro.params;
+const { id_danse } = Astro.params;
 
 // Obtention des détails selon le permalien
-const details = await Bd.obtenirDetailsDanse(danse);
+//const danse = await Bd.obtenirDetailsDanse(id_danse);
+
+const danse ={
+		titre: "Everyone needs a hero",
+		choregraphe: "Roy Verdonk, Grace David, Jef Camps",
+		musique:"Holding Out for a Hero - Adam Lambert",
+		niveau: NIVEAU_STR[NIVEAU.INTERMEDIAIRE],
+		detailsTag: "Après 2e mur, Ajouter 8 comptes (step 1/2 tour X 2, out, out, in, in), après 3e mur et 4e mur ajouter 4 comptes (step 1/2 tour X 2)",
+		lienFeuille:"https://www.copperknob.co.uk/stepsheets/167154/everyone-needs-a-hero",
+		lienVideoDanse: "338U80kqryY",
+		lienVideoMusique: "lGKtKA97mhw",
+		lienVideoAcademie: "https://www.academiedansetavie.com/products/academie-danse-ta-vie/categories/2150082906/posts/2169250245  ",
+		nbComptes: 64,
+		nbMurs: 2,
+		estCoupDeCoeur: true,
+}
+
 
 // Conversion en JSON:
-const detailsJson = JSON.stringify(details);
+const detailsJson = JSON.stringify(danse);
 ---
 
-<Page titre={danse}>
-	<p>Détails d'une danse</p>
-	{detailsJson}
+<Page titre={danse.titre}>
+
+
+	<div class="bg-body-tertiary bg-opacity-75 entete" data-bs-theme="dark">
+		<div class="container-xl ">
+			<div class="row row-cols-1 row-cols-xl-3 text-center py-4 align-items-center">
+				<div>
+					<h2  class=" my-3">{danse.titre}</h2>
+					<p class="my-3 fs-4">Chorégraphe(S): {danse.choregraphe} </p>
+
+
+				</div>
+				<div class="col-xl-6">
+					<p class="my-3 fs-4">Niveau: {danse.niveau} </p>
+					<p class="fs-4">{danse.nbComptes} comptes</p>
+					<p class="fs-4"> {danse.nbMurs} murs </p>
+
+				</div>
+				<div class="gap-2 justify-content-center">
+					<p class="fs-5">Notez cette danse</p>
+						<img class="mini" src="/images/icones/coeurVide.png" alt="coeur appréciation" />
+						<img class="mini" src="/images/icones/coeurVide.png" alt="coeur appréciation" />
+						<img class="mini" src="/images/icones/coeurVide.png" alt="coeur appréciation" />
+						<img class="mini" src="/images/icones/coeurVide.png" alt="coeur appréciation" />
+						<img class="mini" src="/images/icones/coeurVide.png" alt="coeur appréciation" />
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+	<div class="d-flex justify-content-center align-items-center">
+		<div>
+		<iframe class ="large" src={ `https://www.youtube.com/embed/${danse.lienVideoDanse}`}
+		title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+		<p class="fs-5 text-center">Vidéo de la danse</p>
+		</div>
+	</div>
+	<div class="text-center" >
+		<a class="fs-2" href={`${danse.lienFeuille}`}>Voir la feuille de pas</a>
+		<p class="fs-5 "><strong>Aide-mémoire: </strong> {danse.detailsTag}</p>
+	</div>
+
+		<div class="m-2 row row-cols-1 row-cols-lg-2 g-4 g-lg-5">
+
+
+
+		<div class="col">
+			<div class="card text-center ">
+				<div class="card-header">
+					<p class="fs-5 text-center">Musique: {danse.musique} </p>
+				</div>
+
+				{
+					!danse.lienVideoMusique &&
+					<img  class="card-img-top medium"  src="../../public/images/background_header.png" alt="aucun lien vidéo" />
+				}
+				{
+					danse.lienVideoMusique &&
+					<div  >
+						<iframe  class ="card-img-top medium" src={ `https://www.youtube.com/embed/${danse.lienVideoMusique}`}
+						title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+					</div>
+				}
+
+
+			</div>
+		</div>
+
+		<div class="col">
+			<div class="card text-center ">
+				<div class="card-header">
+
+			<p class="fs-5 text-center">Académie danse ta vie </p>
+				</div>
+
+				{
+					!danse.lienVideoAcademie &&
+					<img  class="card-img-top medium" src="../../public/images/nonDispoAcademie.png" alt="aucun lien vers l'académie" />
+				}
+				{
+					danse.lienVideoAcademie &&
+				<a href={danse.lienVideoAcademie}  class="stretched-link" >
+					<img class="card-img-top medium" src="../../public/images/nonDispoAcademie.png" alt="vidéo Académie" />
+				</a>
+				}
+
+			</div>
+		</div>
+
+
+	</div>
+
 </Page>
+
+<style lang="scss">
+
+@use "../../styles/bootstrap.min.css";
+
+	.medium
+	{
+		width: 550Q;
+		height: 300Q;
+	}
+
+	.large
+	{
+		width: 750Q;
+		height: 400Q;
+	}
+
+	.medium, .large{
+	@extend .rounded-5, .border, .border-5, .mt-4, .mx-3;
+	}
+
+	body{
+		--bs-border-color: #80a2ac; ;
+	}
+
+	.entete{
+
+	color: #ffffff;
+}
+
+.mini{
+	width: 60Q;
+}
+
+</style>
