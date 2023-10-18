@@ -19,10 +19,14 @@ const danse ={
 		lienFeuille:"https://www.copperknob.co.uk/stepsheets/167154/everyone-needs-a-hero",
 		lienVideoDanse: "338U80kqryY",
 		lienVideoMusique: "lGKtKA97mhw",
-		lienVideoAcademie: "https://www.academiedansetavie.com/products/academie-danse-ta-vie/categories/2150082906/posts/2169250245  ",
+		lienVideoAcademie: "https://www.academiedansetavie.com/products/academie-danse-ta-vie/categories/2150082912/posts/2169250224",
 		nbComptes: 64,
 		nbMurs: 2,
 		estCoupDeCoeur: true,
+
+		obtenirNoteMoyenne(){
+			return { moyenne:4.5 }
+		}
 }
 
 
@@ -50,11 +54,23 @@ const detailsJson = JSON.stringify(danse);
 				</div>
 				<div class="gap-2 justify-content-center">
 					<p class="fs-5">Notez cette danse</p>
-						<img class="mini" src="/images/icones/coeurVide.png" alt="coeur appréciation" />
-						<img class="mini" src="/images/icones/coeurVide.png" alt="coeur appréciation" />
-						<img class="mini" src="/images/icones/coeurVide.png" alt="coeur appréciation" />
-						<img class="mini" src="/images/icones/coeurVide.png" alt="coeur appréciation" />
-						<img class="mini" src="/images/icones/coeurVide.png" alt="coeur appréciation" />
+					<div>
+						<i class="mini"></i>
+						<i class="mini"></i>
+						<i class="mini"></i>
+						<i class="mini"></i>
+						<i class="mini"></i>
+					</div>
+					<div class="d-flex justify-content-around align-items-center " >
+
+						<button type="button" class="btn btn-secondary" data-bs-toggle="button">Ajout à la liste de souhait <img class="mini" src="../../public/images/icones/ajoutListe.png" alt="ajout à la liste de souhait" /></button>
+
+
+						<p class="bgImage fs-4 pt-2">{danse.obtenirNoteMoyenne().moyenne}</p>
+
+
+					</div>
+
 				</div>
 			</div>
 		</div>
@@ -129,6 +145,12 @@ const detailsJson = JSON.stringify(danse);
 
 @use "../../styles/bootstrap.min.css";
 
+
+	.petit{
+		width: 75Q;
+	}
+
+
 	.medium
 	{
 		width: 550Q;
@@ -156,6 +178,25 @@ const detailsJson = JSON.stringify(danse);
 
 .mini{
 	width: 60Q;
+	aspect-ratio: 1/1;
+
+	&:is(i) {
+		display: inline-block;
+		background: url("/images/icones/coeurVide.png") center / contain no-repeat;
+
+		&:hover ~ * {
+			background-image: url("/images/icones/coeurPlein.png");
+		}
+
+	}
+}
+
+.bgImage{
+	color:black;
+	display: inline-block;
+	background: url("/images/icones/coeurPlein.png")  center / contain no-repeat ;
+	width: 60Q;
+	aspect-ratio: 1/1;
 }
 
 </style>
