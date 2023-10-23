@@ -1,0 +1,85 @@
+---
+/**
+ * Adapté depuis https://nikitahl.com/coeur-rating-with-css
+ *
+ * @author Nikita Hlopov, Pascal Breton, Cynthia Fortier
+ */
+
+// Définition des paramètres pouvant être passés à la composante:
+interface Props {
+	/** Note actuelle */
+	note?: number;
+}
+
+let { note } = Astro.props;
+
+note = Math.round(note ?? 0);
+---
+
+<div>
+	<input type="radio" id="coeur5" name="nb-coeurs" value="5" checked={note==5&&'checked'} autocomplete="false">
+	<label for="coeur5" title="5 coeurs">5 coeurs</label>
+
+	<input type="radio" id="coeur4" name="nb-coeurs" value="4" checked={note==4&&'checked'} autocomplete="false">
+	<label for="coeur4" title="4 coeurs">4 coeurs</label>
+
+	<input type="radio" id="coeur3" name="nb-coeurs" value="3" checked={note==3&&'checked'} autocomplete="false">
+	<label for="coeur3" title="3 coeurs">3 coeurs</label>
+
+	<input type="radio" id="coeur2" name="nb-coeurs" value="2" checked={note==2&&'checked'} autocomplete="false">
+	<label for="coeur2" title="2 coeurs">2 coeurs</label>
+
+	<input type="radio" id="coeur1" name="nb-coeurs" value="1" checked={note==1&&'checked'} autocomplete="false">
+	<label for="coeur1" title="1 coeur">1 coeur</label>
+</div>
+
+<style lang="scss">
+$couleur-coeur-inactif: rgba(0,0,0,0.2);
+$couleur-coeur-actif: #FF5252;
+$couleur-coeur-survol: #7B1FA2;
+$icone-coeur: "♥";
+$image-hr: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSIxNTAiIGhlaWdodD0iNzMiIHZlcnNpb249IjEuMCI+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS13aWR0aD0iNSIgZD0iTTAgNDVoMzlsNi0xMiA2IDEyaDdsNSAxMSA5LTQ3IDggNTUgNC0xOWgxM2w2LTUgNyA1aDQwIi8+PC9zdmc+Cg==";
+
+div {
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: flex-end;
+
+	input {
+		position: fixed;
+		opacity: 0;
+		pointer-events: none;
+
+		&:checked ~ label {
+			background-color: $couleur-coeur-actif;
+		}
+
+		&:hover,
+		&:hover ~ label {
+			background-color: $couleur-coeur-survol;
+		}
+	}
+
+	label {
+		cursor: pointer;
+		font-size: 0;
+		background-color: $couleur-coeur-inactif;
+		background-clip: text;
+		transition: color 0.1s ease-in-out;
+		text-shadow: currentColor 1Q 0 2Q;
+
+		&:before {
+			content: $icone-coeur;
+			stroke: gold;
+			color: transparent;
+			background-image: url($image-hr);
+			background-size: 120% auto;
+			background-repeat: no-repeat;
+			background-position: 90% 40%;
+			background-clip: text;
+			display: inline-block;
+			font-size: 2rem;
+		}
+	}
+}
+</style>
