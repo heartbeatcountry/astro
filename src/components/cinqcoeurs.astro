@@ -1,6 +1,6 @@
 ---
 /**
- * Adapté depuis https://nikitahl.com/coeur-rating-with-css
+ * Adapté depuis https://nikitahl.com/star-rating-with-css
  *
  * @author Nikita Hlopov, Pascal Breton, Cynthia Fortier
  */
@@ -9,27 +9,31 @@
 interface Props {
 	/** Note actuelle */
 	note?: number;
+
+	/** Nom du champ dans le formulaire */
+	name?: string;
 }
 
-let { note } = Astro.props;
+let { note, name } = Astro.props;
 
 note = Math.round(note ?? 0);
+name = name ?? "nb-coeurs";
 ---
 
 <div>
-	<input type="radio" id="coeur5" name="nb-coeurs" value="5" checked={note==5&&'checked'} autocomplete="false">
+	<input type="radio" id="coeur5" name={name} value="5" checked={note==5&&'checked'} autocomplete="false">
 	<label for="coeur5" title="5 coeurs">5 coeurs</label>
 
-	<input type="radio" id="coeur4" name="nb-coeurs" value="4" checked={note==4&&'checked'} autocomplete="false">
+	<input type="radio" id="coeur4" name={name} value="4" checked={note==4&&'checked'} autocomplete="false">
 	<label for="coeur4" title="4 coeurs">4 coeurs</label>
 
-	<input type="radio" id="coeur3" name="nb-coeurs" value="3" checked={note==3&&'checked'} autocomplete="false">
+	<input type="radio" id="coeur3" name={name} value="3" checked={note==3&&'checked'} autocomplete="false">
 	<label for="coeur3" title="3 coeurs">3 coeurs</label>
 
-	<input type="radio" id="coeur2" name="nb-coeurs" value="2" checked={note==2&&'checked'} autocomplete="false">
+	<input type="radio" id="coeur2" name={name} value="2" checked={note==2&&'checked'} autocomplete="false">
 	<label for="coeur2" title="2 coeurs">2 coeurs</label>
 
-	<input type="radio" id="coeur1" name="nb-coeurs" value="1" checked={note==1&&'checked'} autocomplete="false">
+	<input type="radio" id="coeur1" name={name} value="1" checked={note==1&&'checked'} autocomplete="false">
 	<label for="coeur1" title="1 coeur">1 coeur</label>
 </div>
 
