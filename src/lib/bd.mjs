@@ -221,8 +221,8 @@ export default class Bd {
 	 * @param {String} id_danse id de la danse
 	 * @returns {Promise<Danse>} instance de la Danse
 	 */
-	static async obtenirDetailsDanse(id_danse){
-		return await Danse.findOne(id_danse)
+	static async obtenirDetailsDanse(danse){
+		return await Danse.findOne({_id : danse})
 	}
 
 }
