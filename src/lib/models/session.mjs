@@ -8,8 +8,17 @@ export const Session = new Schema({
 	usager: {
 		type: ObjectId,
 		ref: 'Usager',
-		required: true,
+		null: [false, "L'usager ne doit pas être nul"],
+		required: [true, "L'usager est requis"],
 		unique: true,
+		validate: [
+			{
+				async validator(id) {
+					return await model("Usager").exists({ _id: id });
+				},
+				message: "L'usager n'existe pas",
+			}
+		],
 	},
 
 	/**
@@ -17,7 +26,17 @@ export const Session = new Schema({
 	 */
 	cle: {
 		type: String,
-		required: true,
+		required: [true, "La clé publique est requise"],
+		unique: true,
+		null: [false, "La clé publique ne doit pas être nulle"],
+		validate: [
+			{
+				async validator(cle) {
+					return await model("Session").exists({ cle });
+				},
+				message: "La clé publique est déjà utilisée",
+			}
+		],
 	},
 
 	/**
