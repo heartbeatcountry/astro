@@ -91,4 +91,16 @@ export const contraintes = {
 			max: 4,
 		},
 	},
+	/**
+	 * Contraintes pour une appréciation
+	 */
+	appreciation: {
+		/**
+		 * Note accordée par l'usager
+		 */
+		note: {
+			min: 1,
+			max: 5,
+		},
+	}
 };
