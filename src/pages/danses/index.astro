@@ -1,6 +1,5 @@
 ---
 import Page from "../../layouts/GabaritPrincipal.astro";
-import { NIVEAU_STR } from "../../lib/enums.mjs";
 ---
 
 <Page titre="Danses" h1="Liste des danses">
@@ -8,6 +7,10 @@ import { NIVEAU_STR } from "../../lib/enums.mjs";
 	<div class="row g-5">
 		<div class="col-12 col-xl-8 order-2">
 			<h2 class="fs-3 mb-3">Résultats de recherche</h2>
+			<div class="alert alert-warning my-3 d-none" data-msg-erreur>
+				<i class="bi bi-exclamation-circle me-1"></i>
+				Un problème est survenu lors de l'obtention des danses. Veuillez ressayer ultérieurement.
+			</div>
 			<div class="row row-cols-2 g-3" data-cartes>
 
 				<template>
@@ -18,19 +21,19 @@ import { NIVEAU_STR } from "../../lib/enums.mjs";
 								<ul class="list-group list-group-flush">
 									<li class="list-group-item">
 										<p class="m-0"><i class="bi bi-music-note"></i> Musique:</p>
-										<em class="ps-4" data-musique></em>
+										<em class="ps-4 d-block" data-musique></em>
 									</li>
 									<li class="list-group-item">
 										<p class="m-0"><i class="bi bi-person"></i> Chorégraphe:</p>
-										<em class="ps-4" data-auteur></em>
+										<em class="ps-4 d-block" data-auteur></em>
 									</li>
 									<li class="list-group-item">
 										<p class="m-0"><i class="bi bi-stopwatch"></i> Comptes et murs:</p>
-										<em class="ps-4" data-comptes></em>
+										<em class="ps-4 d-block" data-comptes></em>
 									</li>
 									<li class="list-group-item">
 										<p class="m-0"><i class="bi bi-diamond"></i> Niveau de difficulté:</p>
-										<em class="ps-4" data-niveau></em>
+										<em class="ps-4 d-block" data-niveau></em>
 									</li>
 								</ul>
 								<a href="/" class="lien-danse stretched-link">Voir cette danse</a>
@@ -44,24 +47,38 @@ import { NIVEAU_STR } from "../../lib/enums.mjs";
 				<i class="bi bi-x-circle me-1"></i>
 				Aucune danse trouvée.
 			</div>
+			<div class="my-5 d-flex justify-content-between d-none" data-charger-plus>
+				<div aria-hidden="true" role="presentation" class="btn-remonter"></div>
+				<button class="btn btn-primary py-2 px-5">
+					<i class="bi bi-plus-circle me-1"></i>
+					Charger plus de résultats
+				</button>
+				<button class="btn btn-outline-secondary py-2" data-btn-remonter>
+					Remonter
+					<i class="ms-auto bi bi-arrow-up"></i>
+				</button>
+			</div>
 		</div>
 		<div class="col-12 col-xl-4 bg-light rounded rounded-3 py-3 order-1">
 			<h2 class="fs-5 mb-3"><i class="bi bi-funnel"></i> Critères de recherche</h2>
-			<form>
+			<form data-form-recherche>
 				<div class="form-floating mb-3">
-					<input type="search" class="form-control" id="champRecherche" name="champRecherche" maxlength="50">
+					<input type="search" class="form-control" id="champRecherche" name="champRecherche" maxlength="50" placeholder="Mots-clés...">
 					<label for="champRecherche">Chercher une danse par mot-clé...</label>
 				</div>
-				<div class="form-floating">
-					<select class="form-select" id="trierPar" name="trierPar" aria-label="Critère de tri">
-						<option value="score" selected>Trier par meilleure correspondance</option>
-						<option value="titre">Trier par titre</option>
-						<option value="ajout">Trier par date d'ajout</option>
-						<option value="difficulte">Trier par difficulté</option>
-						<option value="comptes">Trier par nombre de comptes</option>
-						<option value="murs">Trier par nombre de murs</option>
-					</select>
-					<label for="trierPar">Ordre d'affichage:</label>
+				<div class="input-group mb-3">
+					<div class="form-floating">
+						<select class="form-select" id="trierPar" name="trierPar" aria-label="Critère de tri">
+							<option value="score" selected>Trier par meilleure correspondance</option>
+							<option value="titre">Trier par titre</option>
+							<option value="ajout">Trier par date d'ajout</option>
+							<option value="difficulte">Trier par difficulté</option>
+							<option value="comptes">Trier par nombre de comptes</option>
+							<option value="murs">Trier par nombre de murs</option>
+						</select>
+						<label for="trierPar">Ordre d'affichage:</label>
+					</div>
+					<button class="btn btn-light border-secondary input-group-text" id="btn-ordre" type="button"><span class="visually-hidden">Changer pour l'ordre descendant</span><i class="bi bi-sort-up"></i></button>
 				</div>
 				<!--
 				<div class="accordion" id="accordeonFiltres">
@@ -96,7 +113,10 @@ import { NIVEAU_STR } from "../../lib/enums.mjs";
 					</div>
 				</div>
 				-->
-				<div class="mt-3">
+				<div class="mt-4 mb-3">
+					<input id="btn-chercher" type="submit" class="btn btn-primary d-block w-100" value="Lancer la recherche">
+				</div>
+				<div>
 					<input type="reset" class="btn btn-outline-danger d-block w-100" value="Réinitialiser">
 				</div>
 			</form>
@@ -105,52 +125,229 @@ import { NIVEAU_STR } from "../../lib/enums.mjs";
 </div>
 </Page>
 
-<script define:vars={{ NIVEAU_STR }}>
+<script>
+import Api from "../../lib/clientside/api.mjs";
+import { NIVEAU_STR } from "../../lib/enums.mjs";
 
-const conteneur = document.querySelector("[data-cartes]");
-/** @type {HTMLTemplateElement} */
-const template = conteneur.querySelector("template");
+/**
+ * Conteneur de la page
+ */
+const conteneurPrincipal = document.querySelector("main");
+/**
+ * Conteneur des cartes de résultats
+ */
+const conteneurCartes = document.querySelector("[data-cartes]");
+/**
+ * Maquette de carte de résultat
+ */
+const template = conteneurCartes.querySelector<HTMLTemplateElement>("template");
+/**
+ * Conteneur du message qui indique qu'aucune danse n'est trouvée
+ */
 const msgAucuneDanse = document.querySelector("[data-aucune-danse]");
+/**
+ * Champ de recherche textuelle
+ */
+const champRecherche = document.querySelector<HTMLInputElement>("#champRecherche");
+/**
+ * Liste déroulante de l'ordre de tri
+ */
+const selectTrierPar = document.querySelector<HTMLSelectElement>("#trierPar");
+/**
+ * Formulaire de recherhe
+ */
+const formRecherche = document.querySelector<HTMLFormElement>("[data-form-recherche]");
+/**
+ * Bouton pour permuter l'ordre d'affichage
+ */
+const btnOrdreAffichage = document.querySelector<HTMLButtonElement>("#btn-ordre");
+/**
+ * Message a11y pour l'ordre d'affichage
+ */
+const msgOrdreAffichage = btnOrdreAffichage.querySelector<HTMLSpanElement>("span");
+/**
+ * Icône du bouton d'ordre d'affichage
+ */
+const iconeOrdreAffichage = btnOrdreAffichage.querySelector("i");
+/**
+ * Bouton pour réinitialiser la recherche
+ */
+const btnReinitialiser = document.querySelector<HTMLButtonElement>("input[type=reset]");
+/**
+ * Conteneur du bouton pour charger plus de résultats
+ */
+const conteneurChargerPlus = document.querySelector("[data-charger-plus]");
+/**
+ * Bouton pour charger plus de résultats
+ */
+const btnChargerPlus = conteneurChargerPlus.querySelector<HTMLButtonElement>("button");
+/**
+ * Bouton pour remonter en haut de la page
+ */
+const btnRemonter = conteneurChargerPlus.querySelector<HTMLButtonElement>("[data-btn-remonter]");
+/**
+ * Conteneur des messages d'erreur
+ */
+const conteneurErreur = document.querySelector("[data-msg-erreur]");
 
+/**
+ * Instance de la requête à l'API
+ */
+const req = Api.GET("danses");
+/**
+ * Vrai si la recherche est en ordre descendant
+ */
+let desc = 0;
+/**
+ * Numéro de la page de résultats
+ */
+let page = 1;
+
+/**
+ * Affiche un message d'erreur en console et un message générique à l'usager
+ * @param msg message d'erreur
+ */
+const afficherErr = msg => {
+	console.error(msg);
+	conteneurErreur.classList.remove("d-none");
+};
+
+/**
+ * Crée une nouvelle carte de résultats
+ *
+ * @param titre titre de la danse
+ * @param musique nom de la chanson + artiste
+ * @param auteur auteur de la danse
+ * @param comptes nombre de comptes
+ * @param murs nombre de murs
+ * @param niveau niveau de difficulté
+ * @param url slug unique
+ */
 const creerCarte = (titre, musique, auteur, comptes, murs, niveau, url) => {
-	/** @type {DocumentFragment} */
-	const carte = template.content.cloneNode(true);
-	carte.querySelector("[data-titre]").innerText = titre;
-	carte.querySelector("[data-musique]").innerText = musique;
-	carte.querySelector("[data-auteur]").innerText = auteur;
-	carte.querySelector("[data-comptes]").innerText = `${comptes} comptes, ${murs} murs`;
-	carte.querySelector("[data-niveau]").innerText = NIVEAU_STR[niveau];
-	carte.querySelector("a").href = `/danses/${url}`;
+	const carte = template.content.cloneNode(true) as DocumentFragment;
+	carte.querySelector<HTMLSpanElement>("[data-titre]").innerText = titre;
+	carte.querySelector<HTMLSpanElement>("[data-musique]").innerText = musique;
+	carte.querySelector<HTMLSpanElement>("[data-auteur]").innerText = auteur;
+	carte.querySelector<HTMLSpanElement>("[data-comptes]").innerText = `${comptes} comptes, ${murs} murs`;
+	carte.querySelector<HTMLSpanElement>("[data-niveau]").innerText = NIVEAU_STR[niveau];
+	carte.querySelector<HTMLAnchorElement>("a").href = `/danses/${url}`;
 	return carte;
 };
 
-const ajouterDanse = (danse) => {
-	conteneur.append(danse);
+/**
+ * Ajoute une carte de résultats dans le conteneur des résultats
+ * @param {DocumentFragment} danse carte de résultat
+ */
+const ajouterDanseDansResultats = (danse) => {
+	conteneurCartes.append(danse);
 	msgAucuneDanse.classList.add("d-none");
+	conteneurErreur.classList.add("d-none");
 };
 
+/**
+ * Vide le conteneur des résultats
+ */
 const viderDanses = () => {
-	conteneur.replaceChildren();
+	conteneurCartes.replaceChildren();
 	msgAucuneDanse.classList.remove("d-none");
+	conteneurChargerPlus.classList.add("d-none");
 };
 
-const rafraichirDepuisApi = async (motsCles = "", trierPar = "score") => {
-	const url = new URL("/api/danses", document.location.origin);
-	url.searchParams.append("motsCles", motsCles);
-	url.searchParams.append("trierPar", trierPar);
-
-	const req = await fetch(url);
-	const {resultats} = await req.json();
-
-	viderDanses();
+/**
+ * À partir d'une réponse de l'API, met à jour la liste des résultats
+ * @param param0 réponse de l'API
+ */
+const rafraichirCartes = ({resultats}) => {
 	for (let danse of resultats) {
 		const carte = creerCarte(danse.titre, danse.musique, danse.choregraphe, danse.nbComptes, danse.nbMurs, danse.niveau, danse.identifiantUnique);
-		ajouterDanse(carte);
+		ajouterDanseDansResultats(carte);
+	}
+
+	if (resultats.length > 0) {
+		conteneurChargerPlus.classList.remove("d-none");
+
+		if (resultats.length === 20) {
+			btnChargerPlus.classList.remove("d-none");
+		} else {
+			btnChargerPlus.classList.add("d-none");
+		}
 	}
 };
 
-//ajouterDanse(creerCarte("titre", "musique", "auteur", "comptes", "murs", "niveau", "url"));
-rafraichirDepuisApi();
+/**
+ * Envoie une requête de recherche à l'API et ajoute les résultats dans le
+ * conteneur des résultats
+ */
+const envoyerEtAjouterCartes = async () => {
+	try {
+		rafraichirCartes(await req.envoyer());
+	} catch (err) {
+		afficherErr(err);
+	}
+};
+
+/**
+ * Gère la soumission du formulaire de recherche
+ */
+const gererSoumisionFormulaire = async (evt = null) => {
+	evt?.preventDefault();
+
+	const motsCles = champRecherche?.value?.trim() ?? "";
+	const trierPar = selectTrierPar?.value ?? "score";
+	page = 1;
+
+	req.params({motsCles, trierPar, page, desc});
+
+	btnReinitialiser.classList.add("btn-danger");
+	btnReinitialiser.classList.remove("btn-outline-danger");
+
+
+	if (motsCles.length === 0 && trierPar === "score") {
+		if (!desc) {
+			btnReinitialiser.classList.add("btn-outline-danger");
+			btnReinitialiser.classList.remove("btn-danger");
+		}
+
+		req.params({trierPar: "titre", desc: !desc});
+	}
+
+	viderDanses();
+	await envoyerEtAjouterCartes();
+}
+
+/**
+ * Met à jour l'affichage du bouton d'ordre d'affichage
+ */
+const majBtnOrdreSelonDesc = () => {
+	msgOrdreAffichage.innerText = `Changer pour l'ordre ${desc ? 'ascendant' : 'descendant'}`;
+	iconeOrdreAffichage.className = `bi bi-sort-${desc ? 'down' : 'up'}`;
+};
+
+
+formRecherche.addEventListener("submit", gererSoumisionFormulaire);
+btnReinitialiser.addEventListener("click", () => {
+	formRecherche.reset();
+	desc = 0;
+	majBtnOrdreSelonDesc();
+	gererSoumisionFormulaire();
+});
+
+btnOrdreAffichage.addEventListener("click", () => {
+	desc ^=1
+	majBtnOrdreSelonDesc();
+});
+
+btnChargerPlus.addEventListener("click", async () => {
+	req.params({page: ++page});
+	await envoyerEtAjouterCartes();
+});
+
+btnRemonter.addEventListener("click", () => {
+	conteneurPrincipal.scrollIntoView({block: "start", inline: "nearest"});
+});
+
+majBtnOrdreSelonDesc();
+await envoyerEtAjouterCartes();
 </script>
 
 <style lang="scss">
@@ -161,5 +358,8 @@ rafraichirDepuisApi();
 	width: 0;
 	display: block;
 	contain: style size;
+}
+.btn-remonter {
+	width: 150Q;
 }
 </style>
