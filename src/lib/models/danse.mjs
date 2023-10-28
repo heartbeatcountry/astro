@@ -90,8 +90,8 @@ export const Danse = new Schema({
 	},
 	identifiantUnique: {
 		type: String,
-		default: genererIdentifiantUnique,
-		set: genererIdentifiantUnique,
+		default: () => genererIdentifiantUnique(),
+		set: () => genererIdentifiantUnique(),
 		required: [true, "L'identifiant unique est requis"],
 		unique: true,
 		immutable: [true, "Impossible de modifier l'identifiant unique de la danse"],
@@ -110,6 +110,22 @@ export const Danse = new Schema({
 				.group({ _id: null, moyenne: { $avg: "$note" } })
 				.project({ _id: 0, moyenne: { $round: ["$moyenne", 1] } });
 		}
+	},
+	timestamps: true,
+});
+
+// Ajout d'un index textuel pour la recherche:
+Danse.index({
+	titre: "text",
+	choregraphe: "text",
+	musique: "text"
+}, {
+	// eslint-disable-next-line camelcase
+	default_language: "french",
+	weights: {
+		titre: 20,
+		musique: 15,
+		choregraphe: 2,
 	},
 });
 

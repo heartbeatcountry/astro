@@ -32,7 +32,7 @@ export const Session = new Schema({
 		validate: [
 			{
 				async validator(cle) {
-					return await model("Session").exists({ cle });
+					return !(await model("Session").exists({ cle }));
 				},
 				message: "La clé publique est déjà utilisée",
 			}
@@ -53,7 +53,8 @@ export const Session = new Schema({
 				return (new Date()) >= this.dateExpiration
 			}
 		},
-	}
+	},
+	timestamps: true,
 });
 
 export default Session;

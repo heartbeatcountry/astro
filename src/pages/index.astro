@@ -1,5 +1,4 @@
 ---
-import { date } from "astro/zod";
 import Page from "../layouts/GabaritPrincipal.astro";
 import { formaterDate, obtenirDimanchePrecedent,obtenirSamediSuivant, formaterDateJour  } from "../lib/date.mjs";
 import Bd from "../lib/bd.mjs";
@@ -10,51 +9,6 @@ const dimancheDeLaSemaine = obtenirDimanchePrecedent(new Date());
 const samediDeLaSemaine = obtenirSamediSuivant(new Date());
 const samedi = formaterDate(samediDeLaSemaine)
 const dimanche = formaterDate(dimancheDeLaSemaine);
-
-
-
-/*
-const listesDanses = [];
-
-for (let i = 0; i < 1; ++i) {
-	const {titre, choregraphe, musique, niveau, detailsTag, lienFeuille, lienVideoAcademie, lienVideoDanse, lienVideoMusique, nbComptes, nbMurs, estCoupDeCoeur} = {
-		titre: "Everyone needs a hero",
-		choregraphe: "Roy Verdonk, Grace David, Jef Camps",
-		musique:"Holding Out for a Hero - Adam Lambert",
-		niveau: NIVEAU.INTERMEDIAIRE,
-		detailsTag: "Après 2e mur, Ajouter 8 comptes (step 1/2 tour X 2, out, out, in, in), après 3e mur et 4e mur ajouter 4 comptes (step 1/2 tour X 2)",
-		lienFeuille:"https://www.copperknob.co.uk/stepsheets/167154/everyone-needs-a-hero",
-		lienVideoDanse: "338U80kqryY",
-		lienVideoMusique: "dB7NsWHCQv4",
-		lienVideoAcademie: "https://www.academiedansetavie.com/products/academie-danse-ta-vie/categories/2150082906/posts/2169250245  ",
-		nbComptes: 64,
-		nbMurs: 2,
-		estCoupDeCoeur: true,
-	};
-	listesDanses.push(
-	await Bd.creerDanse(titre + i,
-		choregraphe,
-		musique,
-		niveau,
-		detailsTag,
-		lienFeuille,
-		lienVideoDanse,
-		lienVideoMusique,
-		lienVideoAcademie,
-		nbComptes,
-		nbMurs,
-		estCoupDeCoeur));
-}
-
-const coursTest = await Bd.creerCours(
-	NIVEAU.INTERMEDIAIRE,
-	new Date('2023-09-30T19:15:00-04:00'),
-	"Salle des Lions",
-	listesDanses,
-);
-
-return
-*/
 
 const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 ---
