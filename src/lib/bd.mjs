@@ -45,13 +45,13 @@ await mongoose.connection.useDb(nomBase);
 /** @type {Model<SchemaSession>} */
 export const Session = model("Session", SchemaSession);
 /** @type {Model<SchemaUsager>} */
-const Usager = model("Usager", SchemaUsager);
+export const Usager = model("Usager", SchemaUsager);
 /** @type {Model<SchemaAppreciation>} */
-const Appreciation = model("Appreciation", SchemaAppreciation);
+export const Appreciation = model("Appreciation", SchemaAppreciation);
 /** @type {Model<SchemaDanse>} */
-const Danse = model("Danse", SchemaDanse);
+export const Danse = model("Danse", SchemaDanse);
 /** @type {Model<SchemaCours>} */
-const Cours = model("Cours", SchemaCours);
+export const Cours = model("Cours", SchemaCours);
 
 /**
  * Classe de communication avec la base MongoDB
@@ -210,9 +210,51 @@ export default class Bd {
 			.populate("danses")
 			.sort({
 				date: 1,
-			});
+			}).lean();
 
 
 		return coursDeLaSemaine;
+	}
+
+	/**
+	 *
+	 * @param {string} motsCles mots clés à chercher
+	 * @param {"score"|"titre"|"ajout"|"difficulte"|"comptes"|"murs"} trierPar ordre de tri
+	 * @param {boolean?} desc si vrai, tri descendant
+	 * @param {number?} delta numéro de la page de résultats
+	 * @param {number?} limite nombre de résultats à retourner
+	 * @returns
+	 */
+	static async chercherDanses(motsCles, trierPar, desc = false, delta = 0, limite = 20) {
+		const asc = !desc;
+		let req = Danse.find();
+
+		if (motsCles.length > 0) {
+			req = req.find({
+				$text: { $search: motsCles }
+			}, {
+				score: { $meta: "textScore" }
+			});
+		}
+
+		// Calcul des pages:
+		req = req.skip(delta * limite);
+
+		// Tri selon trierPar:
+		if (trierPar === "score" && motsCles.length > 0) {
+			req = req.sort({ score: { $meta: "textScore" } });
+		} else if (trierPar === "ajout") {
+			req = req.sort({ createdAt: asc ? 1 : -1 });
+		} else if (trierPar === "difficulte") {
+			req = req.sort({ niveau: asc ? 1 : -1 });
+		} else if (trierPar === "comptes") {
+			req = req.sort({ nbComptes: asc ? 1 : -1 });
+		} else if (trierPar === "murs") {
+			req = req.sort({ nbMurs: asc ? 1 : -1 });
+		} else {
+			req = req.sort({ titre: asc ? 1 : -1 });
+		}
+
+		return await req.limit(limite).lean();
 	}
 }

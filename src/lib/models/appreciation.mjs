@@ -42,6 +42,8 @@ export const Appreciation = new Schema({
 			}
 		],
 	},
+}, {
+	timestamps: true,
 });
 
 Appreciation.index({ danse: 1, usager: 1 }, { unique: true });

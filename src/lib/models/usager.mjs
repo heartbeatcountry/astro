@@ -66,6 +66,7 @@ export const Usager = new Schema({
 	virtuals: {
 		nomAffichage: { get: () => `${this.prenom} ${this.nom}` },
 	},
+	timestamps: true,
 });
 
 export default Usager;

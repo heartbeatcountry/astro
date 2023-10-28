@@ -49,6 +49,7 @@ if (Astro.request.method === "POST") {
 			if (err instanceof ErrUtilisateurExiste) {
 				erreurs["courriel"] = "Un autre usager utilise déjà cette même adresse courriel."
 			} else {
+				console.error(err);
 				erreurs["general"] = "Un problème est survenu lors de la création de votre compte. Veuillez réssayer sous peu."
 			}
 		}

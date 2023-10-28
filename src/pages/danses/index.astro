@@ -1,7 +1,165 @@
 ---
 import Page from "../../layouts/GabaritPrincipal.astro";
+import { NIVEAU_STR } from "../../lib/enums.mjs";
 ---
 
-<Page titre="Danses">
-  <p>Liste des danses</p>
+<Page titre="Danses" h1="Liste des danses">
+<div class="container-xl">
+	<div class="row g-5">
+		<div class="col-12 col-xl-8 order-2">
+			<h2 class="fs-3 mb-3">Résultats de recherche</h2>
+			<div class="row row-cols-2 g-3" data-cartes>
+
+				<template>
+					<div class="col">
+						<div class="card h-100">
+							<div class="card-body">
+								<h3 class="card-title fs-5" data-titre>.</h3>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">
+										<p class="m-0"><i class="bi bi-music-note"></i> Musique:</p>
+										<em class="ps-4" data-musique></em>
+									</li>
+									<li class="list-group-item">
+										<p class="m-0"><i class="bi bi-person"></i> Chorégraphe:</p>
+										<em class="ps-4" data-auteur></em>
+									</li>
+									<li class="list-group-item">
+										<p class="m-0"><i class="bi bi-stopwatch"></i> Comptes et murs:</p>
+										<em class="ps-4" data-comptes></em>
+									</li>
+									<li class="list-group-item">
+										<p class="m-0"><i class="bi bi-diamond"></i> Niveau de difficulté:</p>
+										<em class="ps-4" data-niveau></em>
+									</li>
+								</ul>
+								<a href="/" class="lien-danse stretched-link">Voir cette danse</a>
+							</div>
+						</div>
+					</div>
+				</template>
+
+			</div>
+			<div class="alert alert-light my-3" data-aucune-danse>
+				<i class="bi bi-x-circle me-1"></i>
+				Aucune danse trouvée.
+			</div>
+		</div>
+		<div class="col-12 col-xl-4 bg-light rounded rounded-3 py-3 order-1">
+			<h2 class="fs-5 mb-3"><i class="bi bi-funnel"></i> Critères de recherche</h2>
+			<form>
+				<div class="form-floating mb-3">
+					<input type="search" class="form-control" id="champRecherche" name="champRecherche" maxlength="50">
+					<label for="champRecherche">Chercher une danse par mot-clé...</label>
+				</div>
+				<div class="form-floating">
+					<select class="form-select" id="trierPar" name="trierPar" aria-label="Critère de tri">
+						<option value="score" selected>Trier par meilleure correspondance</option>
+						<option value="titre">Trier par titre</option>
+						<option value="ajout">Trier par date d'ajout</option>
+						<option value="difficulte">Trier par difficulté</option>
+						<option value="comptes">Trier par nombre de comptes</option>
+						<option value="murs">Trier par nombre de murs</option>
+					</select>
+					<label for="trierPar">Ordre d'affichage:</label>
+				</div>
+				<!--
+				<div class="accordion" id="accordeonFiltres">
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed text-muted" type="button" data-bs-toggle="collapse" data-bs-target="#filtresCO" aria-expanded="false" aria-controls="filtresCO">
+								Filtres avancés
+							</button>
+						</h2>
+						<div id="filtresCO" class="accordion-collapse collapse" data-bs-parent="#accordeonFiltres">
+							<div class="accordion-body">
+								<div class="mb-4">
+									<span class="form-label d-inline-block">Nombre de comptes:</span>
+									<div class="input-group mb-3">
+										<span class="input-group-text">Entre</span>
+										<input type="number" class="form-control" name="nbComptesMin" placeholder="1" min="1" max="255" aria-label="nombre minimum de comptes">
+										<span class="input-group-text">et</span>
+										<input type="number" class="form-control" name="nbComptesMax" placeholder="255" min="1" max="255" aria-label="nombre maximum de comptes">
+									</div>
+								</div>
+								<div class="mb-3">
+									<span class="form-label d-inline-block">Nombre de murs:</span>
+									<div class="input-group mb-3">
+										<span class="input-group-text">Entre</span>
+										<input type="number" class="form-control" name="nbMursMin" placeholder="1" min="1" max="4" aria-label="nombre minimum de murs">
+										<span class="input-group-text">et</span>
+										<input type="number" class="form-control" name="nbMursMax" placeholder="4" min="1" max="4" aria-label="nombre maximum de murs">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				-->
+				<div class="mt-3">
+					<input type="reset" class="btn btn-outline-danger d-block w-100" value="Réinitialiser">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 </Page>
+
+<script define:vars={{ NIVEAU_STR }}>
+
+const conteneur = document.querySelector("[data-cartes]");
+/** @type {HTMLTemplateElement} */
+const template = conteneur.querySelector("template");
+const msgAucuneDanse = document.querySelector("[data-aucune-danse]");
+
+const creerCarte = (titre, musique, auteur, comptes, murs, niveau, url) => {
+	/** @type {DocumentFragment} */
+	const carte = template.content.cloneNode(true);
+	carte.querySelector("[data-titre]").innerText = titre;
+	carte.querySelector("[data-musique]").innerText = musique;
+	carte.querySelector("[data-auteur]").innerText = auteur;
+	carte.querySelector("[data-comptes]").innerText = `${comptes} comptes, ${murs} murs`;
+	carte.querySelector("[data-niveau]").innerText = NIVEAU_STR[niveau];
+	carte.querySelector("a").href = `/danses/${url}`;
+	return carte;
+};
+
+const ajouterDanse = (danse) => {
+	conteneur.append(danse);
+	msgAucuneDanse.classList.add("d-none");
+};
+
+const viderDanses = () => {
+	conteneur.replaceChildren();
+	msgAucuneDanse.classList.remove("d-none");
+};
+
+const rafraichirDepuisApi = async (motsCles = "", trierPar = "score") => {
+	const url = new URL("/api/danses", document.location.origin);
+	url.searchParams.append("motsCles", motsCles);
+	url.searchParams.append("trierPar", trierPar);
+
+	const req = await fetch(url);
+	const {resultats} = await req.json();
+
+	viderDanses();
+	for (let danse of resultats) {
+		const carte = creerCarte(danse.titre, danse.musique, danse.choregraphe, danse.nbComptes, danse.nbMurs, danse.niveau, danse.identifiantUnique);
+		ajouterDanse(carte);
+	}
+};
+
+//ajouterDanse(creerCarte("titre", "musique", "auteur", "comptes", "murs", "niveau", "url"));
+rafraichirDepuisApi();
+</script>
+
+<style lang="scss">
+.lien-danse {
+	opacity: 0;
+	overflow: hidden;
+	height: 0;
+	width: 0;
+	display: block;
+	contain: style size;
+}
+</style>

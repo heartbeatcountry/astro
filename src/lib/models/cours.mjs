@@ -29,6 +29,8 @@ export const Cours = new Schema({
 			ref: "Danse",
 		},
 	],
+}, {
+	timestamps: true,
 });
 
 export default Cours;
