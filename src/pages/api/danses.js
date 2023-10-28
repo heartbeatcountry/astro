@@ -13,13 +13,14 @@ export async function GET({ url }) {
 	const trierPar = obtenirQueryChaine(url, "trierPar", "score", 50);
 	const page = obtenirQueryEntier(url, "page", 1, 1) - 1;
 	const limite = obtenirQueryEntier(url, "nbResultats", 20, 1, 20);
+	const desc = obtenirQueryEntier(url, "desc", 0, 0, 1);
 
 	if (!modesDeTri.includes(trierPar)) {
 		return repondreErr("Mode de tri invalide");
 	}
 
 	let retour = {
-		resultats: await Bd.chercherDanses(motsCles, trierPar, false, page, limite),
+		resultats: await Bd.chercherDanses(motsCles, trierPar, desc, page, limite),
 	};
 
 	return repondreJson(retour);
