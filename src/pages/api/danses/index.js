@@ -1,5 +1,5 @@
-import { obtenirQueryChaine, obtenirQueryEntier, repondreErr, repondreJson } from "../../lib/apiUtils.mjs";
-import Bd from "../../lib/bd.mjs";
+import { obtenirQueryChaine, obtenirQueryEntier, repondreErr, repondreJson } from "../../../lib/apiUtils.mjs";
+import Bd from "../../../lib/bd.mjs";
 
 const modesDeTri = ["score", "titre", "ajout", "difficulte", "comptes", "murs"];
 

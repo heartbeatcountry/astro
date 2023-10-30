@@ -119,6 +119,18 @@ export class Api {
 	}
 
 	/**
+	 * Constructeur d'une requête de type PUT.
+	 *
+	 * @param {String} pChemin - Chemin relatif de la route (le "endpoint")
+	 * @returns {Api} Une nouvelle instance de la classe
+	 */
+	static PUT(pChemin) {
+		return new this(pChemin, {
+			method: "PUT",
+		});
+	}
+
+	/**
 	 * Méthode utilitaire permettant de combiner des dictionnaires et d'éliminer
 	 * les valeurs nulles.
 	 *
@@ -131,7 +143,7 @@ export class Api {
 		return Object.fromEntries(
 			Object.entries(
 				pLstNouvDict.reduce(
-					(acc, dict) => ({ acc, ...(dict ?? {}) }),
+					(acc, dict) => ({ ...acc, ...(dict ?? {}) }),
 					pDictBase ?? {}
 				)
 			).filter(([, val]) => val !== null)
