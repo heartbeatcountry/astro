@@ -199,6 +199,14 @@ export class Api {
 	}
 
 	/**
+	 * Permet de créer un nouvel annuleur
+	 */
+	#nouvAnnuleur() {
+		this.#annuleur = new AbortController();
+		this.#optionsReq.signal = this.#annuleur.signal;
+	}
+
+	/**
 	 * Permet d'annuler une requête en cours.
 	 *
 	 * @returns {Api} Une référence à la classe Api (pour chaîner)
@@ -206,6 +214,7 @@ export class Api {
 	annuler() {
 		if (this.estEnCours) {
 			this.#annuleur.abort();
+			this.#nouvAnnuleur();
 		}
 		this.#fetch = null;
 		return this;
@@ -221,6 +230,7 @@ export class Api {
 		switch (pErr.name) {
 			case "AbortError":
 			case "DOMError":
+			case "DOMException":
 				throw new this.ErrRequeteAnnulee(pErr.message);
 			default:
 				throw pErr;
