@@ -18,12 +18,13 @@ export function repondreJson(obj, statut = 200) {
  * Crée une réponse d'erreur pour une route d'API
  *
  * @param {string} msg message d'erreur
+ * @param {number?} statut statut HTTP à utiliser (400 par défaut)
  * @returns {Response} un objet Response prêt à être envoyé
  */
-export function repondreErr(msg) {
+export function repondreErr(msg, statut = 400) {
 	return repondreJson({
 		erreur: msg,
-	}, 400);
+	}, statut);
 }
 
 /**
