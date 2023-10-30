@@ -267,4 +267,16 @@ export default class Bd {
 		return await Danse.findOne({_id : danse})
 	}
 
+	/**
+	 * Obtenir la note d'une danse à partir de son identifiant et l'usager
+	 * @param {String} danse id de la danse
+	 * @param {String} usager id de la danse
+	 * @returns {Promise<Appreciation>} instance de l'appréciation d'une danse
+	 */
+	static async obtenirAppreciation(danse, usager){
+		return await Appreciation.findOne({
+			danse: danse,
+			usager : usager
+		})
+	}
 }
