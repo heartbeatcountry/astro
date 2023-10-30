@@ -1,5 +1,10 @@
 ---
 import Page from "../../layouts/GabaritPrincipal.astro";
+import Bd from "../../lib/bd.mjs";
+import { NIVEAU_STR } from "../../lib/enums.mjs";
+
+// préchargement d'une première page de résultats:
+const resultatsInitiaux = await Bd.chercherDanses("", "titre", false, 0, 20);
 ---
 
 <Page titre="Danses" h1="Liste des danses">
@@ -42,12 +47,41 @@ import Page from "../../layouts/GabaritPrincipal.astro";
 					</div>
 				</template>
 
+				{resultatsInitiaux.map(res => (
+					<div class="col">
+						<div class="card h-100">
+							<div class="card-body">
+								<h3 class="card-title fs-5" data-titre>{res.titre}</h3>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">
+										<p class="m-0"><i class="bi bi-music-note"></i> Musique:</p>
+										<em class="ps-4 d-block" data-musique>{res.musique}</em>
+									</li>
+									<li class="list-group-item">
+										<p class="m-0"><i class="bi bi-person"></i> Chorégraphe:</p>
+										<em class="ps-4 d-block" data-auteur>{res.choregraphe}</em>
+									</li>
+									<li class="list-group-item">
+										<p class="m-0"><i class="bi bi-stopwatch"></i> Comptes et murs:</p>
+										<em class="ps-4 d-block" data-comptes>{res.nbComptes} comptes, {res.nbMurs} murs</em>
+									</li>
+									<li class="list-group-item">
+										<p class="m-0"><i class="bi bi-diamond"></i> Niveau de difficulté:</p>
+										<em class="ps-4 d-block" data-niveau>{NIVEAU_STR[res.niveau]}</em>
+									</li>
+								</ul>
+								<a href={`/danses/${res.identifiantUnique}`} class="lien-danse stretched-link">Voir cette danse</a>
+							</div>
+						</div>
+					</div>
+				))}
+
 			</div>
-			<div class="alert alert-light my-3" data-aucune-danse>
+			<div class="alert alert-light my-3 d-none" data-aucune-danse>
 				<i class="bi bi-x-circle me-1"></i>
 				Aucune danse trouvée.
 			</div>
-			<div class="my-5 d-flex justify-content-between d-none" data-charger-plus>
+			<div class="my-5 d-flex justify-content-between" data-charger-plus>
 				<div aria-hidden="true" role="presentation" class="btn-remonter"></div>
 				<button class="btn btn-primary py-2 px-5">
 					<i class="bi bi-plus-circle me-1"></i>
@@ -347,7 +381,6 @@ btnRemonter.addEventListener("click", () => {
 });
 
 majBtnOrdreSelonDesc();
-await envoyerEtAjouterCartes();
 </script>
 
 <style lang="scss">
