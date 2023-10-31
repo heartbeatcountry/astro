@@ -70,7 +70,7 @@ const resultatsInitiaux = await Bd.chercherDanses("", "titre", false, 0, 20);
 										<em class="ps-4 d-block" data-niveau>{NIVEAU_STR[res.niveau]}</em>
 									</li>
 								</ul>
-								<a href={`/danses/${res.identifiantUnique}`} class="lien-danse stretched-link">Voir cette danse</a>
+								<a href={`/danses/${res._id}`} class="lien-danse stretched-link">Voir cette danse</a>
 							</div>
 						</div>
 					</div>
@@ -293,7 +293,7 @@ const viderDanses = () => {
  */
 const rafraichirCartes = ({resultats}) => {
 	for (let danse of resultats) {
-		const carte = creerCarte(danse.titre, danse.musique, danse.choregraphe, danse.nbComptes, danse.nbMurs, danse.niveau, danse.identifiantUnique);
+		const carte = creerCarte(danse.titre, danse.musique, danse.choregraphe, danse.nbComptes, danse.nbMurs, danse.niveau, danse._id);
 		ajouterDanseDansResultats(carte);
 	}
 
