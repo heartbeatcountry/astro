@@ -2,47 +2,39 @@
 import Page from "../../layouts/GabaritPrincipal.astro";
 import Bd from "../../lib/bd.mjs";
 import { NIVEAU, NIVEAU_STR } from "../../lib/enums.mjs";
-import { obtenirNoteMoyenne  } from "../../lib/models/danse.mjs";
+import { obtenirNoteMoyenne } from "../../lib/models/danse.mjs";
+import CinqCoeurs from "../../components/cinqcoeurs.astro";
+
 
 	// Obtention du permalien depuis l'URL:
 	const { danse } = Astro.params;
 
+
+	const usager  = Astro.locals["usager"];
+
+
+	// Affichage de la note donnée par l'utilisateur pour la danse affichée.
+	let note = 0;
+	let appreciation = await Bd.obtenirAppreciation(danse, usager);
+	if (appreciation){
+		note = appreciation.note;
+	}
+
 	// Obtention des détails selon le permalien
 	const detailsDanse = await Bd.obtenirDetailsDanse(danse);
-
-/*
-try{
-	// Obtention du permalien depuis l'URL:
-	const { danse } = Astro.params;
-
-	// Obtention des détails selon le permalien
-	const detailsDanse = await Bd.obtenirDetailsDanse(danse);
+	let moyenne = 0;
 
 	if(!detailsDanse){
-		const error = new Error("Aucun paquet trouvé !");
-      	error.statusCode = 404;
-      	throw error;
+		Astro.response.status = 404;
+	} else {
+		moyenne = (await detailsDanse.obtenirNoteMoyenne())?.[0]?.moyenne ?? 0;
 	}
-}
-catch (err) {
- if (err.kind === "ObjectId" && err.name === "CastError") {
-      err.statusCode = 400;
-      err.message = `ID de danse invalide`;
-    } else if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-} */
-
-
-
-// Conversion en JSON:
-const detailsJson = JSON.stringify(detailsDanse);
 ---
 
+{ detailsDanse ?
 <Page titre={detailsDanse.titre}>
 
-
-	<div class="bg-body-tertiary bg-opacity-75 entete" data-bs-theme="dark">
+	<div class="bg-body-tertiary bg-opacity-75 entete" data-bs-theme="dark" data-id-danse={detailsDanse._id}>
 		<div class="container-xl ">
 			<div class="row row-cols-1  row-cols-lg-3 text-center py-4 align-items-center">
 				<div>
@@ -57,26 +49,40 @@ const detailsJson = JSON.stringify(detailsDanse);
 					<p class="fs-4"> {detailsDanse.nbMurs} murs </p>
 
 				</div>
-				<div class="gap-2 justify-content-center">
-					<p class="fs-5">Notez cette danse</p>
-					<div>
-						<i class="mini"></i>
-						<i class="mini"></i>
-						<i class="mini"></i>
-						<i class="mini"></i>
-						<i class="mini"></i>
-					</div>
+
+
+
+				<div >
+
+					{ usager &&
+
+						<p class="fs-5">Notez cette danse.</p>
+
+					<form class="d-flex justify-content-center">
+						<CinqCoeurs name="note" note={note}></CinqCoeurs>
+					</form>
+
 					<div class="d-flex justify-content-center align-items-center" >
 
-						<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">Ajout à la liste de souhait <img class="mini" src="../../public/images/icones/ajoutListe.png" alt="ajout à la liste de souhait" /></button>
+					<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">Ajout à la liste de souhait
+						<img class="mini" src="../../public/images/icones/ajoutListe.png" alt="ajout à la liste de souhait" /></button>
 
-
-						<p class="bgImage fs-4 pt-2">{detailsDanse.obtenirNoteMoyenne().moyenne}</p>
-
-
+					<p class="bgImage fs-4 pt-2" id="coeurMoyenne" >{moyenne}</p>
 					</div>
 
+					}
+					{ !usager &&
+
+						<p class="fs-5">Connectez-vous pour noter cette danse.</p>
+						<p class="bgImage fs-4 pt-2" id="coeurMoyenne">{moyenne}</p>
+
+					}
+
+
 				</div>
+
+
+
 			</div>
 		</div>
 
@@ -143,6 +149,31 @@ const detailsJson = JSON.stringify(detailsDanse);
 	</div>
 
 </Page>
+:
+<Page titre="Danse introuvable">
+	introuvable!
+</Page>
+}
+
+
+<script>
+	import Api from "../../lib/clientside/api.mjs";
+	const idDanse = document.querySelector<HTMLDivElement>("[data-id-danse]").dataset.idDanse;
+
+	const form = document.querySelector("form");
+	const req = Api.PUT(`danses/${idDanse}/appreciation`);
+
+	const coeurMoyenne = document.getElementById("coeurMoyenne");
+
+	form.addEventListener("change", async () => {
+		const inputNote = form.querySelector(`input[name="note"]:checked`);
+		const {nouvMoyenne} = await req.params({ note: +inputNote.value }).envoyer();
+		coeurMoyenne.innerText =  nouvMoyenne;
+	});
+
+
+
+</script>
 
 <style lang="scss">
 
@@ -156,19 +187,18 @@ const detailsJson = JSON.stringify(detailsDanse);
 
 	.card-img-top
 	{
-
+		&:is(img) {
+			object-fit:contain;
+		}
 
 		height: 300Q;
 	}
 
 	.large
 	{
+		@extend .rounded-5, .border, .border-5, .mt-4, .mx-3;
 		width: 750Q;
 		height: 400Q;
-	}
-
-	.medium, .large{
-	@extend .rounded-5, .border, .border-5, .mt-4, .mx-3;
 	}
 
 	body{
