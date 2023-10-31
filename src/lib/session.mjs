@@ -51,6 +51,7 @@ export default class Session {
 		cookies.set(NOM_COOKIE, cle, {
 			expires: expiration,
 			httpOnly: true,
+			path: "/",
 		});
 
 		// On retourne une référence à la session:
