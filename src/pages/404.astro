@@ -1,7 +1,12 @@
 ---
 import Page from "../layouts/GabaritPrincipal.astro";
+import { repondreErr } from "../lib/apiUtils.mjs";
 
 Astro.response.status = 404;
+
+if (Astro.url.pathname.startsWith("/api/")) {
+	return repondreErr("ressource introuvable", 404);
+}
 ---
 
 <Page titre="Page introuvable">
