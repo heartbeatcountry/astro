@@ -210,8 +210,8 @@ export default class Bd {
 			.populate("danses")
 			.sort({
 				date: 1,
-			}).lean();
-
+			})
+			.lean();
 
 		return coursDeLaSemaine;
 	}
@@ -225,16 +225,25 @@ export default class Bd {
 	 * @param {number?} limite nombre de résultats à retourner
 	 * @returns
 	 */
-	static async chercherDanses(motsCles, trierPar, desc = false, delta = 0, limite = 20) {
+	static async chercherDanses(
+		motsCles,
+		trierPar,
+		desc = false,
+		delta = 0,
+		limite = 20
+	) {
 		const asc = !desc;
 		let req = Danse.find();
 
 		if (motsCles.length > 0) {
-			req = req.find({
-				$text: { $search: motsCles }
-			}, {
-				score: { $meta: "textScore" }
-			});
+			req = req.find(
+				{
+					$text: { $search: motsCles },
+				},
+				{
+					score: { $meta: "textScore" },
+				}
+			);
 		}
 
 		// Calcul des pages:
@@ -263,8 +272,8 @@ export default class Bd {
 	 * @param {String} id_danse id de la danse
 	 * @returns {Promise<Danse>} instance de la Danse
 	 */
-	static async obtenirDetailsDanse(danse){
-		return await Danse.findOne({_id : danse})
+	static async obtenirDetailsDanse(danse) {
+		return await Danse.findOne({ _id: danse });
 	}
 
 	/**
@@ -273,10 +282,18 @@ export default class Bd {
 	 * @param {String} usager id de la danse
 	 * @returns {Promise<Appreciation>} instance de l'appréciation d'une danse
 	 */
-	static async obtenirAppreciation(danse, usager){
+	static async obtenirAppreciation(danse, usager) {
 		return await Appreciation.findOne({
 			danse: danse,
-			usager : usager
-		})
+			usager: usager,
+		});
+	}
+
+	static async modifierAppreciation(note, danse, usager) {
+		await Appreciation.updateOne(
+			{ danse, usager },
+			{ note, danse, usager },
+			{ upsert: true }
+		);
 	}
 }
