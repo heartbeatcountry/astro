@@ -14,20 +14,23 @@ export async function PUT(apiRoute) {
 	const usager = apiRoute.locals["usager"];
 
 	if (!usager) {
-		//return repondreErr("Vous devez être connecté", 401);
+		return repondreErr("Vous devez être connecté", 401);
 	}
 
-	/*
-	await Bd.modifierAppreciation({
-		usager: usager.id,
-		danse: danse.id,
-		note,
-	});
-	*/
+	const danse = await Bd.obtenirDetailsDanse(idDanse);
 
-	console.log({ idDanse, note });
+	if (!danse) {
+		return repondreErr("Danse introuvable", 404);
+	}
+
+	try {
+		await Bd.modifierAppreciation(note, idDanse, usager);
+	} catch (erreur) {
+		return repondreErr(erreur.message, 404);
+	}
 
 	return repondreJson({
 		message: "Note modifiée avec succès",
+		nouvMoyenne: (await danse.obtenirNoteMoyenne())[0].moyenne,
 	});
 }
