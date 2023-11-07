@@ -289,6 +289,12 @@ export default class Bd {
 		});
 	}
 
+	/**
+	 *Modifier l'appréciation d'une danse par un utilisateur
+	 * @param {Number} note
+	 * @param {String} danse
+	 * @param {String} usager
+	 */
 	static async modifierAppreciation(note, danse, usager) {
 		await Appreciation.updateOne(
 			{ danse, usager },
