@@ -38,9 +38,11 @@ name = name ?? "nb-coeurs";
 </div>
 
 <style lang="scss">
-$couleur-coeur-inactif: rgba(0,0,0,0.2);
+$couleur-coeur-inactif: rgba(0,0,0,0.4);
 $couleur-coeur-actif: #FF5252;
-$couleur-coeur-survol: #7B1FA2;
+$couleur-coeur-survol: #80a2ac;
+// $icone-coeur: url("../../images/icones/heart.svg");
+// $image-hr: url("../../images/icones/beat.svg");
 $icone-coeur: "♥";
 $image-hr: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSIxNTAiIGhlaWdodD0iNzMiIHZlcnNpb249IjEuMCI+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS13aWR0aD0iNSIgZD0iTTAgNDVoMzlsNi0xMiA2IDEyaDdsNSAxMSA5LTQ3IDggNTUgNC0xOWgxM2w2LTUgNyA1aDQwIi8+PC9zdmc+Cg==";
 
@@ -79,10 +81,10 @@ div {
 			background-image: url($image-hr);
 			background-size: 120% auto;
 			background-repeat: no-repeat;
-			background-position: 90% 40%;
+			background-position: 90% 50%;
 			background-clip: text;
 			display: inline-block;
-			font-size: 2rem;
+			font-size: 4rem;
 		}
 	}
 }
