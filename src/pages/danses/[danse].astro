@@ -32,9 +32,10 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 ---
 
 { detailsDanse ?
-<Page titre={detailsDanse.titre}>
+<Page titre={detailsDanse.titre} espacementVertical={0}>
 
-	<div class="bg-body-tertiary bg-opacity-75 entete" data-bs-theme="dark" data-id-danse={detailsDanse._id}>
+ <div class =" bg-light" data-bs-theme="dark">
+	<div class="bg-body-tertiary bg-opacity-75 entete"  data-id-danse={detailsDanse._id}>
 		<div class="container-xl ">
 			<div class="row row-cols-1  row-cols-lg-3 text-center py-4 align-items-center">
 				<div>
@@ -64,8 +65,10 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 
 					<div class="d-flex justify-content-center align-items-center" >
 
-					<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">Ajout à la liste de souhait
+							{/*
+						<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">Ajout à la liste de souhait
 						<img class="mini" src="../../public/images/icones/ajoutListe.png" alt="ajout à la liste de souhait" /></button>
+						*/}
 
 					<p class="bgImage fs-4 pt-2" id="coeurMoyenne" >{moyenne}</p>
 					</div>
@@ -100,7 +103,7 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 		<p class="fs-5 "><strong>Aide-mémoire: </strong> {detailsDanse.detailsTag}</p>
 	</div>
 
-		<div class="m-2 row row-cols-1 row-cols-lg-2 p-sm-5 gx-lg-5">
+		<div class=" row row-cols-1 row-cols-lg-2 p-sm-5 gx-lg-5">
 
 		<div class="col">
 			<div class="card text-center mb-sm-4">
@@ -147,7 +150,7 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 
 
 	</div>
-
+</div>
 </Page>
 :
 <Page titre="Danse introuvable">
