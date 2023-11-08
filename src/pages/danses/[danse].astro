@@ -66,7 +66,7 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 
 								{/*
 							<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">Ajout à la liste de souhait
-							<img class="mini" src="../../public/images/icones/ajoutListe.png" alt="ajout à la liste de souhait" /></button>
+							<img class="mini" src="/images/icones/ajoutListe.png" alt="ajout à la liste de souhait" /></button>
 							*/}
 
 							<p class="bgImage fs-4 pt-2" id="coeurMoyenne" >{detailsDanse.noteMoyenne ?? 0}</p>
@@ -93,7 +93,7 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 				<p class="fs-5 text-center">Vidéo de la danse</p>
 				</div>
 			:
-				<img  class ="large"  src="../../public/images/videoNonDispo.png" alt="aucun lien vidéo" />
+				<img  class ="large"  src="/images/videoNonDispo.png" alt="aucun lien vidéo" />
 		}
 
 	</div>
@@ -130,7 +130,7 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 							title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 						</div>
 					:
-						<img  class="card-img-top" src="../../public/images/videoNonDispo.png" alt="aucun lien vidéo" />
+						<img  class="card-img-top" src="/images/videoNonDispo.png" alt="aucun lien vidéo" />
 				}
 
 				<div class="card-footer">
@@ -149,10 +149,10 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 				{
 				detailsDanse.lienVideoAcademie ?
 					<a href={detailsDanse.lienVideoAcademie}  class="stretched-link" >
-						<img class="card-img-top " src="../../public/images/dispoAcademie.png" alt="vidéo Académie" />
+						<img class="card-img-top " src="/images/dispoAcademie.png" alt="vidéo Académie" />
 					</a>
 				:
-					<img  class="card-img-top " src="../../public/images/nonDispoAcademie.png" alt="aucun lien vers l'académie" />
+					<img  class="card-img-top " src="/images/nonDispoAcademie.png" alt="aucun lien vers l'académie" />
 				}
 			<div class="card-footer">
 
