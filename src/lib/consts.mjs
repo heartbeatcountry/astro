@@ -87,7 +87,7 @@ export const contraintes = {
 		 * Détails du nombre de murs
 		 */
 		nbMurs: {
-			min: 1,
+			min: 0,
 			max: 4,
 		},
 	},
