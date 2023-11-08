@@ -23,14 +23,16 @@ export async function PUT(apiRoute) {
 		return repondreErr("Danse introuvable", 404);
 	}
 
+	let nouvMoyenne = 0;
 	try {
-		await Bd.modifierAppreciation(note, idDanse, usager);
+		nouvMoyenne = await Bd.modifierAppreciation(note, idDanse, usager);
 	} catch (erreur) {
+		console.error(erreur);
 		return repondreErr(erreur.message, 404);
 	}
 
 	return repondreJson({
 		message: "Note modifiée avec succès",
-		nouvMoyenne: (await danse.obtenirNoteMoyenne())[0].moyenne,
+		nouvMoyenne,
 	});
 }
