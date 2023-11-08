@@ -59,7 +59,7 @@ const resultatsInitiaux = await Bd.chercherDanses("", "titre", false, 0, 20);
 									</li>
 									<li class="list-group-item">
 										<p class="m-0"><i class="bi bi-person"></i> Chorégraphe:</p>
-										<em class="ps-4 d-block" data-auteur>{res.choregraphe}</em>
+										<em class="ps-4 d-block" data-auteur>{res.choregraphe ?? "Inconnu"}</em>
 									</li>
 									<li class="list-group-item">
 										<p class="m-0"><i class="bi bi-stopwatch"></i> Comptes et murs:</p>
@@ -261,7 +261,7 @@ const creerCarte = (titre, musique, auteur, comptes, murs, niveau, url) => {
 	const carte = template.content.cloneNode(true) as DocumentFragment;
 	carte.querySelector<HTMLSpanElement>("[data-titre]").innerText = titre;
 	carte.querySelector<HTMLSpanElement>("[data-musique]").innerText = musique;
-	carte.querySelector<HTMLSpanElement>("[data-auteur]").innerText = auteur;
+	carte.querySelector<HTMLSpanElement>("[data-auteur]").innerText = auteur ?? "Inconnu";
 	carte.querySelector<HTMLSpanElement>("[data-comptes]").innerText = `${comptes} comptes, ${murs} murs`;
 	carte.querySelector<HTMLSpanElement>("[data-niveau]").innerText = NIVEAU_STR[niveau];
 	carte.querySelector<HTMLAnchorElement>("a").href = `/danses/${url}`;
