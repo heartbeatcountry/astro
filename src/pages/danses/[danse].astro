@@ -2,7 +2,6 @@
 import Page from "../../layouts/GabaritPrincipal.astro";
 import Bd from "../../lib/bd.mjs";
 import { NIVEAU, NIVEAU_STR } from "../../lib/enums.mjs";
-import { obtenirNoteMoyenne } from "../../lib/models/danse.mjs";
 import CinqCoeurs from "../../components/cinqcoeurs.astro";
 
 
@@ -22,12 +21,9 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 
 	// Obtention des détails selon le permalien
 	const detailsDanse = await Bd.obtenirDetailsDanse(danse);
-	let moyenne = 0;
 
 	if(!detailsDanse){
 		Astro.response.status = 404;
-	} else {
-		moyenne = (await detailsDanse.obtenirNoteMoyenne())?.[0]?.moyenne ?? 0;
 	}
 ---
 
@@ -73,11 +69,11 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 							<img class="mini" src="../../public/images/icones/ajoutListe.png" alt="ajout à la liste de souhait" /></button>
 							*/}
 
-							<p class="bgImage fs-4 pt-2" id="coeurMoyenne" >{moyenne}</p>
+							<p class="bgImage fs-4 pt-2" id="coeurMoyenne" >{detailsDanse.noteMoyenne ?? 0}</p>
 						</div>
 					:
 						<p class="fs-5">Connectez-vous pour noter cette danse.</p>
-						<p class="bgImage fs-4 pt-2" id="coeurMoyenne">{moyenne}</p>
+						<p class="bgImage fs-4 pt-2" id="coeurMoyenne">{detailsDanse.noteMoyenne ?? 0}</p>
 					}
 
 				</div>

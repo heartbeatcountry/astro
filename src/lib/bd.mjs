@@ -290,10 +290,11 @@ export default class Bd {
 	}
 
 	/**
-	 *Modifier l'appréciation d'une danse par un utilisateur
+	 * Modifier l'appréciation d'une danse par un utilisateur
 	 * @param {Number} note
-	 * @param {String} danse
-	 * @param {String} usager
+	 * @param {ObjectId} danse
+	 * @param {Usager} usager
+	 * @returns {Promise<Number>} la nouvelle moyenne
 	 */
 	static async modifierAppreciation(note, danse, usager) {
 		await Appreciation.updateOne(
@@ -301,5 +302,8 @@ export default class Bd {
 			{ note, danse, usager },
 			{ upsert: true }
 		);
+
+		// Retour de la nouvelle moyenne:
+		return (await Danse.findById(danse)).noteMoyenne;
 	}
 }

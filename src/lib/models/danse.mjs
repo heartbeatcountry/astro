@@ -134,13 +134,27 @@ export const Danse = new Schema(
 			required: false,
 			null: [false, "Le coup de coeur ne doit pas être nul"],
 		},
+		noteMoyenne: {
+			type: Number,
+			default: 0,
+			required: false,
+			null: [true, "La note moyenne ne doit pas être nulle."],
+			min: [
+				contraintes.appreciation.note.min,
+				`La note moyenne doit être entre ${contraintes.appreciation.note.min} et ${contraintes.appreciation.note.max}`
+			],
+			max: [
+				contraintes.appreciation.note.max,
+				`La note moyenne doit être entre ${contraintes.appreciation.note.min} et ${contraintes.appreciation.note.max}`
+			],
+		},
 	},
 	{
 		methods: {
 			/**
 			 * Requête qui permet d'obtenir la moyenne des appréciations
 			 */
-			obtenirNoteMoyenne() {
+			calculerNoteMoyenne() {
 				return model("Appreciation")
 					.aggregate()
 					.match({ danse: this._id })

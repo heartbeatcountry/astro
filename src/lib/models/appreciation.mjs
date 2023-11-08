@@ -48,4 +48,24 @@ export const Appreciation = new Schema({
 
 Appreciation.index({ danse: 1, usager: 1 }, { unique: true });
 
+/**
+ * Écouteur pour recalculer la note moyenne d'une danse lors de l'ajout ou de
+ * la modification d'une appréciation.
+ */
+async function recalculerMoyenne() {
+	const nouvMoyenne = (await model("Appreciation")
+		.aggregate()
+		.match({ danse: this._conditions.danse })
+		.group({ _id: null, moyenne: { $avg: "$note" } })
+		.project({ _id: 0, moyenne: { $round: ["$moyenne", 1] } }))[0].moyenne;
+
+	await model("Danse").updateOne({
+		_id: this._conditions.danse
+	}, {
+		noteMoyenne: nouvMoyenne
+	});
+}
+Appreciation.post("updateOne", recalculerMoyenne);
+//Appreciation.post("save", recalculerMoyenne);
+
 export default Appreciation;
