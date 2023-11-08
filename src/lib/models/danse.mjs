@@ -104,8 +104,8 @@ export const Danse = new Schema(
 		},
 		nbComptes: {
 			type: Number,
-			required: false,
-			null: [false, "Le nombre de comptes ne doit pas être nul"],
+			required: [true,"Le nombre de comptes doit être inscrit."],
+			null: [false, "Le nombre de comptes ne doit pas être nul."],
 			min: [
 				cnt.nbComptes.min,
 				`Le nombre de comptes doit être entre ${cnt.nbComptes.min} et ${cnt.nbComptes.max}`,
@@ -117,7 +117,7 @@ export const Danse = new Schema(
 		},
 		nbMurs: {
 			type: Number,
-			required: false,
+			required: [true,"Le nombre de murs doit être inscrit."],
 			null: [false, "Le nombre de murs ne doit pas être nul"],
 			min: [
 				cnt.nbMurs.min,
