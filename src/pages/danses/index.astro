@@ -16,12 +16,27 @@ const resultatsInitiaux = await Bd.chercherDanses("", "titre", false, 0, 20);
 				<i class="bi bi-exclamation-circle me-1"></i>
 				Un problème est survenu lors de l'obtention des danses. Veuillez ressayer ultérieurement.
 			</div>
-			<div class="row row-cols-2 g-3" data-cartes>
+			<div class="row row-cols-1 row-cols-md-2 g-3" data-cartes>
 
 				<template>
 					<div class="col">
 						<div class="card h-100">
 							<div class="card-body">
+
+								<span class="position-absolute top-0 start-0 end-0 badge bg-light py-2 rounded-bottom-0">
+									<span class="text-primary">
+										Appréciation moyenne:
+										<span class="text-danger fw-bold">
+											<span data-moyenne>0</span>
+											<span role="presentation" aria-hidden="true"> ♥️</span>
+											<span class="visually-hidden">coeurs</span>
+										</span>
+									</span>
+									<span>
+										Danse non évaluée
+									</span>
+								</span>
+
 								<h3 class="card-title fs-5" data-titre>.</h3>
 								<ul class="list-group list-group-flush">
 									<li class="list-group-item">
@@ -109,6 +124,7 @@ const resultatsInitiaux = await Bd.chercherDanses("", "titre", false, 0, 20);
 							<option value="difficulte">Trier par difficulté</option>
 							<option value="comptes">Trier par nombre de comptes</option>
 							<option value="murs">Trier par nombre de murs</option>
+							<option value="appreciations">Trier par appréciation moyenne</option>
 						</select>
 						<label for="trierPar">Ordre d'affichage:</label>
 					</div>
@@ -236,6 +252,10 @@ let desc = 0;
  * Numéro de la page de résultats
  */
 let page = 1;
+/**
+ * Le mode de tri actuel
+ */
+let trierPar = "score";
 
 /**
  * Affiche un message d'erreur en console et un message générique à l'usager
@@ -256,8 +276,9 @@ const afficherErr = msg => {
  * @param murs nombre de murs
  * @param niveau niveau de difficulté
  * @param url slug unique
+ * @param noteMoyenne appréciation moyenne
  */
-const creerCarte = (titre, musique, auteur, comptes, murs, niveau, url) => {
+const creerCarte = (titre, musique, auteur, comptes, murs, niveau, url, noteMoyenne) => {
 	const carte = template.content.cloneNode(true) as DocumentFragment;
 	carte.querySelector<HTMLSpanElement>("[data-titre]").innerText = titre;
 	carte.querySelector<HTMLSpanElement>("[data-musique]").innerText = musique;
@@ -265,6 +286,9 @@ const creerCarte = (titre, musique, auteur, comptes, murs, niveau, url) => {
 	carte.querySelector<HTMLSpanElement>("[data-comptes]").innerText = `${comptes} comptes, ${murs} murs`;
 	carte.querySelector<HTMLSpanElement>("[data-niveau]").innerText = NIVEAU_STR[niveau];
 	carte.querySelector<HTMLAnchorElement>("a").href = `/danses/${url}`;
+	const pill = carte.querySelector<HTMLSpanElement>("span.badge");
+	if (noteMoyenne) pill.classList.add("moyenne-dispo");
+	pill.querySelector<HTMLSpanElement>("[data-moyenne]").innerText = noteMoyenne;
 	return carte;
 };
 
@@ -292,8 +316,14 @@ const viderDanses = () => {
  * @param param0 réponse de l'API
  */
 const rafraichirCartes = ({resultats}) => {
+	if (trierPar === "appreciations") {
+		conteneurCartes.classList.add("appreciations");
+	} else {
+		conteneurCartes.classList.remove("appreciations");
+	}
+
 	for (let danse of resultats) {
-		const carte = creerCarte(danse.titre, danse.musique, danse.choregraphe, danse.nbComptes, danse.nbMurs, danse.niveau, danse._id);
+		const carte = creerCarte(danse.titre, danse.musique, danse.choregraphe, danse.nbComptes, danse.nbMurs, danse.niveau, danse._id, danse.noteMoyenne);
 		ajouterDanseDansResultats(carte);
 	}
 
@@ -327,7 +357,7 @@ const gererSoumisionFormulaire = async (evt = null) => {
 	evt?.preventDefault();
 
 	const motsCles = champRecherche?.value?.trim() ?? "";
-	const trierPar = selectTrierPar?.value ?? "score";
+	trierPar = selectTrierPar?.value ?? "score";
 	page = 1;
 
 	req.params({motsCles, trierPar, page, desc});
@@ -394,5 +424,25 @@ majBtnOrdreSelonDesc();
 }
 .btn-remonter {
 	width: 150Q;
+}
+
+[data-cartes]:not(.appreciations) .badge {
+	display: none;
+}
+
+[data-cartes].appreciations {
+	--bs-gutter-y: 3rem;
+	padding-top: 1rem;
+
+	.badge {
+		&.moyenne-dispo > span:last-of-type(),
+		&:not(.moyenne-dispo) > span:first-of-type() {
+			display: none;
+		}
+
+		& + h3 {
+			margin-top: 2rem;
+		}
+	}
 }
 </style>
