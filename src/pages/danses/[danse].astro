@@ -8,19 +8,17 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 
 	// Obtention du permalien depuis l'URL:
 	const { danse } = Astro.params;
-	// Obtention du permalien depuis l'URL:
-	const { danse } = Astro.params;
-
 
 	const usager  = Astro.locals["usager"];
 
-
 	// Affichage de la note donnée par l'utilisateur pour la danse affichée.
 	let note = 0;
-	let appreciation = await Bd.obtenirAppreciation(danse, usager);
-	if (appreciation){
-		note = appreciation.note;
+	if(usager){
+		const appreciation = await Bd.obtenirAppreciation(danse, usager);
+		if (appreciation){
+			note = appreciation.note;
 	}
+}
 
 	// Obtention des détails selon le permalien
 	const detailsDanse = await Bd.obtenirDetailsDanse(danse);
@@ -42,8 +40,13 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 			<div class="row row-cols-1  row-cols-lg-3 text-center py-4 align-items-center">
 				<div>
 					<h2  class=" my-3">{detailsDanse.titre}</h2>
-					<p class="my-3 fs-4">Chorégraphe(s): {detailsDanse.choregraphe} </p>
 
+					{
+					detailsDanse.choregraphe ?
+						<p class="my-3 fs-4">Chorégraphe(s): {detailsDanse.choregraphe} </p>
+					:
+						<p class="my-3 fs-4">Chorégraphe inconnu</p>
+					}
 
 				</div>
 				<div class="col-xl-6">
@@ -53,56 +56,67 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 
 				</div>
 
-
-
 				<div >
 
-					{ usager &&
+					{ usager ?
 
 						<p class="fs-5">Notez cette danse.</p>
 
-					<form class="d-flex justify-content-center">
-						<CinqCoeurs name="note" note={note}></CinqCoeurs>
-					</form>
+						<form class="d-flex justify-content-center">
+							<CinqCoeurs name="note" note={note}></CinqCoeurs>
+						</form>
 
-					<div class="d-flex justify-content-center align-items-center" >
+						<div class="d-flex justify-content-center align-items-center" >
 
-							{/*
-						<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">Ajout à la liste de souhait
-						<img class="mini" src="../../public/images/icones/ajoutListe.png" alt="ajout à la liste de souhait" /></button>
-						*/}
+								{/*
+							<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">Ajout à la liste de souhait
+							<img class="mini" src="../../public/images/icones/ajoutListe.png" alt="ajout à la liste de souhait" /></button>
+							*/}
 
-					<p class="bgImage fs-4 pt-2" id="coeurMoyenne" >{moyenne}</p>
-					</div>
-
-					}
-					{ !usager &&
-
+							<p class="bgImage fs-4 pt-2" id="coeurMoyenne" >{moyenne}</p>
+						</div>
+					:
 						<p class="fs-5">Connectez-vous pour noter cette danse.</p>
 						<p class="bgImage fs-4 pt-2" id="coeurMoyenne">{moyenne}</p>
-
 					}
 
-
 				</div>
-
-
-
 			</div>
 		</div>
 
 
 	</div>
 	<div class="d-flex justify-content-center align-items-center">
-		<div>
-		<iframe class ="large" src={ `https://www.youtube.com/embed/${detailsDanse.lienVideoDanse}`}
-		title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-		<p class="fs-5 text-center">Vidéo de la danse</p>
-		</div>
+
+		{
+			detailsDanse.lienVideoDanse ?
+
+				<div>
+				<iframe class ="large" src={ `https://www.youtube.com/embed/${detailsDanse.lienVideoDanse}`}
+				title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+				<p class="fs-5 text-center">Vidéo de la danse</p>
+				</div>
+			:
+				<img  class ="large"  src="../../public/images/videoNonDispo.png" alt="aucun lien vidéo" />
+		}
+
 	</div>
+
 	<div class="text-center" >
-		<a class="fs-2" href={`${detailsDanse.lienFeuille}`}>Voir la feuille de pas</a>
-		<p class="fs-5 "><strong>Aide-mémoire: </strong> {detailsDanse.detailsTag}</p>
+				{
+					detailsDanse.lienFeuille ?
+						<a class="fs-2" href={`${detailsDanse.lienFeuille}`}>Voir la feuille de pas</a>
+					:
+						<p class="fs-2" >Feuille de pas non disponible</p>
+				}
+
+				{
+					detailsDanse.detailsTag ?
+						<p class="fs-5 "><strong>Aide-mémoire: </strong> {detailsDanse.detailsTag}</p>
+					:
+						<p class="fs-5 "><strong>Aide-mémoire: </strong> Aucun tag ou restart</p>
+				}
+
 	</div>
 
 		<div class=" row row-cols-1 row-cols-lg-2 p-sm-5 gx-lg-5">
@@ -114,18 +128,18 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 				</div>
 
 				{
-					!detailsDanse.lienVideoMusique &&
-					<img  class="card-img-top" src="../../public/images/videoNonDispo.png" alt="aucun lien vidéo" />
-				}
-				{
-					detailsDanse.lienVideoMusique &&
-					<div  >
-						<iframe  class ="card-img-top" src={ `https://www.youtube.com/embed/${detailsDanse.lienVideoMusique}`}
-						title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-					</div>
+					detailsDanse.lienVideoMusique ?
+						<div  >
+							<iframe  class ="card-img-top" src={ `https://www.youtube.com/embed/${detailsDanse.lienVideoMusique}`}
+							title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+						</div>
+					:
+						<img  class="card-img-top" src="../../public/images/videoNonDispo.png" alt="aucun lien vidéo" />
 				}
 
+				<div class="card-footer">
 
+				</div>
 			</div>
 		</div>
 
@@ -137,20 +151,18 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 				</div>
 
 				{
-					!detailsDanse.lienVideoAcademie &&
+				detailsDanse.lienVideoAcademie ?
+					<a href={detailsDanse.lienVideoAcademie}  class="stretched-link" >
+						<img class="card-img-top " src="../../public/images/dispoAcademie.png" alt="vidéo Académie" />
+					</a>
+				:
 					<img  class="card-img-top " src="../../public/images/nonDispoAcademie.png" alt="aucun lien vers l'académie" />
 				}
-				{
-					detailsDanse.lienVideoAcademie &&
-				<a href={detailsDanse.lienVideoAcademie}  class="stretched-link" >
-					<img class="card-img-top " src="../../public/images/nonDispoAcademie.png" alt="vidéo Académie" />
-				</a>
-				}
+			<div class="card-footer">
 
 			</div>
+			</div>
 		</div>
-
-
 	</div>
 </div>
 </Page>
