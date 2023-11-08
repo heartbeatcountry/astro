@@ -219,7 +219,7 @@ export default class Bd {
 	/**
 	 *
 	 * @param {string} motsCles mots clés à chercher
-	 * @param {"score"|"titre"|"ajout"|"difficulte"|"comptes"|"murs"} trierPar ordre de tri
+	 * @param {"score"|"titre"|"ajout"|"difficulte"|"comptes"|"murs"|"appreciations"} trierPar ordre de tri
 	 * @param {boolean?} desc si vrai, tri descendant
 	 * @param {number?} delta numéro de la page de résultats
 	 * @param {number?} limite nombre de résultats à retourner
@@ -260,6 +260,8 @@ export default class Bd {
 			req = req.sort({ nbComptes: asc ? 1 : -1 });
 		} else if (trierPar === "murs") {
 			req = req.sort({ nbMurs: asc ? 1 : -1 });
+		} else if (trierPar === "appreciations") {
+			req = req.sort({ noteMoyenne: asc ? 1 : -1 });
 		} else {
 			req = req.sort({ titre: asc ? 1 : -1 });
 		}

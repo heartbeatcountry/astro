@@ -1,7 +1,7 @@
 import { obtenirQueryChaine, obtenirQueryEntier, repondreErr, repondreJson } from "../../../lib/apiUtils.mjs";
 import Bd from "../../../lib/bd.mjs";
 
-const modesDeTri = ["score", "titre", "ajout", "difficulte", "comptes", "murs"];
+const modesDeTri = ["score", "titre", "ajout", "difficulte", "comptes", "murs", "appreciations"];
 
 /**
  * Requête pour chercher des danses
