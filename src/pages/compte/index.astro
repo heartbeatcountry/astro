@@ -32,6 +32,12 @@ else{
 
 	<div class="hstack">
 		<h3>Bienvenue {usager?.prenom + " " + usager?.nom},</h3>
+		{
+			usager?.estAdmin &&
+			<a href="/admin" class="ms-auto btn btn-outline-primary me-1">
+				Accéder au tableau de bord
+			</a>
+		}
 		<a class="ms-auto btn btn-primary" href="/compte/deconnexion">Se déconnecter</a>
 	</div>
 
@@ -56,50 +62,42 @@ else{
 		<form action="." method="DELETE" id="formRetirerDanseSouhaitee">
 		</form>
 
-		{usager.dansesSouhaitees && usager.dansesSouhaitees.length > 0 && (
-			usager.dansesSouhaitees.map((danse) => (
-			<div class="row row-cols-2 row-cols-lg-4 my-2 border border-primary rounded p-3" >
-
+		{usager.dansesSouhaitees && usager.dansesSouhaitees.length > 0 && (usager.dansesSouhaitees.map((danse) => (
+			<div class="row row-cols-2 row-cols-lg-4 my-2 border border-primary rounded p-3">
 				<a href= {`/danses/${danse._id}`} class = "fs-4 col-lg-4 stretched-link">{danse.titre}</a>
 
-					{
-					danse.choregraphe ?
-						<p class="col-lg-3">{danse.choregraphe}</p>
-					:
-						<p class="col-lg-3">Inconnu</p>
-					}
+				{
+				danse.choregraphe ?
+					<p class="col-lg-3">{danse.choregraphe}</p>
+				:
+					<p class="col-lg-3">Inconnu</p>
+				}
 
-					{
-						danse.nbMurs === 0 ?
-							<p  class="col-lg-3" >{NIVEAU_STR[danse.niveau]} / {danse.nbComptes} comptes / Partenaire</p>
+				{
+					danse.nbMurs === 0 ?
+						<p  class="col-lg-3" >{NIVEAU_STR[danse.niveau]} / {danse.nbComptes} comptes / Partenaire</p>
+					:
+						(danse.nbMurs === 1?
+							<p  class="col-lg-3" >{NIVEAU_STR[danse.niveau]} / {danse.nbComptes} comptes /{danse.nbMurs} Mur</p>
 						:
-							(danse.nbMurs === 1?
-								<p  class="col-lg-3" >{NIVEAU_STR[danse.niveau]} / {danse.nbComptes} comptes /{danse.nbMurs} Mur</p>
-							:
-								<p  class="col-lg-3" >{NIVEAU_STR[danse.niveau]} / {danse.nbComptes} comptes /{danse.nbMurs} Murs</p>)
-					}
+							<p  class="col-lg-3" >{NIVEAU_STR[danse.niveau]} / {danse.nbComptes} comptes /{danse.nbMurs} Murs</p>)
+				}
 
 				<button type="submit" form="formRetirerDanseSouhaitee" class="btn btn-secondary col-3 col-lg-2 retrait zi" value={danse._id} name="idDanse">
 					Retrait de la liste
 					<img class="mini" src="/images/icones/retraitListe.png" alt="retrait à la liste de souhait">
 				</button>
 			</div>
-
-
-			))
-		  )}
-		  <p class="fs-5 text-muted">
+		)))}
+		<p class="fs-5 text-muted">
 			Aucune danse souhaitée.
 			<span class="d-block mt-1 fs-6">
 				<i class="bi bi-info-circle me-1"></i>
 				Vous pouvez ajouter une danse à votre liste de souhaits en allant sur la page de la danse.
 			</span>
-			</p>
-		</div>
+		</p>
 	</div>
 </Page>
-
-
 
 <script>
 	import Api from "../../lib/clientside/api.mjs";
@@ -120,7 +118,6 @@ else{
 
 
 <style lang="scss">
-
 @use "../../styles/bootstrap.min.css";
 
 

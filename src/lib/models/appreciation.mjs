@@ -1,8 +1,8 @@
-import { Schema, model, ObjectId } from "mongoose";
+import Mongoose, { Schema, model, ObjectId } from "mongoose";
 import { contraintes } from "../consts.mjs";
 const cnt = contraintes.appreciation;
 
-export const Appreciation = new Schema({
+export const AppreciationSchema = new Schema({
 	note: {
 		type: Number,
 		min: [cnt.note.min, `La note minimale est de ${cnt.note.min}`],
@@ -46,7 +46,7 @@ export const Appreciation = new Schema({
 	timestamps: true,
 });
 
-Appreciation.index({ danse: 1, usager: 1 }, { unique: true });
+AppreciationSchema.index({ danse: 1, usager: 1 }, { unique: true });
 
 /**
  * Écouteur pour recalculer la note moyenne d'une danse lors de l'ajout ou de
@@ -65,7 +65,8 @@ async function recalculerMoyenne() {
 		noteMoyenne: nouvMoyenne
 	});
 }
-Appreciation.post("updateOne", recalculerMoyenne);
+AppreciationSchema.post("updateOne", recalculerMoyenne);
 //Appreciation.post("save", recalculerMoyenne);
 
+export const Appreciation = Mongoose.models.Appreciation ?? model("Appreciation", AppreciationSchema);
 export default Appreciation;

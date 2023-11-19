@@ -1,4 +1,4 @@
-import { Schema, model, ObjectId } from "mongoose";
+import Mongoose, { Schema, model, ObjectId } from "mongoose";
 import { contraintes } from "../consts.mjs";
 import { NIVEAU } from "../enums.mjs";
 import { genererIdentifiantUnique } from "../cryptographie.mjs";
@@ -6,7 +6,7 @@ import { genererIdentifiantUnique } from "../cryptographie.mjs";
 const cnt = contraintes.danse;
 
 
-export const Danse = new Schema(
+export const DanseSchema = new Schema(
 	{
 		titre: {
 			type: String,
@@ -104,7 +104,7 @@ export const Danse = new Schema(
 		},
 		nbComptes: {
 			type: Number,
-			required: [true,"Le nombre de comptes doit être inscrit."],
+			required: [true, "Le nombre de comptes doit être inscrit."],
 			null: [false, "Le nombre de comptes ne doit pas être nul."],
 			min: [
 				cnt.nbComptes.min,
@@ -117,7 +117,7 @@ export const Danse = new Schema(
 		},
 		nbMurs: {
 			type: Number,
-			required: [true,"Le nombre de murs doit être inscrit."],
+			required: [true, "Le nombre de murs doit être inscrit."],
 			null: [false, "Le nombre de murs ne doit pas être nul"],
 			min: [
 				cnt.nbMurs.min,
@@ -167,7 +167,7 @@ export const Danse = new Schema(
 );
 
 // Ajout d'un index textuel pour la recherche:
-Danse.index({
+DanseSchema.index({
 	titre: "text",
 	choregraphe: "text",
 	musique: "text"
@@ -181,4 +181,5 @@ Danse.index({
 	},
 });
 
+export const Danse = Mongoose.models.Danse ?? new model("Danse", DanseSchema);
 export default Danse;

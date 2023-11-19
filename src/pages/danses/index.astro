@@ -5,13 +5,25 @@ import { NIVEAU_STR } from "../../lib/enums.mjs";
 
 // préchargement d'une première page de résultats:
 const resultatsInitiaux = await Bd.chercherDanses("", "titre", false, 0, 20);
+
+// Obtention de l'usager:
+const usager = Astro.locals["usager"];
 ---
 
 <Page titre="Danses" h1="Liste des danses">
 <div class="container-xl">
 	<div class="row g-5">
 		<div class="col-12 col-xl-8 order-2">
-			<h2 class="fs-3 mb-3">Résultats de recherche</h2>
+			<div class="hstack mb-3">
+				<h2 class="fs-3 me-auto">Résultats de recherche</h2>
+				{
+					usager?.estAdmin &&
+					<a class="btn btn-outline-success" href="/admin/resources/Danse/actions/new">
+						<i class="bi bi-pencil-square"></i>
+						Créer une danse
+					</a>
+				}
+			</div>
 			<div class="alert alert-warning my-3 d-none" data-msg-erreur>
 				<i class="bi bi-exclamation-circle me-1"></i>
 				Un problème est survenu lors de l'obtention des danses. Veuillez ressayer ultérieurement.

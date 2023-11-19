@@ -1,15 +1,16 @@
 // eslint-disable-next-line no-unused-vars
-import { AstroCookies } from "astro";
 import { chaineAleatoire } from "./cryptographie.mjs";
 import Bd from "./bd.mjs";
 // eslint-disable-next-line no-unused-vars
 import { Session as ModeleSession } from "./bd.mjs";
 
+const env = import.meta.env ?? process.env;
+
 /**
  * Nombre d'heures avant qu'une session expire et que l'utilisateur doivent se
  * reconnecter.
  */
-const SESSION_EXPIRATION_HEURES = parseInt(import.meta.env.SESSION_EXPIRATION_HEURES ?? 48);
+const SESSION_EXPIRATION_HEURES = parseInt(env.SESSION_EXPIRATION_HEURES ?? 48);
 
 /**
  * Nom du cookie (ne doit pas être modifié).
@@ -23,6 +24,11 @@ const NOM_COOKIE = "sess";
  * octets n'offre aucun avantage concret.
  */
 const NB_OCTETS_ENTROPIE = 256;
+
+/**
+ * Regex pour valider une chaîne de caractères en base64url
+ */
+const REGEX_BASE64_URL = new RegExp(/^[a-zA-Z0-9-_]+$/);
 
 /**
  * Représente la session d'un utilisateur connecté
@@ -69,7 +75,18 @@ export default class Session {
 	static async obtenirDepuisCookie(cookies) {
 		const cleSession = cookies.get(NOM_COOKIE)?.value;
 
-		if (!cleSession) {
+		return await this.validerDepuisCleSession(cleSession);
+	}
+
+	/**
+	 * Restaure une session à partir d'une clé de session
+	 *
+	 * @param {string} cle clé de la session
+	 * @returns {Promise<ModeleSession>} Une nouvelle instance de la classe ou
+	 * null si aucune session existe pour l'usager
+	 */
+	static async validerDepuisCleSession(cleSession) {
+		if (!cleSession || !REGEX_BASE64_URL.test(cleSession)) {
 			return null;
 		}
 

@@ -3,6 +3,7 @@ dist/
 
 # types générés
 .astro/
+.adminjs/
 
 # dépendances
 node_modules/
