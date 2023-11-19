@@ -1,6 +1,6 @@
-import { Schema, model, ObjectId } from "mongoose";
+import Mongoose, { Schema, model, ObjectId } from "mongoose";
 
-export const Session = new Schema({
+export const SessionSchema = new Schema({
 	/**
 	 * L'usager à qui appartient la session.
 	 * Il est possible d'utiliser Session.populate("usager") pour obtenir les détails de l'usager
@@ -57,4 +57,5 @@ export const Session = new Schema({
 	timestamps: true,
 });
 
+export const Session = Mongoose.models.Session ?? model("Session", SessionSchema);
 export default Session;

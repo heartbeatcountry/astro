@@ -16,7 +16,8 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 	if(usager){
 		const appreciation = await Bd.obtenirAppreciation(danse, usager);
 		if (appreciation){
-			note = appreciation.note;}
+			note = appreciation.note;
+		}
 
 		estDanseSouhaitee = usager.dansesSouhaitees.some(danseSouhaitee => danseSouhaitee.toString() === danse);
 
@@ -25,12 +26,12 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 
 
 
-	// Obtention des détails selon le permalien
-	const detailsDanse = await Bd.obtenirDetailsDanse(danse);
+// Obtention des détails selon le permalien
+const detailsDanse = await Bd.obtenirDetailsDanse(danse);
 
-	if(!detailsDanse){
-		Astro.response.status = 404;
-	}
+if(!detailsDanse){
+	Astro.response.status = 404;
+}
 ---
 
 { detailsDanse ?
@@ -50,6 +51,10 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 						<p class="my-3 fs-4">Chorégraphe inconnu</p>
 					}
 
+					{
+						usager?.estAdmin &&
+						<a class="btn btn-outline-warning my-2" href={`/admin/resources/Danse/records/${detailsDanse._id}/edit`}>Modifier cette danse</a>
+					}
 				</div>
 				<div class="col-xl-6">
 					<p class="my-3 fs-4">Niveau: {NIVEAU_STR[detailsDanse.niveau]} </p>

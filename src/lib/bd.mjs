@@ -2,11 +2,11 @@
 import mongoose, { Model, model } from "mongoose";
 
 // Importation des schémas:
-import SchemaSession from "./models/session.mjs";
-import SchemaUsager from "./models/usager.mjs";
-import SchemaAppreciation from "./models/appreciation.mjs";
-import SchemaDanse from "./models/danse.mjs";
-import SchemaCours from "./models/cours.mjs";
+import Session from "./models/session.mjs";
+import Usager from "./models/usager.mjs";
+import Appreciation from "./models/appreciation.mjs";
+import Danse from "./models/danse.mjs";
+import Cours from "./models/cours.mjs";
 
 // Importation des autres dépendances:
 import { hacherMdp } from "./cryptographie.mjs";
@@ -22,8 +22,9 @@ import { obtenirDimancheSuivant } from "./date.mjs";
 const ObjectId = mongoose.mongo.ObjectId;
 
 // Obtention du MONGO_URL depuis le fichier .env:
-const urlConnexion = import.meta.env.MONGO_URL?.trim();
-const nomBase = import.meta.env.MONGO_BASE?.trim();
+const env = import.meta.env ?? process.env;
+const urlConnexion = env.MONGO_URL?.trim();
+const nomBase = env.MONGO_BASE?.trim();
 
 // Validation du MONGO_URL:
 if (
@@ -40,18 +41,7 @@ if (
 // Connexion à mongo avec la connexion Mongoose par défaut:
 await mongoose.connect(urlConnexion);
 await mongoose.connection.useDb(nomBase);
-
-// Création des modèles à partir des schémas:
-/** @type {Model<SchemaSession>} */
-export const Session = model("Session", SchemaSession);
-/** @type {Model<SchemaUsager>} */
-export const Usager = model("Usager", SchemaUsager);
-/** @type {Model<SchemaAppreciation>} */
-export const Appreciation = model("Appreciation", SchemaAppreciation);
-/** @type {Model<SchemaDanse>} */
-export const Danse = model("Danse", SchemaDanse);
-/** @type {Model<SchemaCours>} */
-export const Cours = model("Cours", SchemaCours);
+export { Session, Usager, Appreciation, Danse, Cours };
 
 /**
  * Classe de communication avec la base MongoDB

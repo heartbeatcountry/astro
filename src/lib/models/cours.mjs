@@ -1,10 +1,10 @@
-import { Schema, model, ObjectId } from "mongoose";
+import Mongoose, { Schema, model, ObjectId } from "mongoose";
 import { contraintes } from "../consts.mjs";
 import { NIVEAU } from "../enums.mjs";
 
 
 
-export const Cours = new Schema({
+export const CoursSchema = new Schema({
 	niveau: {
 		type: Number,
 		enum: Object.values(NIVEAU),
@@ -33,4 +33,5 @@ export const Cours = new Schema({
 	timestamps: true,
 });
 
+export const Cours = Mongoose.models.Cours ?? model("Cours", CoursSchema);
 export default Cours;

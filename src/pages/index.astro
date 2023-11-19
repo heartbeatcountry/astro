@@ -13,6 +13,9 @@ const usager  = Astro.locals["usager"];
 
 
 const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
+
+// Obtention de l'usager:
+const usager = Astro.locals["usager"];
 ---
 
 <Page titre="Accueil" h1="École de danse Heartbeat Country">
@@ -78,7 +81,15 @@ const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 		}
 	</div>
 
-
+	{
+		usager?.estAdmin &&
+		<div class="d-flex justify-content-center">
+			<a class="btn btn-outline-success" href="/admin/resources/Cours/actions/new">
+				<i class="bi bi-pencil-square me-1"></i>
+				Créer un nouveau cours
+			</a>
+		</div>
+	}
 </Page>
 
 <style lang="scss">

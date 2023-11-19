@@ -1,9 +1,9 @@
-import { Schema, model, ObjectId } from "mongoose";
+import Mongoose, { Schema, model, ObjectId } from "mongoose";
 import { contraintes } from "../consts.mjs";
 
 const cnt = contraintes.usager;
 
-export const Usager = new Schema(
+export const UsagerSchema = new Schema(
 	{
 		prenom: {
 			type: String,
@@ -90,4 +90,5 @@ export const Usager = new Schema(
 	}
 );
 
+export const Usager = Mongoose.models.Usager ?? model("Usager", UsagerSchema);
 export default Usager;
