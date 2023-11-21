@@ -19,12 +19,15 @@ if (!globalThis.adminExpress) {
 	});
 
 	const valeursCoeurs = [
-		{ value: 0, label: "Non évalué" },
 		{ value: 1, label: "1 cœur" },
 		{ value: 2, label: "2 cœurs" },
 		{ value: 3, label: "3 cœurs" },
 		{ value: 4, label: "4 cœurs" },
 		{ value: 5, label: "5 cœurs" },
+	];
+	const valeursCoeurs2 = [
+		{ value: 0, label: "Non évalué" },
+		...valeursCoeurs
 	];
 	const valeursNiveaux = Object.values(NIVEAU_STR).map((label, value) => ({
 		value,
@@ -132,7 +135,7 @@ if (!globalThis.adminExpress) {
 						},
 						noteMoyenne: {
 							isDisabled: true,
-							availableValues: valeursCoeurs,
+							availableValues: valeursCoeurs2,
 						},
 						lienFeuille: {
 							isVisible: {

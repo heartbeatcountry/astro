@@ -20,7 +20,8 @@
 		"seeTheDocumentation": "Voir: <1>la documentation</1>",
 		"createFirstRecord": "Créer un premier document",
 		"cancel": "Annuler",
-		"confirm": "Confirmer"
+		"confirm": "Confirmer",
+		"contactUs": "Contactez-nous"
 	},
 	"components": {
 		"DropZone": {
@@ -62,7 +63,11 @@
 		"adminVersion": "Admin: {{version}}",
 		"appVersion": "App: {{version}}",
 		"dashboard": "Tableau de bord",
-		"Appreciation": "Appréciation"
+		"Appreciation": "Appréciation",
+		"Usager": "Usager",
+		"Danse": "Danse",
+		"Cours": "Cours",
+		"confirm": "Confirmez cette action"
 	},
 	"properties": {
 		"length": "Taille",
@@ -70,20 +75,19 @@
 		"to": "À",
 		"_id": "Identifiant unique",
 		"estAdmin": "Est un superutilisateur?",
-		"estAdmin.true": "Oui",
-		"estAdmin.false": "Non",
 		"estValide": "Est activé?",
-		"estValide.true": "Oui",
-		"estValide.false": "Non",
 		"note": "Nb de cœurs",
 		"prenom": "Prénom",
+		"nom": "Nom",
 		"courriel": "Adresse courriel",
 		"dansesSouhaitees": "Danses souhaitées",
-		"dansesSouhaitees.addNewItem": "Ajouter une danse",
 		"telephone": "No de téléphone",
 		"createdAt": "Créé le",
 		"updatedAt": "Mis à jour le",
 		"choregraphe": "Chorégraphe",
+		"musique": "Musique",
+		"niveau": "Niveau",
+		"titre": "Titre",
 		"detailsTag": "Tag",
 		"lienFeuille": "Feuille de pas",
 		"lienVideoDanse": "Vidéo YouTube de danse",
@@ -92,12 +96,184 @@
 		"nbComptes": "Nombre de comptes",
 		"nbMurs": "Nombre de murs",
 		"estCoupDeCoeur": "Coup de cœur de Cynthia?",
-		"estCoupDeCoeur.true": "Oui",
-		"estCoupDeCoeur.false": "Non",
 		"noteMoyenne": "Appréciation moyenne",
-		"danses.addNewItem": "Ajouter une danse"
+		"1 cœur": "1 cœur",
+		"2 cœurs": "2 cœurs",
+		"3 cœurs": "3 cœurs",
+		"4 cœurs": "4 cœurs",
+		"5 cœurs": "5 cœurs",
+		"Non évalué": "Danse non évaluée",
+		"Ultra-Débutant": "Ultra-Débutant",
+		"Débutant": "Débutant",
+		"Novice": "Novice",
+		"Intermédiaire": "Intermédiaire",
+		"Avancé": "Avancé",
+		"danse": "Danse",
+		"usager": "Usager",
+		"danses.addNewItem": "Ajouter une danse à l'étude"
 	},
-	"resources": {},
+	"resources": {
+		"Appreciation": {
+			"actions": {
+				"new": "Nouvelle appréciation",
+				"show": "Afficher l'appréciation",
+				"list": "Liste des appréciations"
+			},
+			"buttons": {
+				"save": "Enregistrer l'appréciation",
+				"confirmRemovalMany": "Confirmer la suppression de {{count}} appréciation",
+				"confirmRemovalMany_plural": "Confirmer la suppression de {{count}} appréciations",
+				"createFirstRecord": "Créer une première appréciation"
+			},
+			"messages": {
+				"noRecordsInResource": "Aucune danse n'a encore été évaluée",
+				"noRecords": "Aucune appréciation",
+				"successfullyBulkDeleted": "{{count}} appréciation supprimée avec succès",
+				"successfullyBulkDeleted_plural": "{{count}} appréciations supprimées avec succès",
+				"successfullyDeleted": "appréciation supprimée avec succès",
+				"successfullyUpdated": "appréciation modifiée avec succès",
+				"successfullyCreated": "appréciation créée avec succès",
+				"noRecordsSelected": "Vous n'avez sélectionné aucune appréciation",
+				"theseRecordsWillBeRemoved": "L'appréciation suivante sera supprimée",
+				"theseRecordsWillBeRemoved_plural": "Les appréciations suivantes seront supprimées",
+				"pickSomeFirstToRemove": "Vous devez sélectionner des appréciations afin de les supprimer",
+				"error404Resource": "L'appréciation avec l'identifiant {{resourceId}} est introuvable",
+				"confirmDelete": "Désirez-vous vraiment supprimer cette appréciation?"
+			},
+			"properties": {
+				"note.1 cœur": "1 cœur",
+				"note.2 cœurs": "2 cœurs",
+				"note.3 cœurs": "3 cœurs",
+				"note.4 cœurs": "4 cœurs",
+				"note.5 cœurs": "5 cœurs",
+				"danse": "Danse évaluée",
+				"usager": "Par l'usager",
+				"createdAt": "Soumise le",
+				"updatedAt": "Mise à jour le"
+			}
+		},
+		"Usager": {
+			"actions": {
+				"new": "Créer un usager",
+				"show": "Afficher les détails",
+				"list": "Liste des usagers"
+			},
+			"buttons": {
+				"save": "Enregistrer l'usager",
+				"confirmRemovalMany": "Confirmer la suppression de {{count}} usager",
+				"confirmRemovalMany_plural": "Confirmer la suppression de {{count}} usagers",
+				"createFirstRecord": "Créer un premier usager"
+			},
+			"messages": {
+				"noRecordsInResource": "Aucun usager n'existe sur le site",
+				"noRecords": "Aucun usager",
+				"successfullyBulkDeleted": "{{count}} usager supprimé avec succès",
+				"successfullyBulkDeleted_plural": "{{count}} usagers supprimés avec succès",
+				"successfullyDeleted": "usager supprimé avec succès",
+				"successfullyUpdated": "usager modifié avec succès",
+				"successfullyCreated": "usager créé avec succès",
+				"noRecordsSelected": "Vous n'avez sélectionné aucun usager",
+				"theseRecordsWillBeRemoved": "L'usager suivant sera supprimé",
+				"theseRecordsWillBeRemoved_plural": "Les usagers suivants seront supprimés",
+				"pickSomeFirstToRemove": "Vous devez sélectionner des usagers afin de les supprimer",
+				"error404Resource": "L'usager avec l'identifiant {{resourceId}} est introuvable",
+				"confirmDelete": "Désirez-vous vraiment supprimer cet usager?"
+			},
+			"properties": {
+				"estAdmin.true": "Oui",
+				"estAdmin.false": "Non",
+				"estValide.true": "Oui",
+				"estValide.false": "Non",
+				"dansesSouhaitees.addNewItem": "Ajouter une danse souhaitée",
+				"createdAt": "Date d'inscription le",
+				"updatedAt": "Mis à jour le"
+			}
+		},
+		"Danse": {
+			"actions": {
+				"new": "Ajouter une danse",
+				"show": "Afficher les détails",
+				"list": "Liste des danses"
+			},
+			"buttons": {
+				"save": "Enregistrer cette danse",
+				"confirmRemovalMany": "Confirmer la suppression de {{count}} danse",
+				"confirmRemovalMany_plural": "Confirmer la suppression de {{count}} danses",
+				"createFirstRecord": "Ajouter une première danse"
+			},
+			"messages": {
+				"noRecordsInResource": "Aucune danse n'a encore été ajoutée",
+				"noRecords": "Aucune danse",
+				"successfullyBulkDeleted": "{{count}} danse supprimée avec succès",
+				"successfullyBulkDeleted_plural": "{{count}} danses supprimées avec succès",
+				"successfullyDeleted": "danse supprimée avec succès",
+				"successfullyUpdated": "danse modifiée avec succès",
+				"successfullyCreated": "danse créée avec succès",
+				"noRecordsSelected": "Vous n'avez sélectionné aucune danse",
+				"theseRecordsWillBeRemoved": "La danse suivante sera supprimée",
+				"theseRecordsWillBeRemoved_plural": "Les danses suivantes seront supprimées",
+				"pickSomeFirstToRemove": "Vous devez sélectionner des danses afin de les supprimer",
+				"error404Resource": "La danse avec l'identifiant {{resourceId}} est introuvable",
+				"confirmDelete": "Désirez-vous vraiment supprimer cette danse?"
+			},
+			"properties": {
+				"estCoupDeCoeur.true": "Oui",
+				"estCoupDeCoeur.false": "Non",
+				"noteMoyenne.Non évalué": "Danse non évaluée",
+				"noteMoyenne.1 cœur": "1 cœur",
+				"noteMoyenne.2 cœurs": "2 cœurs",
+				"noteMoyenne.3 cœurs": "3 cœurs",
+				"noteMoyenne.4 cœurs": "4 cœurs",
+				"noteMoyenne.5 cœurs": "5 cœurs",
+				"niveau.Ultra-Débutant": "Ultra-Débutant",
+				"niveau.Débutant": "Débutant",
+				"niveau.Novice": "Novice",
+				"niveau.Intermédiaire": "Intermédiaire",
+				"niveau.Avancé": "Avancé",
+				"createdAt": "Ajoutée le",
+				"updatedAt": "Mise à jour le"
+			}
+		},
+		"Cours": {
+			"actions": {
+				"new": "Nouveau cours",
+				"show": "Afficher le cours",
+				"list": "Liste des cours"
+			},
+			"buttons": {
+				"save": "Publier le cours",
+				"confirmRemovalMany": "Confirmer la suppression de {{count}} cours",
+				"confirmRemovalMany_plural": "Confirmer la suppression de {{count}} cours",
+				"createFirstRecord": "Créer un premier cours"
+			},
+			"messages": {
+				"noRecordsInResource": "Aucun cours n'a encore été défini",
+				"noRecords": "Aucun cours",
+				"successfullyBulkDeleted": "{{count}} cours supprimé avec succès",
+				"successfullyBulkDeleted_plural": "{{count}} cours supprimés avec succès",
+				"successfullyDeleted": "cours supprimé avec succès",
+				"successfullyUpdated": "cours modifié avec succès",
+				"successfullyCreated": "cours créé avec succès",
+				"noRecordsSelected": "Vous n'avez sélectionné aucun cours",
+				"theseRecordsWillBeRemoved": "Le cours suivant sera supprimé",
+				"theseRecordsWillBeRemoved_plural": "Les cours suivants seront supprimés",
+				"pickSomeFirstToRemove": "Vous devez sélectionner des cours afin de les supprimer",
+				"error404Resource": "Le cours avec l'identifiant {{resourceId}} est introuvable",
+				"confirmDelete": "Désirez-vous vraiment supprimer ce cours?"
+			},
+			"properties": {
+				"danses.addNewItem": "Ajouter une danse",
+				"niveau.Ultra-Débutant": "Ultra-Débutant",
+				"niveau.Débutant": "Débutant",
+				"niveau.Novice": "Novice",
+				"niveau.Intermédiaire": "Intermédiaire",
+				"niveau.Avancé": "Avancé",
+				"date": "Date d'enseignement",
+				"lieu": "Lieu ou adresse",
+				"danses": "Danses enseignées"
+			}
+		}
+	},
 	"messages": {
 		"successfullyBulkDeleted": "{{count}} document supprimé avec succès",
 		"successfullyBulkDeleted_plural": "{{count}} documents supprimés avec succès",
@@ -109,9 +285,9 @@
 		"successfullyCreated": "document créé avec succès",
 		"bulkDeleteError": "Un problème est survenu lors de la suppression. Inspectez la console pour obtenir plus de détails",
 		"errorFetchingRecords": "Un problème est survenu lors de l'obtention des documents. Inspectez la console pour obtenir plus de détails",
-		"errorFetchingRecord": "Un problème est survenu lors de l'obtention de l'document. Inspectez la console pour obtenir plus de détails",
+		"errorFetchingRecord": "Un problème est survenu lors de l'obtention du document. Inspectez la console pour obtenir plus de détails",
 		"noRecordsSelected": "Vous n'avez sélectionné aucun document",
-		"theseRecordsWillBeRemoved": "Le document suivant suivant sera supprimé",
+		"theseRecordsWillBeRemoved": "Le document suivant sera supprimé",
 		"theseRecordsWillBeRemoved_plural": "Les documents suivants seront supprimés",
 		"pickSomeFirstToRemove": "Vous devez sélectionner des documents afin de les supprimer",
 		"error404Resource": "Le document avec l'identifiant {{resourceId}} est introuvable",
