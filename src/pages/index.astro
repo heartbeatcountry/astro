@@ -9,6 +9,8 @@ const dimancheDeLaSemaine = obtenirDimanchePrecedent(new Date());
 const samediDeLaSemaine = obtenirSamediSuivant(new Date());
 const samedi = formaterDate(samediDeLaSemaine)
 const dimanche = formaterDate(dimancheDeLaSemaine);
+const usager  = Astro.locals["usager"];
+
 
 const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 ---
@@ -37,21 +39,30 @@ const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 							<h4>{cours.lieu}</h4>
 						</div>
 
-						{
-							!danse.lienVideoMusique &&
-							<img  class="card-img-top"  src="../../public/images/videoNonDispo.png" alt="aucun lien vidéo" />
-						}
-						{
-							danse.lienVideoMusique &&
-						<a href={ `https://youtube.com/watch?v=${danse.lienVideoMusique}`}  class="stretched-link" >
-							<img  class="card-img-top" src={ `https://img.youtube.com/vi/${danse.lienVideoMusique}/0.jpg` } alt="vidéo youtube" />
-						</a>
-						}
+
 
 						<div class="card-body">
+
+							{
+							danse.lienVideoMusique ?
+								<a href={ `https://youtube.com/watch?v=${danse.lienVideoMusique}`}  class="stretched-link" >
+									<img  class="card-img-top" src={ `https://img.youtube.com/vi/${danse.lienVideoMusique}/0.jpg` } alt="vidéo youtube" />
+								</a>
+
+							:
+								<img  class="card-img-top"  src="../../public/images/videoNonDispo.png" alt="aucun lien vidéo" />
+
+							}
+
 							<h3>{danse.titre}</h3>
 							<h4>Niveau: {NIVEAU_STR[danse.niveau]} </h4>
 							<p>{danse.nbComptes} comptes {danse.nbMurs} Murs</p>
+						</div>
+
+						<div class="card-footer">
+
+							<button type="button" class="btn btn-secondary mx-2" id={`${cours._id}`} data-bs-toggle="button">M'inscrire</button>
+
 						</div>
 					</div>
 				</div>
@@ -67,6 +78,14 @@ const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 						<div class="card-body">
 							<h3>Cours de révision</h3>
 						</div>
+
+
+						<div class="card-footer">
+
+							<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">M'inscrire</button>
+
+						</div>
+
 					</div>
 				</div>
 			)
@@ -76,10 +95,24 @@ const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 
 </Page>
 
+<script>
+
+
+/**
+ * Bouton pour s'inscrire à un cours précis
+ */
+ const btnInscriptionCours = document.getElementById(`${cours._id}`);
+
+
+ btnInscriptionCours.addEventListener("click", () => {
+	;
+});
+
+</script>
 
 <style lang="scss">
 
-.card-header{
+.card-header, button{
 	background-color: #80a2acf6;
 
 }
