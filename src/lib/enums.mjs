@@ -11,22 +11,26 @@
  */
 export const NIVEAU = Object.freeze({
 	/** Ultra-Débutant */
-	INITIATION: 0,
+	INITIATION: 1,
+
 	/** Débutant */
-	DEBUTANT: 1,
+	DEBUTANT: 2,
+
 	/** Novice */
-	NOVICE: 2,
+	NOVICE: 3,
+
 	/** Intermédiaire */
-	INTERMEDIAIRE: 3,
+	INTERMEDIAIRE: 4,
+
 	/** Avancé */
-	AVANCE: 4,
+	AVANCE: 5,
 });
 export const NIVEAU_STR = Object.freeze({
-    [NIVEAU.INITIATION]: "Ultra-Débutant",
-    [NIVEAU.DEBUTANT]: "Débutant",
-    [NIVEAU.NOVICE]: "Novice",
-    [NIVEAU.INTERMEDIAIRE]: "Intermédiaire",
-    [NIVEAU.AVANCE]: "Avancé",
+	[NIVEAU.INITIATION]: "Ultra-Débutant",
+	[NIVEAU.DEBUTANT]: "Débutant",
+	[NIVEAU.NOVICE]: "Novice",
+	[NIVEAU.INTERMEDIAIRE]: "Intermédiaire",
+	[NIVEAU.AVANCE]: "Avancé",
 });
 
 /**
