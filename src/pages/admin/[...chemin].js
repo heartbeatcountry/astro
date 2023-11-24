@@ -27,12 +27,15 @@ if (!globalThis.adminExpress) {
 	];
 	const valeursCoeurs2 = [
 		{ value: 0, label: "Non évalué" },
-		...valeursCoeurs
+		...valeursCoeurs,
 	];
-	const valeursNiveaux = Object.values(NIVEAU_STR).map((label, value) => ({
-		value,
+
+	const valeursNiveaux = Object.entries(NIVEAU_STR).map(([value, label]) => ({
+		value: +value,
 		label,
 	}));
+	valeursNiveaux.unshift({ value: 0, label: "Veuillez choisir" });
+
 	const desactiverDates = {
 		createdAt: {
 			isDisabled: true,
@@ -135,6 +138,12 @@ if (!globalThis.adminExpress) {
 						},
 						noteMoyenne: {
 							isDisabled: true,
+							isVisible: {
+								show: true,
+								edit: false,
+								filter: true,
+								list: true,
+							},
 							availableValues: valeursCoeurs2,
 						},
 						lienFeuille: {

@@ -1,10 +1,41 @@
 import Mongoose, { Schema, model, ObjectId } from "mongoose";
 import { contraintes } from "../consts.mjs";
-import { NIVEAU } from "../enums.mjs";
-import { genererIdentifiantUnique } from "../cryptographie.mjs";
+import { NIVEAU, NIVEAU_STR } from "../enums.mjs";
 
 const cnt = contraintes.danse;
 
+/**
+ * Permet de racourcir un lien YouTube à son identifiant unique
+ *
+ * @param {string} lien lien à racourcir
+ * @returns {string} l'identifiant unique de la vidéo
+ */
+const racourcirLienYoutube = (lien) =>
+	lien.match(/(?<=[&?]v=)[^&#/?]+/)?.[0] ??
+	lien.match(/(?<=youtu.be\/)[^&#/?]+/)?.[0] ??
+	lien;
+
+/**
+ * Permet de valider si la vidéo peut être jouée directement sur le site
+ *
+ * @param {string} lien la vidéo à valider
+ * @returns {boolean} vrai si la vidéo est jouable, faux sinon
+ */
+const verifierVideoJouable = async (lien) => {
+	try {
+		return !(
+			await (
+				await fetch(
+					`https://www.youtube.com/embed/${racourcirLienYoutube(
+						lien
+					)}`
+				)
+			).text()
+		).includes("UNPLAYABLE");
+	} catch {
+		return false;
+	}
+};
 
 export const DanseSchema = new Schema(
 	{
@@ -55,7 +86,11 @@ export const DanseSchema = new Schema(
 		},
 		niveau: {
 			type: Number,
-			enum: Object.values(NIVEAU),
+			enum: [
+				Object.values(NIVEAU),
+				`Le niveau minimum est ${NIVEAU_STR[1]}`,
+			],
+			min: [1, `Le niveau minimum est ${NIVEAU_STR[1]}`],
 			required: [true, "Le niveau est requis"],
 		},
 		detailsTag: {
@@ -83,6 +118,13 @@ export const DanseSchema = new Schema(
 			trim: true,
 			required: false,
 			null: [false, "Le lien de la vidéo de danse ne doit pas être nul"],
+			set: racourcirLienYoutube,
+			validate: [
+				{
+					validator: verifierVideoJouable,
+					message: "La vidéo n'est pas jouable en raison de restrictions mises en place par son auteur. Veuillez en choisir une autre",
+				}
+			],
 		},
 		lienVideoMusique: {
 			type: String,
@@ -91,6 +133,13 @@ export const DanseSchema = new Schema(
 			null: [
 				false,
 				"Le lien de la vidéo de la musique ne doit pas être nul",
+			],
+			set: racourcirLienYoutube,
+			validate: [
+				{
+					validator: verifierVideoJouable,
+					message: "La vidéo n'est pas jouable en raison de restrictions mises en place par son auteur. Veuillez en choisir une autre",
+				}
 			],
 		},
 		lienVideoAcademie: {
@@ -136,16 +185,15 @@ export const DanseSchema = new Schema(
 		},
 		noteMoyenne: {
 			type: Number,
-			default: 0,
 			required: false,
-			null: [true, "La note moyenne ne doit pas être nulle."],
+			null: [false, "La note moyenne ne doit pas être nulle."],
 			min: [
 				contraintes.appreciation.note.min,
-				`La note moyenne doit être entre ${contraintes.appreciation.note.min} et ${contraintes.appreciation.note.max}`
+				`La note moyenne doit être entre ${contraintes.appreciation.note.min} et ${contraintes.appreciation.note.max}`,
 			],
 			max: [
 				contraintes.appreciation.note.max,
-				`La note moyenne doit être entre ${contraintes.appreciation.note.min} et ${contraintes.appreciation.note.max}`
+				`La note moyenne doit être entre ${contraintes.appreciation.note.min} et ${contraintes.appreciation.note.max}`,
 			],
 		},
 	},
@@ -167,19 +215,22 @@ export const DanseSchema = new Schema(
 );
 
 // Ajout d'un index textuel pour la recherche:
-DanseSchema.index({
-	titre: "text",
-	choregraphe: "text",
-	musique: "text"
-}, {
-	// eslint-disable-next-line camelcase
-	default_language: "french",
-	weights: {
-		titre: 20,
-		musique: 15,
-		choregraphe: 2,
+DanseSchema.index(
+	{
+		titre: "text",
+		choregraphe: "text",
+		musique: "text",
 	},
-});
+	{
+		// eslint-disable-next-line camelcase
+		default_language: "french",
+		weights: {
+			titre: 20,
+			musique: 15,
+			choregraphe: 2,
+		},
+	}
+);
 
 export const Danse = Mongoose.models.Danse ?? new model("Danse", DanseSchema);
 export default Danse;

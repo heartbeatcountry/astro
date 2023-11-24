@@ -110,7 +110,8 @@
 		"Avancé": "Avancé",
 		"danse": "Danse",
 		"usager": "Usager",
-		"danses.addNewItem": "Ajouter une danse à l'étude"
+		"danses.addNewItem": "Ajouter une danse à l'étude",
+		"Veuillez choisir": "Veuillez choisir..."
 	},
 	"resources": {
 		"Appreciation": {
