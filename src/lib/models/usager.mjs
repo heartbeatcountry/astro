@@ -83,6 +83,19 @@ export const UsagerSchema = new Schema(
 			ref: "Danse",
 			required: false,
 			null: [false, "Les danses souhaitées ne doivent pas être nulles"],
+			validate: [
+				{
+					async validator(lstDanses) {
+						for (const id of lstDanses) {
+							if (!(await model("Danse").exists({ _id: id }))) {
+								return false;
+							}
+						}
+					},
+					message: () =>
+						`La liste des danses souhaitées contient une danse qui n'existe pas`,
+				},
+			],
 		},
 	},
 	{

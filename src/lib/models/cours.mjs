@@ -43,13 +43,11 @@ export const CoursSchema = new Schema(
 				},
 				{
 					async validator(lstDanses) {
-						return (
-							lstDanses.length === 0 ||
-							!lstDanses.some(
-								async (id) =>
-									!(await model("Danse").exists({ _id: id }))
-							)
-						);
+						for (const id of lstDanses) {
+							if (!(await model("Danse").exists({ _id: id }))) {
+								return false;
+							}
+						}
 					},
 					message: () =>
 						`La liste des danses contient une danse qui n'existe pas`,
