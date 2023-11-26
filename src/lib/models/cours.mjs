@@ -48,6 +48,7 @@ export const CoursSchema = new Schema(
 								return false;
 							}
 						}
+						return true;
 					},
 					message: () =>
 						`La liste des danses contient une danse qui n'existe pas`,
