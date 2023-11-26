@@ -138,7 +138,6 @@
 				"theseRecordsWillBeRemoved": "L'appréciation suivante sera supprimée",
 				"theseRecordsWillBeRemoved_plural": "Les appréciations suivantes seront supprimées",
 				"pickSomeFirstToRemove": "Vous devez sélectionner des appréciations afin de les supprimer",
-				"error404Resource": "L'appréciation avec l'identifiant {{resourceId}} est introuvable",
 				"confirmDelete": "Désirez-vous vraiment supprimer cette appréciation?"
 			},
 			"properties": {
@@ -177,7 +176,6 @@
 				"theseRecordsWillBeRemoved": "L'usager suivant sera supprimé",
 				"theseRecordsWillBeRemoved_plural": "Les usagers suivants seront supprimés",
 				"pickSomeFirstToRemove": "Vous devez sélectionner des usagers afin de les supprimer",
-				"error404Resource": "L'usager avec l'identifiant {{resourceId}} est introuvable",
 				"confirmDelete": "Désirez-vous vraiment supprimer cet usager?"
 			},
 			"properties": {
@@ -214,7 +212,6 @@
 				"theseRecordsWillBeRemoved": "La danse suivante sera supprimée",
 				"theseRecordsWillBeRemoved_plural": "Les danses suivantes seront supprimées",
 				"pickSomeFirstToRemove": "Vous devez sélectionner des danses afin de les supprimer",
-				"error404Resource": "La danse avec l'identifiant {{resourceId}} est introuvable",
 				"confirmDelete": "Désirez-vous vraiment supprimer cette danse?"
 			},
 			"properties": {
@@ -259,7 +256,6 @@
 				"theseRecordsWillBeRemoved": "Le cours suivant sera supprimé",
 				"theseRecordsWillBeRemoved_plural": "Les cours suivants seront supprimés",
 				"pickSomeFirstToRemove": "Vous devez sélectionner des cours afin de les supprimer",
-				"error404Resource": "Le cours avec l'identifiant {{resourceId}} est introuvable",
 				"confirmDelete": "Désirez-vous vraiment supprimer ce cours?"
 			},
 			"properties": {
@@ -281,7 +277,7 @@
 		"successfullyDeleted": "document supprimé avec succès",
 		"successfullyUpdated": "document modifié avec succès",
 		"thereWereValidationErrors": "Il y a des erreurs de validation - voyez-les ci-dessous",
-		"forbiddenError": "Vous n'avez pas la permission d'effectuer {{actionName}} sur {{resourceId}}",
+		"forbiddenError": "Vous n'avez pas la permission d'effectuer {{actionName}} dans la collection {{resourceId}}",
 		"anyForbiddenError": "Vous n'avez pas la permission d'effectuer cette action",
 		"successfullyCreated": "document créé avec succès",
 		"bulkDeleteError": "Un problème est survenu lors de la suppression. Inspectez la console pour obtenir plus de détails",
@@ -291,9 +287,9 @@
 		"theseRecordsWillBeRemoved": "Le document suivant sera supprimé",
 		"theseRecordsWillBeRemoved_plural": "Les documents suivants seront supprimés",
 		"pickSomeFirstToRemove": "Vous devez sélectionner des documents afin de les supprimer",
-		"error404Resource": "Le document avec l'identifiant {{resourceId}} est introuvable",
-		"error404Action": "Le document avec l'identifiant {{resourceId}} ne possède pas d'action {{actionName}}, ou vous n'êtes pas autorisé.e à l'utiliser!",
-		"error404Record": "La collection avec l'identifiant {{resourceId}} ne contient aucun document avec l'identifiant {{recordId}}, ou vous n'êtes pas autorisé.e à y accéder!",
+		"error404Resource": "La collection {{resourceId}} est introuvable",
+		"error404Action": "La collection {{resourceId}} ne possède pas d'action {{actionName}}, ou vous n'êtes pas autorisé.e à l'utiliser!",
+		"error404Record": "La collection {{resourceId}} ne contient aucun document avec l'identifiant {{recordId}}, ou vous n'êtes pas autorisé.e à y accéder!",
 		"seeConsoleForMore": "Inspectez la console pour plus de détails...",
 		"noActionComponent": "L'action demandée n'est pas implémentée",
 		"noRecordsInResource": "Cette collection ne contient aucun document",

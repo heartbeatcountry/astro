@@ -91,6 +91,7 @@ export const UsagerSchema = new Schema(
 								return false;
 							}
 						}
+						return true;
 					},
 					message: () =>
 						`La liste des danses souhaitées contient une danse qui n'existe pas`,
