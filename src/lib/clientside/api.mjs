@@ -131,6 +131,18 @@ export class Api {
 	}
 
 	/**
+	 * Constructeur d'une requête de type DELETE.
+	 *
+	 * @param {String} pChemin - Chemin relatif de la route (le "endpoint")
+	 * @returns {Api} Une nouvelle instance de la classe
+	 */
+	static DELETE(pChemin) {
+		return new this(pChemin, {
+			method: "DELETE",
+		});
+	}
+
+	/**
 	 * Méthode utilitaire permettant de combiner des dictionnaires et d'éliminer
 	 * les valeurs nulles.
 	 *
