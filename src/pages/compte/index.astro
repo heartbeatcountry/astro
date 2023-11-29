@@ -8,10 +8,13 @@ import Bd from "../../lib/bd.mjs";
 const succesInscription = Astro.url.searchParams.has("succesInscription");
 const succesConnexion = Astro.url.searchParams.has("succesConnexion");
 const usager = Astro.locals["usager"];
-const usagerAvecDanses = await Usager.findById({_id : usager._id}).populate('dansesSouhaitees').exec();
+let usagerAvecDanses = ""
 
 if (!usager) {
 	return Astro.redirect("/compte/connexion");
+}
+else{
+	usagerAvecDanses = await Usager.findById({_id : usager._id}).populate('dansesSouhaitees').exec();
 }
 ---
 
@@ -33,7 +36,6 @@ if (!usager) {
 
 	<div class="bg-light rounded rounded-3 py-3 order-1 p-4 mb-4">
 		<h4 class="fs-5 mb-4"><strong>Détails du profil</strong> </h4>
-
 		<p><strong>Prénom: </strong> {usager?.prenom}</p>
 		<p><strong>Nom: </strong>{usager?.nom}</p>
 		<p><strong>Courriel: </strong>{usager?.courriel}</p>
@@ -44,31 +46,42 @@ if (!usager) {
 	<div class="bg-light rounded rounded-3 py-3 order-1 p-4 mb-4">
 		<h4 class="fs-5 mb-4"><strong>Danses souhaitées</strong> </h4>
 		<div class="row row-cols-2 row-cols-lg-4 fs-5">
+			<p class = " col-lg-4">Titre de la danse</p>
 
-		<p class = " col-lg-4">Titre de la danse</p>
-
-		<p class="col-lg-3">Chorégraphe (s)</p>
-		<p  class="col-lg-3" >Niveau / comptes / murs</p>
-
+			<p class="col-lg-3">Chorégraphe (s)</p>
+			<p  class="col-lg-3" >Niveau / comptes / murs</p>
 		</div>
+
+		<form action="." method="DELETE" id="formRetirerDanseSouhaitee">
+		</form>
 
 		{usagerAvecDanses.dansesSouhaitees && usagerAvecDanses.dansesSouhaitees.length > 0 ? (
 			usagerAvecDanses.dansesSouhaitees.map((danse) => (
-						<div class="row row-cols-2 row-cols-lg-4 my-3">
+			<div class="row row-cols-2 row-cols-lg-4 my-2 border border-primary rounded p-3" >
 
-			<a href= {`/danses/${danse._id}`} class = "fs-4 col-lg-4">{danse.titre}</a>
+				<a href= {`/danses/${danse._id}`} class = "fs-4 col-lg-4">{danse.titre}</a>
 
-							{
-			danse.choregraphe ?
+					{
+					danse.choregraphe ?
 						<p class="col-lg-3">{danse.choregraphe} </p>
 					:
 						<p class="col-lg-3">Inconnu</p>
 					}
 
+					{
+						danse.nbMurs === 0 ?
+							<p  class="col-lg-3" >{NIVEAU_STR[danse.niveau]} / {danse.nbComptes} comptes / Partenaire</p>
+						:
+							(danse.nbMurs === 1?
+								<p  class="col-lg-3" >{NIVEAU_STR[danse.niveau]} / {danse.nbComptes} comptes /{danse.nbMurs} Mur</p>
+							:
+								<p  class="col-lg-3" >{NIVEAU_STR[danse.niveau]} / {danse.nbComptes} comptes /{danse.nbMurs} Murs</p>)
+					}
 
-			<p  class="col-lg-3" >{NIVEAU_STR[danse.niveau]} / {danse.nbComptes} comptes / {danse.nbMurs} Murs</p>
-			<button type="button" class="btn btn-secondary col-3 col-lg-2 " data-bs-toggle="button">Retrait de la liste
-				<i class="bi bi-clipboard2-minus"></i></button>
+				<button type="submit" form="formRetirerDanseSouhaitee" class="btn btn-secondary col-3 col-lg-2 retrait" value={danse._id} name="idDanse">
+					Retrait de la liste
+					<img class="mini" src="/images/icones/retraitListe.png" alt="retrait à la liste de souhait">
+				</button>
 			</div>
 
 
@@ -77,11 +90,25 @@ if (!usager) {
 			<p>Aucune danse souhaitée</p>
 		  )}
 		</div>
-
-
 	</div>
 
 	<div class="mt-4">
 		<a class="btn btn-primary" href="/compte/deconnexion">Se déconnecter</a>
 	</div>
 </Page>
+
+
+
+
+
+<style lang="scss">
+
+@use "../../styles/bootstrap.min.css";
+
+
+.mini{
+	width: 60Q;
+	aspect-ratio: 1/1;
+}
+
+</style>
