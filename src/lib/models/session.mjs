@@ -11,6 +11,7 @@ export const SessionSchema = new Schema({
 		null: [false, "L'usager ne doit pas être nul"],
 		required: [true, "L'usager est requis"],
 		unique: true,
+		immutable: [true, "L'usager ne peut pas être modifié. Veuillez créer une nouvelle session"],
 		validate: [
 			{
 				async validator(id) {
@@ -29,6 +30,7 @@ export const SessionSchema = new Schema({
 		required: [true, "La clé publique est requise"],
 		unique: true,
 		null: [false, "La clé publique ne doit pas être nulle"],
+		immutable: [true, "La clé publique ne peut pas être modifiée. Veuillez créer une nouvelle session"],
 		validate: [
 			{
 				async validator(cle) {
@@ -42,7 +44,19 @@ export const SessionSchema = new Schema({
 	/**
 	 * Date d'expiration de la session
 	 */
-	dateExpiration: Date,
+	dateExpiration: {
+		type: Date,
+		required: [true, "La date d'expiration est requise"],
+		null: [false, "La date d'expiration ne doit pas être nulle"],
+		validate: [
+			{
+				validator(date) {
+					return date > Date.now();
+				},
+				message: "La date d'expiration doit être dans le futur",
+			},
+		],
+	},
 }, {
 	virtuals: {
 		/**

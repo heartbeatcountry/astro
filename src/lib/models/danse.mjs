@@ -198,18 +198,6 @@ export const DanseSchema = new Schema(
 		},
 	},
 	{
-		methods: {
-			/**
-			 * Requête qui permet d'obtenir la moyenne des appréciations
-			 */
-			calculerNoteMoyenne() {
-				return model("Appreciation")
-					.aggregate()
-					.match({ danse: this._id })
-					.group({ _id: null, moyenne: { $avg: "$note" } })
-					.project({ _id: 0, moyenne: { $round: ["$moyenne", 1] } });
-			},
-		},
 		timestamps: true,
 	}
 );

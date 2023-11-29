@@ -19,6 +19,20 @@ export const CoursSchema = new Schema(
 			type: Date,
 			required: [true, "La date d'enseignement est requise"],
 			null: [false, "La date d'enseignement ne doit pas être nulle"],
+			validate: [
+				{
+					validator(date) {
+						return !this.$isNew || date > Date.now();
+					},
+					message: "La date d'enseignement doit être dans le futur",
+				},
+				{
+					validator(date) {
+						return date.getHours() > 0;
+					},
+					message: "L'heure d'enseignement doit être définie",
+				},
+			],
 		},
 
 		lieu: {
@@ -36,7 +50,7 @@ export const CoursSchema = new Schema(
 			null: [false, "La liste des danses ne doit pas être nulle"],
 			validate: [
 				{
-					async validator(lstDanses) {
+					validator(lstDanses) {
 						return lstDanses.length > 0;
 					},
 					message: "Au moins une danse est requise",

@@ -71,6 +71,7 @@ export const UsagerSchema = new Schema(
 			default: false,
 			required: false,
 			null: [false, "Le statut d'administrateur ne doit pas être nul"],
+			immutable: [true, "Le statut d'administrateur ne peut pas être modifié. Veuillez manuellement modifier la base de données"],
 		},
 		estValide: {
 			type: Boolean,

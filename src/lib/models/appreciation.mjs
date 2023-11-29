@@ -17,6 +17,7 @@ export const AppreciationSchema = new Schema({
 		ref: "Danse",
 		null: [false, "La danse ne doit pas être nulle"],
 		required: [true, "La danse est requise"],
+		immutable: [true, "La danse ne peut pas être modifiée. Veuillez créer une nouvelle appréciation"],
 		validate: [
 			{
 				async validator(id) {
@@ -33,6 +34,7 @@ export const AppreciationSchema = new Schema({
 		ref: "Usager",
 		null: [false, "L'usager ne doit pas être nul"],
 		required: [true, "L'usager est requis"],
+		immutable: [true, "L'usager ne peut pas être modifié. Veuillez créer une nouvelle appréciation"],
 		validate: [
 			{
 				async validator(id) {
