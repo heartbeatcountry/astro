@@ -185,7 +185,19 @@
 				"estValide.false": "Non",
 				"dansesSouhaitees.addNewItem": "Ajouter une danse souhaitée",
 				"createdAt": "Date d'inscription le",
-				"updatedAt": "Mis à jour le"
+				"updatedAt": "Mis à jour le",
+				"[1]": "Première danse souhaitée",
+				"[2]": "Deuxième danse souhaitée",
+				"[3]": "Troisième danse souhaitée",
+				"[4]": "Quatrième danse souhaitée",
+				"[5]": "Cinquième danse souhaitée",
+				"[6]": "Sixième danse souhaitée",
+				"[7]": "Septième danse souhaitée",
+				"[8]": "Huitième danse souhaitée",
+				"[9]": "Neuvième danse souhaitée",
+				"[10]": "Dixième danse souhaitée",
+				"[11]": "Onzième danse souhaitée",
+				"[12]": "Douzième danse souhaitée"
 			}
 		},
 		"Danse": {
@@ -267,7 +279,19 @@
 				"niveau.Avancé": "Avancé",
 				"date": "Date d'enseignement",
 				"lieu": "Lieu ou adresse",
-				"danses": "Danses enseignées"
+				"danses": "Danses enseignées",
+				"[1]": "Première danse",
+				"[2]": "Deuxième danse",
+				"[3]": "Troisième danse",
+				"[4]": "Quatrième danse",
+				"[5]": "Cinquième danse",
+				"[6]": "Sixième danse",
+				"[7]": "Septième danse",
+				"[8]": "Huitième danse",
+				"[9]": "Neuvième danse",
+				"[10]": "Dixième danse",
+				"[11]": "Onzième danse",
+				"[12]": "Douzième danse"
 			}
 		}
 	},
