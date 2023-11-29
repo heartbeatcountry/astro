@@ -6,18 +6,24 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 
 
 	// Obtention du permalien depuis l'URL:
-	const { danse } = Astro.params;
-
+	const { danse : danse } = Astro.params
 	const usager  = Astro.locals["usager"];
 
-	// Affichage de la note donnée par l'utilisateur pour la danse affichée.
+
+	// Affichage de la note donnée par l'utilisateur pour la danse affichée et le bouton pour l'ajout et retrait de
 	let note = 0;
+	let estDanseSouhaitee =  false
 	if(usager){
 		const appreciation = await Bd.obtenirAppreciation(danse, usager);
 		if (appreciation){
-			note = appreciation.note;
+			note = appreciation.note;}
+
+		estDanseSouhaitee = usager.dansesSouhaitees.some(danseSouhaitee => danseSouhaitee.toString() === danse);
+
 	}
-}
+
+
+
 
 	// Obtention des détails selon le permalien
 	const detailsDanse = await Bd.obtenirDetailsDanse(danse);
@@ -48,11 +54,23 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 				<div class="col-xl-6">
 					<p class="my-3 fs-4">Niveau: {NIVEAU_STR[detailsDanse.niveau]} </p>
 					<p class="fs-4">{detailsDanse.nbComptes} comptes</p>
-					<p class="fs-4"> {detailsDanse.nbMurs} murs </p>
+
+					{
+						detailsDanse.nbMurs === 0 ?
+						<p  class="fs-4">Danse de partenaire</p>
+					:
+						(detailsDanse.nbMurs === 1?
+							<p class="fs-4"> {detailsDanse.nbMurs} mur</p>
+						:
+							<p class="fs-4"> {detailsDanse.nbMurs} murs</p>)
+				}
+
+
 
 				</div>
 
 				<div >
+
 
 					{ usager ?
 
@@ -64,10 +82,16 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 
 						<div class="d-flex justify-content-center align-items-center" >
 
-								{/*
-							<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">Ajout à la liste de souhait
-							<img class="mini" src="/images/icones/ajoutListe.png" alt="ajout à la liste de souhait" /></button>
-							*/}
+							{
+							estDanseSouhaitee ?
+								<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">Retirer de la liste de souhait
+								<img class="mini" src="/images/icones/retraitListe.png" alt="retrait à la liste de souhait" /></button>
+							:
+								<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">Ajout à la liste de souhait
+								<img class="mini" src="/images/icones/ajoutListe.png" alt="ajout à la liste de souhait" /></button>
+							}
+
+
 
 							<p class="bgImage fs-4 pt-2" id="coeurMoyenne" >{detailsDanse.noteMoyenne ?? 0}</p>
 						</div>
@@ -168,25 +192,6 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 </Page>
 }
 
-
-<script>
-	import Api from "../../lib/clientside/api.mjs";
-	const idDanse = document.querySelector<HTMLDivElement>("[data-id-danse]").dataset.idDanse;
-
-	const form = document.querySelector("form");
-	const req = Api.PUT(`danses/${idDanse}/appreciation`);
-
-	const coeurMoyenne = document.getElementById("coeurMoyenne");
-
-	form.addEventListener("change", async () => {
-		const inputNote = form.querySelector(`input[name="note"]:checked`);
-		const {nouvMoyenne} = await req.params({ note: +inputNote.value }).envoyer();
-		coeurMoyenne.innerText =  nouvMoyenne;
-	});
-
-
-
-</script>
 
 <style lang="scss">
 
