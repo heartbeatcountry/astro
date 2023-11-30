@@ -5,9 +5,11 @@ import express from "express";
 import { NIVEAU_STR } from "../../lib/enums.mjs";
 import traductionFr from "../../admin/i18n/fr.json" assert { type: "json" };
 import { Appreciation, Session, Usager, Danse, Cours } from "../../lib/bd.mjs";
+import { chaineAleatoire } from "../../lib/cryptographie.mjs";
 
 const env = import.meta.env ?? process.env;
 
+const SECRET_HTTP = chaineAleatoire(128);
 const PORT = 9043;
 
 if (!globalThis.adminExpress) {
@@ -197,6 +199,16 @@ if (!globalThis.adminExpress) {
 	});
 
 	const adminRouter = AdminJSExpress.buildRouter(admin);
+
+	// Si le port express est accédé directement sans passer par le proxy, on
+	// bloque la requête:
+	adminExpress.use((req, res, next) => {
+		if (req.headers["x-cle-secrete"] !== SECRET_HTTP) {
+			return res.sendStatus(401);
+		}
+		next();
+	});
+
 	adminExpress.use(admin.options.rootPath, adminRouter);
 	adminExpress.listen(PORT);
 }
@@ -207,14 +219,14 @@ const redirigerVersExpress = async (ctx, methode = "GET") => {
 	}
 
 	const chemin = ctx.url.pathname;
-
-	if (methode === "GET" && (chemin === "/admin" || chemin === "/admin/")) {
-		//return ctx.redirect("/admin/resources/Danse");
-	}
+	const enTetes = new Headers(ctx.request.headers);
+	enTetes.set("x-cle-secrete", SECRET_HTTP);
 
 	const nouvReq = new Request(
 		`http://127.0.0.1:${PORT}${chemin}`,
-		ctx.request
+		new Request(ctx.request, {
+			headers: enTetes,
+		})
 	);
 
 	return await fetch(nouvReq, { method: methode });
