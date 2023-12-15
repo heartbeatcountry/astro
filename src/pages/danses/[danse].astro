@@ -82,21 +82,19 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 
 						<div class="d-flex justify-content-center align-items-center" >
 
-							{
-							estDanseSouhaitee ?
-								<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">Retirer de la liste de souhait
-								<img class="mini" src="/images/icones/retraitListe.png" alt="retrait à la liste de souhait" /></button>
-							:
-								<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">Ajout à la liste de souhait
-								<img class="mini" src="/images/icones/ajoutListe.png" alt="ajout à la liste de souhait" /></button>
-							}
-
-
+								<button type="button" id="supprimerSouhait" class={`btn btn-secondary mx-2 ${estDanseSouhaitee ? '' : 'd-none'}`}>
+									Retirer de la liste de souhait
+									<img class="mini" src="/images/icones/retraitListe.png" alt="retrait à la liste de souhait" />
+								</button>
+								<button type="button" id="ajoutSouhait" class={`btn btn-secondary mx-2 ${estDanseSouhaitee ? 'd-none' : ''}`}>
+									Ajout à la liste de souhait
+									<img class="mini"  src="/images/icones/ajoutListe.png" alt="ajout à la liste de souhait" />
+								</button>
 
 							<p class="bgImage fs-4 pt-2" id="coeurMoyenne" >{detailsDanse.noteMoyenne ?? 0}</p>
 						</div>
 					:
-						<p class="fs-5">Connectez-vous pour noter cette danse.</p>
+						<p class="fs-4">Connectez-vous pour noter cette danse ou l'ajouter à votre liste de souhait.</p>
 						<p class="bgImage fs-4 pt-2" id="coeurMoyenne">{detailsDanse.noteMoyenne ?? 0}</p>
 					}
 
@@ -192,6 +190,43 @@ import CinqCoeurs from "../../components/cinqcoeurs.astro";
 </Page>
 }
 
+
+
+<script>
+	import Api from "../../lib/clientside/api.mjs";
+	const idDanse = document.querySelector<HTMLDivElement>("[data-id-danse]").dataset.idDanse;
+
+	const form = document.querySelector("form");
+	const req = Api.PUT(`danses/${idDanse}/appreciation`);
+
+	const coeurMoyenne = document.getElementById("coeurMoyenne");
+
+	form.addEventListener("change", async () => {
+		const inputNote = form.querySelector(`input[name="note"]:checked`);
+		const {nouvMoyenne} = await req.params({ note: +inputNote.value }).envoyer();
+		coeurMoyenne.innerText =  nouvMoyenne;
+	});
+
+
+	const btnSupprimeSouhait = document.getElementById("supprimerSouhait");
+	const btnAjoutSouhait = document.getElementById("ajoutSouhait");
+
+	const reqSupprimerSouhait = Api.DELETE(`danses/${idDanse}/souhait`);
+	const reqAjoutSouhait = Api.POST(`danses/${idDanse}/souhait`);
+
+	btnSupprimeSouhait.addEventListener("click", async () => {
+		await reqSupprimerSouhait.envoyer();
+		btnSupprimeSouhait.classList.add("d-none");
+		btnAjoutSouhait.classList.remove("d-none");
+	});
+
+	btnAjoutSouhait.addEventListener("click", async () => {
+		await reqAjoutSouhait.envoyer();
+		btnSupprimeSouhait.classList.remove("d-none");
+		btnAjoutSouhait.classList.add("d-none");
+	});
+
+</script>
 
 <style lang="scss">
 
