@@ -32,13 +32,15 @@ else{
 
 	<div class="hstack">
 		<h3>Bienvenue {usager?.prenom + " " + usager?.nom},</h3>
-		{
-			usager?.estAdmin &&
-			<a href="/admin" class="ms-auto btn btn-outline-primary me-1">
-				Accéder au tableau de bord
-			</a>
-		}
-		<a class="ms-auto btn btn-primary" href="/compte/deconnexion">Se déconnecter</a>
+		<div class="ms-auto">
+			{
+				usager?.estAdmin &&
+				<a href="/admin" class="btn btn-outline-primary me-1">
+					Accéder au tableau de bord
+				</a>
+			}
+			<a class="btn btn-primary" href="/compte/deconnexion">Se déconnecter</a>
+		</div>
 	</div>
 
 	<div class="bg-light rounded rounded-3 py-3 order-1 p-4 mb-4 mt-4">
