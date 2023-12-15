@@ -58,13 +58,6 @@ const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 							<h4>Niveau: {NIVEAU_STR[danse.niveau]} </h4>
 							<p>{danse.nbComptes} comptes {danse.nbMurs} Murs</p>
 						</div>
-					{/*
-						<div class="card-footer">
-
-							<button type="button" class="btn btn-secondary mx-2" id={`${cours._id}`} data-bs-toggle="button">M'inscrire</button>
-
-						</div>
-					*/}
 					</div>
 				</div>
 			)
@@ -79,14 +72,6 @@ const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 						<div class="card-body">
 							<h3>Cours de révision</h3>
 						</div>
-
-						{/*
-						<div class="card-footer">
-
-							<button type="button" class="btn btn-secondary mx-2" data-bs-toggle="button">M'inscrire</button>
-
-						</div>
-						*/}
 					</div>
 				</div>
 			)
@@ -96,27 +81,11 @@ const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 
 </Page>
 
-<script>
-
-
-/**
- * Bouton pour s'inscrire à un cours précis
- const btnInscriptionCours = document.getElementById(`${cours._id}`);
-
-
- btnInscriptionCours.addEventListener("click", () => {
-	 ;
-	});
-	*/
-
-</script>
-
 <style lang="scss">
 
 .card-header, button{
 	background-color: #80a2acf6;
 
 }
-
 
 </style>
