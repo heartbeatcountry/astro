@@ -33,7 +33,7 @@ const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 			cours.danses.map(
 				danse =>
 				<div class="col">
-					<div class="card text-center ">
+					<div class="card h-100 text-center ">
 						<div class="card-header">
 							<h3>{formaterDateJour(cours.date, true)}</h3>
 							<h4>{cours.lieu}</h4>
@@ -80,7 +80,7 @@ const lstCours = await Bd.obtenirCoursDeLaSemaine(dimancheDeLaSemaine);
 
 	{
 		usager?.estAdmin &&
-		<div class="d-flex justify-content-center">
+		<div class="d-flex mt-3 justify-content-center">
 			<a class="btn btn-outline-success" href="/admin/resources/Cours/actions/new">
 				<i class="bi bi-pencil-square me-1"></i>
 				Créer un nouveau cours
