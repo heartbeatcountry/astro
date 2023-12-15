@@ -59,7 +59,7 @@ export const contraintes = {
 		 * Prénom et nom du ou des chorégraphes
 		 */
 		choregraphe: {
-			longueurMin: 8,
+			longueurMin: 0,
 			longueurMax: 255,
 		},
 		/**
@@ -73,8 +73,8 @@ export const contraintes = {
 		 * Détails des "Tags" et "Restarts"
 		 */
 		detailsTag: {
-			longueurMin: 8,
-			longueurMax: 555,
+			longueurMin: 0,
+			longueurMax: 128,
 		},
 		/**
 		 * Détails du nombre de comptes
