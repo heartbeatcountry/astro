@@ -218,7 +218,7 @@ const redirigerVersExpress = async (ctx, methode = "GET") => {
 		return ctx.redirect("/compte/connexion");
 	}
 
-	const chemin = ctx.url.pathname;
+	const chemin = ctx.url.pathname + ctx.url.search;
 	const enTetes = new Headers(ctx.request.headers);
 	enTetes.set("x-cle-secrete", SECRET_HTTP);
 
