@@ -2,19 +2,17 @@
 import Page from "../../layouts/GabaritPrincipal.astro";
 import { Danse, Usager } from "../../lib/bd.mjs";
 import { NIVEAU_STR } from "../../lib/enums.mjs";
-import Bd from "../../lib/bd.mjs";
 
 
 const succesInscription = Astro.url.searchParams.has("succesInscription");
 const succesConnexion = Astro.url.searchParams.has("succesConnexion");
 const usager = Astro.locals["usager"];
-let usagerAvecDanses = ""
 
 if (!usager) {
 	return Astro.redirect("/compte/connexion");
 }
 else{
-	usagerAvecDanses = await Usager.findById({_id : usager._id}).populate('dansesSouhaitees').exec();
+	await usager.populate('dansesSouhaitees');
 }
 ---
 
@@ -32,9 +30,12 @@ else{
 		</div>
 	}
 
-	<h3>Bienvenue {usager?.prenom + " " + usager?.nom},</h3>
+	<div class="hstack">
+		<h3>Bienvenue {usager?.prenom + " " + usager?.nom},</h3>
+		<a class="ms-auto btn btn-primary" href="/compte/deconnexion">Se déconnecter</a>
+	</div>
 
-	<div class="bg-light rounded rounded-3 py-3 order-1 p-4 mb-4">
+	<div class="bg-light rounded rounded-3 py-3 order-1 p-4 mb-4 mt-4">
 		<h4 class="fs-5 mb-4"><strong>Détails du profil</strong> </h4>
 		<p><strong>Prénom: </strong> {usager?.prenom}</p>
 		<p><strong>Nom: </strong>{usager?.nom}</p>
@@ -43,7 +44,7 @@ else{
 
 	</div>
 
-	<div class="bg-light rounded rounded-3 py-3 order-1 p-4 mb-4">
+	<div class="bg-light rounded rounded-3 py-3 order-1 p-4 mb-4 lst-souhaits">
 		<h4 class="fs-5 mb-4"><strong>Danses souhaitées</strong> </h4>
 		<div class="row row-cols-2 row-cols-lg-4 fs-5">
 			<p class = " col-lg-4">Titre de la danse</p>
@@ -55,15 +56,15 @@ else{
 		<form action="." method="DELETE" id="formRetirerDanseSouhaitee">
 		</form>
 
-		{usagerAvecDanses.dansesSouhaitees && usagerAvecDanses.dansesSouhaitees.length > 0 ? (
-			usagerAvecDanses.dansesSouhaitees.map((danse) => (
+		{usager.dansesSouhaitees && usager.dansesSouhaitees.length > 0 && (
+			usager.dansesSouhaitees.map((danse) => (
 			<div class="row row-cols-2 row-cols-lg-4 my-2 border border-primary rounded p-3" >
 
-				<a href= {`/danses/${danse._id}`} class = "fs-4 col-lg-4">{danse.titre}</a>
+				<a href= {`/danses/${danse._id}`} class = "fs-4 col-lg-4 stretched-link">{danse.titre}</a>
 
 					{
 					danse.choregraphe ?
-						<p class="col-lg-3">{danse.choregraphe} </p>
+						<p class="col-lg-3">{danse.choregraphe}</p>
 					:
 						<p class="col-lg-3">Inconnu</p>
 					}
@@ -78,7 +79,7 @@ else{
 								<p  class="col-lg-3" >{NIVEAU_STR[danse.niveau]} / {danse.nbComptes} comptes /{danse.nbMurs} Murs</p>)
 					}
 
-				<button type="submit" form="formRetirerDanseSouhaitee" class="btn btn-secondary col-3 col-lg-2 retrait" value={danse._id} name="idDanse">
+				<button type="submit" form="formRetirerDanseSouhaitee" class="btn btn-secondary col-3 col-lg-2 retrait zi" value={danse._id} name="idDanse">
 					Retrait de la liste
 					<img class="mini" src="/images/icones/retraitListe.png" alt="retrait à la liste de souhait">
 				</button>
@@ -86,19 +87,36 @@ else{
 
 
 			))
-		  ) : (
-			<p>Aucune danse souhaitée</p>
 		  )}
+		  <p class="fs-5 text-muted">
+			Aucune danse souhaitée.
+			<span class="d-block mt-1 fs-6">
+				<i class="bi bi-info-circle me-1"></i>
+				Vous pouvez ajouter une danse à votre liste de souhaits en allant sur la page de la danse.
+			</span>
+			</p>
 		</div>
-	</div>
-
-	<div class="mt-4">
-		<a class="btn btn-primary" href="/compte/deconnexion">Se déconnecter</a>
 	</div>
 </Page>
 
 
 
+<script>
+	import Api from "../../lib/clientside/api.mjs";
+	const formRetirerDanseSouhaitee = document.getElementById("formRetirerDanseSouhaitee");
+
+	formRetirerDanseSouhaitee.addEventListener("submit", async (event) => {
+		event.preventDefault();
+		const btn = event.submitter;
+		const carte = btn.parentElement;
+		const idDanse = btn.value;
+
+		const req = Api.DELETE(`danses/${idDanse}/souhait`);
+		await req.envoyer();
+
+		carte.remove();
+	});
+</script>
 
 
 <style lang="scss">
@@ -111,4 +129,16 @@ else{
 	aspect-ratio: 1/1;
 }
 
+.lst-souhaits > div + p:last-child {
+	display: none;
+}
+
+.lst-souhaits > :not(div) + p:last-child {
+	display: block;
+}
+
+.zi {
+	z-index: 3;
+	position: relative;
+}
 </style>
