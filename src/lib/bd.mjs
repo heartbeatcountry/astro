@@ -308,4 +308,26 @@ export default class Bd {
 		// Retour de la nouvelle moyenne:
 		return (await Danse.findById(danse)).noteMoyenne;
 	}
+
+	/**
+	 *
+	 * @param {string} idDanse
+	 * @param {Usager} usager
+	 * @returns
+	 */
+	static async ajoutDanseSouhaitee(idDanse, usager) {
+		usager.dansesSouhaitees.addToSet(idDanse);
+		await usager.save();
+	}
+
+	/**
+	 *
+	 * @param {string} idDanse
+	 * @param {Usager} pUsager
+	 * @returns
+	 */
+	static async supprimerDanseSouhaitee(idDanse, usager) {
+		usager.dansesSouhaitees.pull(idDanse);
+		await usager.save();
+	}
 }
