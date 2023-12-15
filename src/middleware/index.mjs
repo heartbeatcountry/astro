@@ -16,7 +16,7 @@ const middlewareSession = defineMiddleware(async (context, next) => {
 	// Si l'usager est connecté, on expose l'instance de Usager:
 	if (session && !session.estExpiree) {
 		await session.populate("usager");
-		context.locals.usager = session.usager._doc;
+		context.locals.usager = session.usager;
 	}
 
 	return next();
