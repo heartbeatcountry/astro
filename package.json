@@ -29,7 +29,7 @@
 		"nanoid": "^5.0.4",
 		"sass": "^1.69.5",
 		"tslib": "^2.6.2",
-		"undici": "^5.28.2"
+		"undici": "^5.28.3"
 	},
 	"devDependencies": {
 		"@typescript-eslint/parser": "^6.14.0",
